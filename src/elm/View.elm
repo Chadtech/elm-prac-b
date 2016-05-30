@@ -13,11 +13,10 @@ view : World -> Html Msg
 view world = 
   div
   [ class "game" ]
-  [ gameView world ]  
-  --[ div 
-  --  [ class "view-port" ] 
-  --  [ gameView world ]
-  --]
+  [ div 
+    [ class "view-port" ] 
+    [ gameView world ]
+  ]
 
 
 

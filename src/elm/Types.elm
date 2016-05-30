@@ -35,9 +35,9 @@ type alias Ship =
 
 frege : Ship
 frege = 
-  { x            = 0
-  , y            = 0
-  , a            = 0
+  { x            = -150
+  , y            = -150
+  , a            = 20
 
   , vx           = -2.4275
   , vy           = 4.472

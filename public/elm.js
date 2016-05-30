@@ -10546,9 +10546,9 @@ var _evancz$elm_graphics$Collage$ngon = F2(
 	});
 
 var _user$project$Types$frege = {
-	x: 0,
-	y: 0,
-	a: 0,
+	x: -150,
+	y: -150,
+	a: 20,
 	vx: -2.4275,
 	vy: 4.472,
 	va: -2,
@@ -10688,14 +10688,22 @@ var _user$project$GameView$rotateArea = F2(
 	});
 var _user$project$GameView$gameView = function (world) {
 	return _evancz$elm_graphics$Element$toHtml(
-		_user$project$GameView$layerer(
+		A3(
+			_evancz$elm_graphics$Collage$collage,
+			600,
+			600,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					A2(
-					_user$project$GameView$rotateArea,
-					world.frege,
-					A2(_user$project$GameView$positionArea, world.frege, _user$project$GameView$area)),
-					_user$project$DrawLander$drawLander(world.frege)
+					_evancz$elm_graphics$Collage$toForm(
+					_user$project$GameView$layerer(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_user$project$GameView$rotateArea,
+								world.frege,
+								A2(_user$project$GameView$positionArea, world.frege, _user$project$GameView$area)),
+								_user$project$DrawLander$drawLander(world.frege)
+							])))
 				])));
 };
 
@@ -10715,7 +10723,16 @@ var _user$project$View$view = function (world) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$GameView$gameView(world)
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('view-port')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$GameView$gameView(world)
+					]))
 			]));
 };
 

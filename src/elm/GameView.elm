@@ -12,13 +12,15 @@ import DrawLander       exposing (drawLander)
 
 gameView : World -> Html Msg
 gameView world =
-  layerer
-  [ area
-    |>positionArea world.frege
-    |>rotateArea world.frege
-  , drawLander world.frege
-  ]
-  |>toHtml
+  collage 600 600 
+  [ layerer
+    [ area
+      |>positionArea world.frege
+      |>rotateArea world.frege
+    , drawLander world.frege
+    ]|>toForm
+  ]|>toHtml
+
 
 worldSize = (1200, 1200)
 
