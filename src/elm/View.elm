@@ -4,18 +4,18 @@ import Html             exposing (..)
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Types            exposing (..)
---import Syles           exposing (..)
+--import Styles           exposing (..)
 import Components       exposing (..)
 import GameView         exposing (gameView)
 
 
-view : World -> Html Msg
-view world = 
+view : Model -> Html Msg
+view model = 
   div
   [ class "game" ]
   [ div 
     [ class "view-port" ] 
-    [ gameView world ]
+    [ gameView model.ship ]
   ]
 
 

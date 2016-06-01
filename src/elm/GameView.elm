@@ -7,29 +7,22 @@ import Collage          exposing (..)
 import Element          exposing (..)
 import Transform        exposing (..)
 import Types            exposing (..)
-import DrawLander       exposing (drawLander)
+import DrawShip         exposing (drawShip)
 
 
-gameView : World -> Html Msg
-gameView world =
+gameView : Ship -> Html Msg
+gameView s =
   collage 600 600 
   [ layerer
     [ area
-      |>positionArea world.frege
-      |>rotateArea world.frege
-    , drawLander world.frege
+      |>positionArea s
+      |>rotateArea   s
+    , drawShip       s
     ]|>toForm
   ]|>toHtml
 
-
-worldSize = (1200, 1200)
-
 layerer : List Form -> Element
-layerer = 
-  let 
-    (w, h) = worldSize
-  in
-    collage w h
+layerer = collage 1200 1200
 
 area : Form
 area =

@@ -40,8 +40,11 @@ gulp.task 'elm', ->
   cmd += '/elm.js'
 
   cp.exec cmd, (err, stdout) ->
-    console.log 'ELM ERROR \n', err if err
-    console.log 'ELM \n', stdout unless err
+    if err
+      console.log 'ELM ERROR :^('
+      console.log err
+    else
+      console.log 'Elm : ' + stdout.slice 0, stdout.length - 1
 
 gulp.task 'watch', ->
   autowatch gulp,

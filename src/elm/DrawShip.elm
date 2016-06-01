@@ -1,4 +1,4 @@
-module DrawLander exposing (drawLander)
+module DrawShip exposing (drawShip)
 
 import Html             exposing (..)
 import Html.Attributes  exposing (..)
@@ -13,9 +13,8 @@ imager : Int -> Int -> String -> Form
 imager w h str =
   toForm <| image w h str
 
-
-drawLander : Ship -> Form
-drawLander s =
+drawShip : Ship -> Form
+drawShip s =
   toForm
   <|collage 138 138
     [ imager 47 48 "./ship/ship.png" ]
