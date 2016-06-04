@@ -1,17 +1,11 @@
 module DrawShip exposing (drawShip)
 
-import Html             exposing (..)
-import Html.Attributes  exposing (..)
-import Html.Events      exposing (..)
 import Collage          exposing (..)
 import Element          exposing (..)
---import Transform        exposing (..)
 import Types            exposing (..)
 import List             exposing (foldr, append)
 import Debug            exposing (log)
-import Source
-
-src = Source.src
+import Source           exposing (src)
 
 drawShip : Thrusters -> Form
 drawShip t =

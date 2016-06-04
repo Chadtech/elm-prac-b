@@ -11437,6 +11437,11 @@ var _user$project$Source$src = function (str) {
 		A2(_elm_lang$core$Basics_ops['++'], str, '.png'));
 };
 
+var _user$project$DrawShip$srcBlast = F2(
+	function (b, str) {
+		return b ? _user$project$Source$src(str) : _user$project$Source$src(
+			A2(_elm_lang$core$Basics_ops['++'], str, '-weak'));
+	});
 var _user$project$DrawShip$isFiring = F2(
 	function (i, f) {
 		return (_elm_lang$core$Native_Utils.cmp(i, 0) > 0) ? _elm_lang$core$Native_List.fromArray(
@@ -11467,12 +11472,6 @@ var _user$project$DrawShip$drawThruster = F3(
 			p,
 			_evancz$elm_graphics$Collage$toForm(
 				A3(_evancz$elm_graphics$Element$image, _p1._0, _p1._1, str)));
-	});
-var _user$project$DrawShip$src = _user$project$Source$src;
-var _user$project$DrawShip$srcBlast = F2(
-	function (b, str) {
-		return b ? _user$project$DrawShip$src(str) : _user$project$DrawShip$src(
-			A2(_elm_lang$core$Basics_ops['++'], str, '-weak'));
 	});
 var _user$project$DrawShip$mainThruster = F2(
 	function (firing, boost) {
@@ -11587,7 +11586,7 @@ var _user$project$DrawShip$drawShip = function (t) {
 					_evancz$elm_graphics$Element$image,
 					47,
 					47,
-					_user$project$DrawShip$src('ship/ship')))
+					_user$project$Source$src('ship/ship')))
 			])
 		]);
 	return _evancz$elm_graphics$Collage$toForm(
@@ -12007,6 +12006,8 @@ Elm['DrawShip'] = Elm['DrawShip'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['DrawShip'], 'DrawShip', typeof _user$project$DrawShip$main === 'undefined' ? null : _user$project$DrawShip$main);
 Elm['GameView'] = Elm['GameView'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['GameView'], 'GameView', typeof _user$project$GameView$main === 'undefined' ? null : _user$project$GameView$main);
+Elm['Main'] = Elm['Main'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
 Elm['Main'] = Elm['Main'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
 Elm['Ports'] = Elm['Ports'] || {};
