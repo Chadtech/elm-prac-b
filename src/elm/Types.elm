@@ -5,9 +5,25 @@ import Keyboard.Extra   as Keyboard
 
 initModel : Model
 initModel = 
-  { world = {stuff = "ye I guess"}
+  { world = world
   , ship  = frege thrusters
   , keys  = fst Keyboard.init
+  }
+
+world : World
+world = 
+  { stuff =
+    [ { x      = -150
+      , y      = -100
+      , a      = 0
+
+      , vx     = 1
+      , vy     = 0
+      , va     = 1
+
+      , sprite = "stuff/oxygen-tank"
+
+    }]
   }
 
 type Msg 
@@ -20,18 +36,30 @@ type alias Model =
   , keys  : Keyboard.Model
   }
 
+type alias Thing =
+  { x           : Float
+  , y           : Float
+  , a           : Float
+
+  , vx          : Float
+  , vy          : Float
+  , va          : Float
+
+  , sprite      : String
+  }
+
 type alias World = 
-  { stuff : String }
+  { stuff : List Thing }
 
 type alias Thrusters =
-  { leftFront : Int
-  , leftSide  : Int
-  , leftBack  : Int
-  , main      : Int
-  , rightFront: Int
-  , rightSide : Int
-  , rightBack : Int
-  , boost     : Bool
+  { leftFront  : Int
+  , leftSide   : Int
+  , leftBack   : Int
+  , main       : Int
+  , rightFront : Int
+  , rightSide  : Int
+  , rightBack  : Int
+  , boost      : Bool
   }
 
 type alias Ship =

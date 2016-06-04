@@ -5,19 +5,16 @@ import Debug exposing (log)
 
 moduloPos : Float -> Float
 moduloPos n =
-  if n > 300 then 
-    moduloPos (n - 600)
+  if n > 300 then moduloPos (n - 600)
   else n
 
 moduloNeg : Float -> Float
 moduloNeg n =
-  if n < -300 then 
-    moduloNeg (n + 600)
+  if n < -300 then moduloNeg (n + 600)
   else n
 
 modulo : Float -> Float
-modulo =
-  moduloPos >> moduloNeg
+modulo = moduloPos >> moduloNeg
 
 moduloClockwise : Float -> Float
 moduloClockwise a =

@@ -11375,14 +11375,24 @@ var _user$project$Types$frege = function (t) {
 	return {x: -150, y: -150, a: 20, vx: 0, vy: 0, va: 0, fuel: 1410.1, oxygen: 166, weight: 852, thrusters: t};
 };
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
+var _user$project$Types$world = {
+	stuff: _elm_lang$core$Native_List.fromArray(
+		[
+			{x: -150, y: -100, a: 0, vx: 1, vy: 0, va: 1, sprite: 'stuff/oxygen-tank'}
+		])
+};
 var _user$project$Types$initModel = {
-	world: {stuff: 'ye I guess'},
+	world: _user$project$Types$world,
 	ship: _user$project$Types$frege(_user$project$Types$thrusters),
 	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init)
 };
 var _user$project$Types$Model = F3(
 	function (a, b, c) {
 		return {world: a, ship: b, keys: c};
+	});
+var _user$project$Types$Thing = F7(
+	function (a, b, c, d, e, f, g) {
+		return {x: a, y: b, a: c, vx: d, vy: e, va: f, sprite: g};
 	});
 var _user$project$Types$World = function (a) {
 	return {stuff: a};
@@ -11419,48 +11429,178 @@ var _user$project$Types$Refresh = function (a) {
 	return {ctor: 'Refresh', _0: a};
 };
 
-var _user$project$Styles_ops = _user$project$Styles_ops || {};
-_user$project$Styles_ops['-'] = F2(
-	function (v0, v1) {
-		return {ctor: '_Tuple2', _0: v0, _1: v1};
-	});
-var _user$project$Styles$viewStyle = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			A2(_user$project$Styles_ops['-'], 'margin', 'auto'),
-			A2(_user$project$Styles_ops['-'], 'width', '60%'),
-			A2(_user$project$Styles_ops['-'], 'padding', '10px'),
-			A2(_user$project$Styles_ops['-'], 'background-color', '#ff0000'),
-			A2(_user$project$Styles_ops['-'], 'height', '500px'),
-			A2(_user$project$Styles_ops['-'], 'width', '500px'),
-			A2(_user$project$Styles_ops['-'], 'position', 'relative'),
-			A2(_user$project$Styles_ops['-'], 'top', '50%'),
-			A2(_user$project$Styles_ops['-'], 'transform', 'translateY(-50%)'),
-			A2(_user$project$Styles_ops['-'], 'overflow', 'hidden')
-		]));
-
-var _user$project$Components$onKeyDown = function (msg) {
+var _user$project$Source$root = './';
+var _user$project$Source$src = function (str) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'keydown',
-		A2(_elm_lang$core$Json_Decode$map, msg, _elm_lang$html$Html_Events$keyCode));
+		_elm_lang$core$Basics_ops['++'],
+		_user$project$Source$root,
+		A2(_elm_lang$core$Basics_ops['++'], str, '.png'));
 };
 
-var _user$project$DrawShip$imager = F3(
-	function (w, h, str) {
-		return _evancz$elm_graphics$Collage$toForm(
-			A3(_evancz$elm_graphics$Element$image, w, h, str));
+var _user$project$DrawShip$isFiring = F2(
+	function (i, f) {
+		return (_elm_lang$core$Native_Utils.cmp(i, 0) > 0) ? _elm_lang$core$Native_List.fromArray(
+			[f]) : _elm_lang$core$Native_List.fromArray(
+			[]);
 	});
-var _user$project$DrawShip$drawShip = function (s) {
+var _user$project$DrawShip$turn = _evancz$elm_graphics$Collage$rotate(
+	_elm_lang$core$Basics$degrees(180));
+var _user$project$DrawShip$transform = F3(
+	function (f, tfs, thruster) {
+		return A2(
+			_user$project$DrawShip$isFiring,
+			f,
+			A3(
+				_elm_lang$core$List$foldr,
+				F2(
+					function (b, a) {
+						return b(a);
+					}),
+				thruster,
+				tfs));
+	});
+var _user$project$DrawShip$drawThruster = F3(
+	function (_p0, p, str) {
+		var _p1 = _p0;
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			p,
+			_evancz$elm_graphics$Collage$toForm(
+				A3(_evancz$elm_graphics$Element$image, _p1._0, _p1._1, str)));
+	});
+var _user$project$DrawShip$src = _user$project$Source$src;
+var _user$project$DrawShip$srcBlast = F2(
+	function (b, str) {
+		return b ? _user$project$DrawShip$src(str) : _user$project$DrawShip$src(
+			A2(_elm_lang$core$Basics_ops['++'], str, '-weak'));
+	});
+var _user$project$DrawShip$mainThruster = F2(
+	function (firing, boost) {
+		return A3(
+			_user$project$DrawShip$transform,
+			firing,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			A3(
+				_user$project$DrawShip$drawThruster,
+				{ctor: '_Tuple2', _0: 11, _1: 30},
+				{ctor: '_Tuple2', _0: 0, _1: -30},
+				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/main')));
+	});
+var _user$project$DrawShip$leftFront = F2(
+	function (firing, boost) {
+		return A3(
+			_user$project$DrawShip$transform,
+			firing,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			A3(
+				_user$project$DrawShip$drawThruster,
+				{ctor: '_Tuple2', _0: 2, _1: 9},
+				{ctor: '_Tuple2', _0: -19, _1: 9},
+				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/yaw')));
+	});
+var _user$project$DrawShip$leftBack = F2(
+	function (firing, boost) {
+		return A3(
+			_user$project$DrawShip$transform,
+			firing,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_evancz$elm_graphics$Collage$scale(-1)
+				]),
+			A3(
+				_user$project$DrawShip$drawThruster,
+				{ctor: '_Tuple2', _0: 2, _1: 9},
+				{ctor: '_Tuple2', _0: -19, _1: -9},
+				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/yaw-f')));
+	});
+var _user$project$DrawShip$leftSide = F2(
+	function (firing, boost) {
+		return A3(
+			_user$project$DrawShip$transform,
+			firing,
+			_elm_lang$core$Native_List.fromArray(
+				[_user$project$DrawShip$turn]),
+			A3(
+				_user$project$DrawShip$drawThruster,
+				{ctor: '_Tuple2', _0: 8, _1: 3},
+				{ctor: '_Tuple2', _0: 26, _1: -1},
+				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/strafe')));
+	});
+var _user$project$DrawShip$rightFront = F2(
+	function (firing, boost) {
+		return A3(
+			_user$project$DrawShip$transform,
+			firing,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_evancz$elm_graphics$Collage$scale(-1),
+					_user$project$DrawShip$turn
+				]),
+			A3(
+				_user$project$DrawShip$drawThruster,
+				{ctor: '_Tuple2', _0: 2, _1: 9},
+				{ctor: '_Tuple2', _0: 20, _1: 9},
+				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/yaw-f')));
+	});
+var _user$project$DrawShip$rightBack = F2(
+	function (firing, boost) {
+		return A3(
+			_user$project$DrawShip$transform,
+			firing,
+			_elm_lang$core$Native_List.fromArray(
+				[_user$project$DrawShip$turn]),
+			A3(
+				_user$project$DrawShip$drawThruster,
+				{ctor: '_Tuple2', _0: 2, _1: 9},
+				{ctor: '_Tuple2', _0: 20, _1: -9},
+				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/yaw')));
+	});
+var _user$project$DrawShip$rightSide = F2(
+	function (firing, boost) {
+		return A3(
+			_user$project$DrawShip$transform,
+			firing,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			A3(
+				_user$project$DrawShip$drawThruster,
+				{ctor: '_Tuple2', _0: 8, _1: 3},
+				{ctor: '_Tuple2', _0: -25, _1: -1},
+				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/strafe')));
+	});
+var _user$project$DrawShip$drawShip = function (t) {
+	var ship = _elm_lang$core$Native_List.fromArray(
+		[
+			A2(_user$project$DrawShip$mainThruster, t.main, t.boost),
+			A2(_user$project$DrawShip$leftFront, t.leftFront, t.boost),
+			A2(_user$project$DrawShip$leftBack, t.leftBack, t.boost),
+			A2(_user$project$DrawShip$leftSide, t.leftSide, t.boost),
+			A2(_user$project$DrawShip$rightFront, t.rightFront, t.boost),
+			A2(_user$project$DrawShip$rightBack, t.rightBack, t.boost),
+			A2(_user$project$DrawShip$rightSide, t.rightSide, t.boost),
+			_elm_lang$core$Native_List.fromArray(
+			[
+				_evancz$elm_graphics$Collage$toForm(
+				A3(
+					_evancz$elm_graphics$Element$image,
+					47,
+					47,
+					_user$project$DrawShip$src('ship/ship')))
+			])
+		]);
 	return _evancz$elm_graphics$Collage$toForm(
 		A3(
 			_evancz$elm_graphics$Collage$collage,
 			138,
 			138,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A3(_user$project$DrawShip$imager, 47, 48, './ship/ship.png')
-				])));
+			A3(
+				_elm_lang$core$List$foldr,
+				_elm_lang$core$List$append,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				ship)));
 };
 
 var _user$project$GameView$tile = function (t) {
@@ -11530,7 +11670,7 @@ var _user$project$GameView$gameView = function (s) {
 								_user$project$GameView$rotateArea,
 								s,
 								A2(_user$project$GameView$positionArea, s, _user$project$GameView$area)),
-								_user$project$DrawShip$drawShip(s)
+								_user$project$DrawShip$drawShip(s.thrusters)
 							])))
 				])));
 };
@@ -11659,13 +11799,13 @@ var _user$project$ThrusterState$setThrusters = function (keys) {
 	};
 };
 
-var _user$project$Thrust$s = function (a) {
+var _user$project$Thrust$s = function (_p0) {
 	return _elm_lang$core$Basics$sin(
-		_elm_lang$core$Basics$degrees(a));
+		_elm_lang$core$Basics$degrees(_p0));
 };
-var _user$project$Thrust$c = function (a) {
+var _user$project$Thrust$c = function (_p1) {
 	return _elm_lang$core$Basics$cos(
-		_elm_lang$core$Basics$degrees(a));
+		_elm_lang$core$Basics$degrees(_p1));
 };
 var _user$project$Thrust$getThrust = F2(
 	function (b, l) {
@@ -11699,76 +11839,76 @@ var _user$project$Thrust$wp = F2(
 	function (f, i) {
 		return (_user$project$Thrust$weakPower * f) * _elm_lang$core$Basics$toFloat(i);
 	});
-var _user$project$Thrust$thrustY = function (_p0) {
-	var _p1 = _p0;
-	var _p3 = _p1._1;
-	var _p2 = _p1._0;
+var _user$project$Thrust$thrustY = function (_p2) {
+	var _p3 = _p2;
+	var _p5 = _p3._1;
+	var _p4 = _p3._0;
 	return A2(
 		_user$project$Thrust$getThrust,
-		_p3.boost,
+		_p5.boost,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				(_user$project$Thrust$mainPower * _user$project$Thrust$c(_p2)) * _elm_lang$core$Basics$toFloat(_p3.main),
+				(_user$project$Thrust$mainPower * _user$project$Thrust$c(_p4)) * _elm_lang$core$Basics$toFloat(_p5.main),
 				A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p2),
-				_p3.leftBack),
+				_user$project$Thrust$c(_p4),
+				_p5.leftBack),
 				0 - A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p2),
-				_p3.leftFront),
+				_user$project$Thrust$c(_p4),
+				_p5.leftFront),
 				A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p2),
-				_p3.rightBack),
+				_user$project$Thrust$c(_p4),
+				_p5.rightBack),
 				0 - A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p2),
-				_p3.rightFront),
+				_user$project$Thrust$c(_p4),
+				_p5.rightFront),
 				0 - A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p2),
-				_p3.leftSide),
+				_user$project$Thrust$s(_p4),
+				_p5.leftSide),
 				A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p2),
-				_p3.rightSide)
+				_user$project$Thrust$s(_p4),
+				_p5.rightSide)
 			]));
 };
-var _user$project$Thrust$thrustX = function (_p4) {
-	var _p5 = _p4;
-	var _p7 = _p5._1;
-	var _p6 = _p5._0;
+var _user$project$Thrust$thrustX = function (_p6) {
+	var _p7 = _p6;
+	var _p9 = _p7._1;
+	var _p8 = _p7._0;
 	return A2(
 		_user$project$Thrust$getThrust,
-		_p7.boost,
+		_p9.boost,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				((0 - _user$project$Thrust$mainPower) * _user$project$Thrust$s(_p6)) * _elm_lang$core$Basics$toFloat(_p7.main),
+				((0 - _user$project$Thrust$mainPower) * _user$project$Thrust$s(_p8)) * _elm_lang$core$Basics$toFloat(_p9.main),
 				0 - A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p6),
-				_p7.leftBack),
+				_user$project$Thrust$s(_p8),
+				_p9.leftBack),
 				A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p6),
-				_p7.leftFront),
+				_user$project$Thrust$s(_p8),
+				_p9.leftFront),
 				0 - A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p6),
-				_p7.rightBack),
+				_user$project$Thrust$s(_p8),
+				_p9.rightBack),
 				A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p6),
-				_p7.rightFront),
+				_user$project$Thrust$s(_p8),
+				_p9.rightFront),
 				0 - A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p6),
-				_p7.leftSide),
+				_user$project$Thrust$c(_p8),
+				_p9.leftSide),
 				A2(
 				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p6),
-				_p7.rightSide)
+				_user$project$Thrust$c(_p8),
+				_p9.rightSide)
 			]));
 };
 var _user$project$Thrust$setThrust = function (s) {
@@ -11786,43 +11926,40 @@ var _user$project$Thrust$setThrust = function (s) {
 
 var _user$project$Main$refresh = F2(
 	function (m, dt) {
-		var s = m.ship;
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{
 				ship: _user$project$Thrust$setThrust(
-					A2(_user$project$ShipPosition$position, dt, s))
+					A2(_user$project$ShipPosition$position, dt, m.ship))
 			});
 	});
 var _user$project$Main$update = F2(
-	function (msg, model) {
+	function (msg, m) {
 		var _p0 = msg;
 		if (_p0.ctor === 'Refresh') {
-			var dt$ = _p0._0 / 120;
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Main$refresh, model, dt$),
+				_0: A2(_user$project$Main$refresh, m, _p0._0 / 120),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
-			var s = model.ship;
-			var _p1 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, model.keys);
+			var ship = m.ship;
+			var _p1 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, m.keys);
 			var keys$ = _p1._0;
 			var kCmd = _p1._1;
+			var t = _user$project$ThrusterState$setThrusters(keys$);
 			return A2(
 				F2(
 					function (v0, v1) {
 						return {ctor: '_Tuple2', _0: v0, _1: v1};
 					}),
 				_elm_lang$core$Native_Utils.update(
-					model,
+					m,
 					{
 						keys: keys$,
 						ship: _elm_lang$core$Native_Utils.update(
-							s,
-							{
-								thrusters: _user$project$ThrusterState$setThrusters(keys$)
-							})
+							ship,
+							{thrusters: t})
 					}),
 				A2(_elm_lang$core$Platform_Cmd$map, _user$project$Types$HandleKeys, kCmd));
 		}
@@ -11845,9 +11982,27 @@ var _user$project$Main$main = {
 		})
 };
 
+var _user$project$Styles_ops = _user$project$Styles_ops || {};
+_user$project$Styles_ops['-'] = F2(
+	function (v0, v1) {
+		return {ctor: '_Tuple2', _0: v0, _1: v1};
+	});
+var _user$project$Styles$viewStyle = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(_user$project$Styles_ops['-'], 'margin', 'auto'),
+			A2(_user$project$Styles_ops['-'], 'width', '60%'),
+			A2(_user$project$Styles_ops['-'], 'padding', '10px'),
+			A2(_user$project$Styles_ops['-'], 'background-color', '#ff0000'),
+			A2(_user$project$Styles_ops['-'], 'height', '500px'),
+			A2(_user$project$Styles_ops['-'], 'width', '500px'),
+			A2(_user$project$Styles_ops['-'], 'position', 'relative'),
+			A2(_user$project$Styles_ops['-'], 'top', '50%'),
+			A2(_user$project$Styles_ops['-'], 'transform', 'translateY(-50%)'),
+			A2(_user$project$Styles_ops['-'], 'overflow', 'hidden')
+		]));
+
 var Elm = {};
-Elm['Components'] = Elm['Components'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['Components'], 'Components', typeof _user$project$Components$main === 'undefined' ? null : _user$project$Components$main);
 Elm['DrawShip'] = Elm['DrawShip'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['DrawShip'], 'DrawShip', typeof _user$project$DrawShip$main === 'undefined' ? null : _user$project$DrawShip$main);
 Elm['GameView'] = Elm['GameView'] || {};
@@ -11858,6 +12013,8 @@ Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['ShipPosition'] = Elm['ShipPosition'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ShipPosition'], 'ShipPosition', typeof _user$project$ShipPosition$main === 'undefined' ? null : _user$project$ShipPosition$main);
+Elm['Source'] = Elm['Source'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Source'], 'Source', typeof _user$project$Source$main === 'undefined' ? null : _user$project$Source$main);
 Elm['Styles'] = Elm['Styles'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Styles'], 'Styles', typeof _user$project$Styles$main === 'undefined' ? null : _user$project$Styles$main);
 Elm['Thrust'] = Elm['Thrust'] || {};

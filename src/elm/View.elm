@@ -5,7 +5,6 @@ import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Types            exposing (..)
 --import Styles           exposing (..)
-import Components       exposing (..)
 import GameView         exposing (gameView)
 
 

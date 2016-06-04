@@ -32,10 +32,10 @@ getThrust b l =
   (if b then 5 else 1) * (foldr (+) 0 l)
 
 c : Float -> Float
-c a = cos <| degrees a
+c = cos << degrees
 
 s : Float -> Float
-s a = sin <| degrees a
+s = sin << degrees
 
 thrustY : (Float, Thrusters) -> Float
 thrustY (a, t) =

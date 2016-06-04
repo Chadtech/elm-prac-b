@@ -30,36 +30,31 @@ subscriptions model =
 
 refresh : Model -> Float -> Model
 refresh m dt =
-  let s = m.ship
-  in
   { m | ship = 
-      s
-      |>position dt
-      |>setThrust
+    m.ship
+    |>position dt
+    |>setThrust
   }
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+update msg m =
   case msg of 
 
     Refresh dt ->
-      let dt' = dt / 120
-      in
-        (refresh model dt', Cmd.none)
+      (refresh m (dt / 120), Cmd.none)
 
     HandleKeys keyMsg ->
       let
         (keys', kCmd) = 
-          Keyboard.update keyMsg model.keys
-        s = model.ship
+          Keyboard.update keyMsg m.keys
+        ship = m.ship
+        t = setThrusters keys'
       in
         (,)
-          { model 
-            | keys = keys'
-            , ship = 
-              { s 
-                | thrusters = setThrusters keys'
-              }
+          { m 
+          | keys = keys'
+          , ship = 
+            { ship | thrusters = t }
           } 
           (Cmd.map HandleKeys kCmd)
 

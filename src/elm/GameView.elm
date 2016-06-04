@@ -17,7 +17,7 @@ gameView s =
     [ area
       |>positionArea s
       |>rotateArea   s
-    , drawShip       s
+    , drawShip       s.thrusters
     ]|>toForm
   ]|>toHtml
 
