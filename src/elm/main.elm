@@ -7,11 +7,12 @@ import View             exposing (view)
 import Time             exposing (..)
 import Debug            exposing (log)
 import AnimationFrame   exposing (..)
-import ShipPosition     exposing (position)
+import Positioning      exposing (shipPosition)
+import ThingPosition    exposing (thingPosition)
 import Keyboard.Extra   as Keyboard
 import ThrusterState    exposing (setThrusters)
 import Thrust           exposing (setThrust)
-import Set
+import List             exposing (map)
 
 main =
   App.program
@@ -30,10 +31,18 @@ subscriptions model =
 
 refresh : Model -> Float -> Model
 refresh m dt =
-  { m | ship = 
+  let world = m.world
+  in
+  { m 
+  | ship = 
     m.ship
-    |>position dt
+    |>shipPosition dt
     |>setThrust
+  , world = 
+    { world 
+      | content = 
+        (map (thingPosition dt) world.content)
+    }
   }
 
 update : Msg -> Model -> (Model, Cmd Msg)

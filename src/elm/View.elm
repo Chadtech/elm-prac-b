@@ -14,7 +14,7 @@ view model =
   [ class "game" ]
   [ div 
     [ class "view-port" ] 
-    [ gameView model.ship ]
+    [ gameView (model.ship, model.world) ]
   ]
 
 

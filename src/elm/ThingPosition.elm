@@ -1,16 +1,15 @@
-module ShipPosition exposing (position)
+module ThingPosition exposing (thingPosition)
 
 import Types exposing (..)
-import Debug exposing (log)
 
 moduloPos : Float -> Float
 moduloPos n =
-  if n > 300 then moduloPos (n - 600)
+  if n > 600 then moduloPos (n - 600)
   else n
 
 moduloNeg : Float -> Float
 moduloNeg n =
-  if n < -300 then moduloNeg (n + 600)
+  if n < 0 then moduloNeg (n + 600)
   else n
 
 modulo : Float -> Float
@@ -32,18 +31,24 @@ moduloAngle : Float -> Float
 moduloAngle =
   moduloClockwise >> moduloCClockwise
 
-position : Float -> Ship -> Ship
-position dt s =
+thingPosition : Float -> Thing -> Thing
+thingPosition dt t =
   let 
-    y' = s.y + (dt * s.vy)
-    x' = s.x + (dt * s.vx)
-    a' = s.a + (dt * s.va)
+    y' = t.y + (dt * t.vy)
+    x' = t.x + (dt * t.vx)
+    a' = t.a + (dt * t.va)
 
     ym = modulo y'
     xm = modulo x'
+
+    (tx, ty) = t.sector
+
+    dyt = (round (y' - ym)) // 600 
+    dxt = (round (x' - xm)) // 600
   in
-    { s
+    { t
     | x = xm
     , y = ym
     , a = moduloAngle a'
+    , sector = (tx + dxt, ty + dyt)
     } 

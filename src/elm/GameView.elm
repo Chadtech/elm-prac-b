@@ -8,24 +8,27 @@ import Element          exposing (..)
 import Transform        exposing (..)
 import Types            exposing (..)
 import DrawShip         exposing (drawShip)
+import DrawStuff        exposing (populate)
+import List exposing (filter)
 
 
-gameView : Ship -> Html Msg
-gameView s =
+gameView : (Ship, World) -> Html Msg
+gameView (ship, world) =
   collage 600 600 
   [ layerer
-    [ area
-      |>positionArea s
-      |>rotateArea   s
-    , drawShip       s.thrusters
+    [ area ship.sector world
+      |>populate (ship, world)
+      |>positionArea ship
+      |>rotateArea   ship
+    , drawShip       ship.thrusters 
     ]|>toForm
   ]|>toHtml
 
 layerer : List Form -> Element
 layerer = collage 1200 1200
 
-area : Form
-area =
+area : (Int, Int) -> World -> Form
+area p world =
   layerer
   [ move (-300, 300)  stars
   , move (300, 300)   stars

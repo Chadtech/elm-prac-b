@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Time             exposing (..)
 import Keyboard.Extra   as Keyboard
+import List             exposing (map, take, drop, head, tail, append, repeat)
 
 initModel : Model
 initModel = 
@@ -10,20 +11,66 @@ initModel =
   , keys  = fst Keyboard.init
   }
 
+oxygenSprite =
+  { src = "stuff/oxygen-tank"
+  , w   = 20
+  , h   = 20
+  }
+
 world : World
 world = 
-  { stuff =
-    [ { x      = -150
-      , y      = -100
+  { renderedSectors = 
+    [ (10, 10)
+    , (11, 10)
+    , (10, 11)
+    , (11, 11)
+    ]
+  , content =
+    [ { x      = 50
+      , y      = 50
       , a      = 0
 
-      , vx     = 1
+      , vx     = 0
       , vy     = 0
+      , va     = -4
+
+      , sector = (10, 10)
+      , sprite = oxygenSprite
+      }
+    , { x      = -150
+      , y      = -10
+      , a      = 0
+
+      , vx     = 2.53
+      , vy     = -3.64
+      , va     = -10
+
+      , sector = (10, 10)
+      , sprite = oxygenSprite
+      }
+    , { x      = 150
+      , y      = -10
+      , a      = 0
+
+      , vx     = 20.53
+      , vy     = 5
       , va     = 1
 
-      , sprite = "stuff/oxygen-tank"
+      , sector = (10, 10)
+      , sprite = oxygenSprite
+      }
+    , { x      = -150
+      , y      = -10
+      , a      = 0
 
-    }]
+      , vx     = 19.1
+      , vy     = 7.04
+      , va     = 20
+
+      , sector = (10, 10)
+      , sprite = oxygenSprite
+      }
+    ]
   }
 
 type Msg 
@@ -36,20 +83,31 @@ type alias Model =
   , keys  : Keyboard.Model
   }
 
+type alias Sprite =
+  { src : String
+  , w   : Int
+  , h   : Int
+  }
+
+
 type alias Thing =
   { x           : Float
   , y           : Float
   , a           : Float
 
+  , sector      : (Int, Int)
+
   , vx          : Float
   , vy          : Float
   , va          : Float
 
-  , sprite      : String
+  , sprite      : Sprite
   }
 
 type alias World = 
-  { stuff : List Thing }
+  { renderedSectors: List (Int, Int)
+  , content: List Thing
+  }
 
 type alias Thrusters =
   { leftFront  : Int
@@ -70,6 +128,8 @@ type alias Ship =
   , vx          : Float
   , vy          : Float
   , va          : Float
+
+  , sector      : (Int, Int)
 
   , fuel        : Float
   , oxygen      : Float
@@ -92,13 +152,15 @@ thrusters =
 
 frege : Thrusters -> Ship
 frege t = 
-  { x            = -150
-  , y            = -150
-  , a            = 20
+  { x            = 0
+  , y            = 0
+  , a            = 0
 
   , vx           = 0
   , vy           = 0
   , va           = 0
+
+  , sector       = (10, 10) 
 
   , fuel         = 1410.1
   , oxygen       = 166
