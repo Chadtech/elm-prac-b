@@ -11373,13 +11373,13 @@ var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
 
 var _user$project$Types$frege = function (t) {
 	return {
-		x: 0,
-		y: 0,
+		x: -50,
+		y: -50,
 		a: 0,
 		vx: 0,
 		vy: 0,
 		va: 0,
-		sector: {ctor: '_Tuple2', _0: 10, _1: 10},
+		sector: {ctor: '_Tuple2', _0: 0, _1: 0},
 		fuel: 1410.1,
 		oxygen: 166,
 		weight: 852,
@@ -11389,12 +11389,16 @@ var _user$project$Types$frege = function (t) {
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
 var _user$project$Types$oxygenSprite = {src: 'stuff/oxygen-tank', w: 20, h: 20};
 var _user$project$Types$world = {
-	renderedSectors: _elm_lang$core$Native_List.fromArray(
+	sectors: _elm_lang$core$Native_List.fromArray(
 		[
-			{ctor: '_Tuple2', _0: 10, _1: 10},
-			{ctor: '_Tuple2', _0: 11, _1: 10},
-			{ctor: '_Tuple2', _0: 10, _1: 11},
-			{ctor: '_Tuple2', _0: 11, _1: 11}
+			_elm_lang$core$Native_List.fromArray(
+			['r', 'g', 'r', 'g']),
+			_elm_lang$core$Native_List.fromArray(
+			['r', 'r', 'g', 'g']),
+			_elm_lang$core$Native_List.fromArray(
+			['r', 'g', 'r', 'r']),
+			_elm_lang$core$Native_List.fromArray(
+			['g', 'r', 'g', 'g'])
 		]),
 	content: _elm_lang$core$Native_List.fromArray(
 		[
@@ -11459,7 +11463,7 @@ var _user$project$Types$Thing = F8(
 	});
 var _user$project$Types$World = F2(
 	function (a, b) {
-		return {renderedSectors: a, content: b};
+		return {sectors: a, content: b};
 	});
 var _user$project$Types$Thrusters = F8(
 	function (a, b, c, d, e, f, g, h) {
@@ -11921,8 +11925,7 @@ var _user$project$Positioning$shipPosition = F2(
 			{
 				x: xm,
 				y: ym,
-				a: _user$project$Positioning$moduloAngle(a$),
-				sector: {ctor: '_Tuple2', _0: sx + dxt, _1: sy + dyt}
+				a: _user$project$Positioning$moduloAngle(a$)
 			});
 	});
 
@@ -12219,25 +12222,49 @@ var _user$project$Main$main = {
 		})
 };
 
-var _user$project$Styles_ops = _user$project$Styles_ops || {};
-_user$project$Styles_ops['-'] = F2(
-	function (v0, v1) {
-		return {ctor: '_Tuple2', _0: v0, _1: v1};
+var _user$project$ShipType$frege = function (t) {
+	return {
+		x: 0,
+		y: 0,
+		a: 0,
+		vx: 0,
+		vy: 0,
+		va: 0,
+		sector: {ctor: '_Tuple2', _0: 10, _1: 10},
+		fuel: 1410.1,
+		oxygen: 166,
+		weight: 852,
+		thrusters: t
+	};
+};
+var _user$project$ShipType$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
+var _user$project$ShipType$Thrusters = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {leftFront: a, leftSide: b, leftBack: c, main: d, rightFront: e, rightSide: f, rightBack: g, boost: h};
 	});
-var _user$project$Styles$viewStyle = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			A2(_user$project$Styles_ops['-'], 'margin', 'auto'),
-			A2(_user$project$Styles_ops['-'], 'width', '60%'),
-			A2(_user$project$Styles_ops['-'], 'padding', '10px'),
-			A2(_user$project$Styles_ops['-'], 'background-color', '#ff0000'),
-			A2(_user$project$Styles_ops['-'], 'height', '500px'),
-			A2(_user$project$Styles_ops['-'], 'width', '500px'),
-			A2(_user$project$Styles_ops['-'], 'position', 'relative'),
-			A2(_user$project$Styles_ops['-'], 'top', '50%'),
-			A2(_user$project$Styles_ops['-'], 'transform', 'translateY(-50%)'),
-			A2(_user$project$Styles_ops['-'], 'overflow', 'hidden')
-		]));
+var _user$project$ShipType$Ship = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return {x: a, y: b, a: c, vx: d, vy: e, va: f, sector: g, fuel: h, oxygen: i, weight: j, thrusters: k};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 
 var Elm = {};
 Elm['DrawShip'] = Elm['DrawShip'] || {};
@@ -12252,10 +12279,10 @@ Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['Positioning'] = Elm['Positioning'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Positioning'], 'Positioning', typeof _user$project$Positioning$main === 'undefined' ? null : _user$project$Positioning$main);
+Elm['ShipType'] = Elm['ShipType'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['ShipType'], 'ShipType', typeof _user$project$ShipType$main === 'undefined' ? null : _user$project$ShipType$main);
 Elm['Source'] = Elm['Source'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Source'], 'Source', typeof _user$project$Source$main === 'undefined' ? null : _user$project$Source$main);
-Elm['Styles'] = Elm['Styles'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['Styles'], 'Styles', typeof _user$project$Styles$main === 'undefined' ? null : _user$project$Styles$main);
 Elm['ThingPosition'] = Elm['ThingPosition'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ThingPosition'], 'ThingPosition', typeof _user$project$ThingPosition$main === 'undefined' ? null : _user$project$ThingPosition$main);
 Elm['Thrust'] = Elm['Thrust'] || {};

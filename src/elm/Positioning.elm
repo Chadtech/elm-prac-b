@@ -51,6 +51,6 @@ shipPosition dt s =
     | x      = xm
     , y      = ym
     , a      = moduloAngle a'
-    , sector = (sx + dxt, sy + dyt)
+    --, sector = (sx + dxt, sy + dyt)
     } 
 

@@ -4,7 +4,6 @@ import Html             exposing (..)
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Types            exposing (..)
---import Styles           exposing (..)
 import GameView         exposing (gameView)
 
 
@@ -16,12 +15,6 @@ view model =
     [ class "view-port" ] 
     [ gameView (model.ship, model.world) ]
   ]
-
-
-
-
-
-
 
 
 

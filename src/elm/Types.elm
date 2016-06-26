@@ -4,6 +4,16 @@ import Time             exposing (..)
 import Keyboard.Extra   as Keyboard
 import List             exposing (map, take, drop, head, tail, append, repeat)
 
+type Msg 
+  = Refresh Time
+  | HandleKeys Keyboard.Msg
+
+type alias Model =
+  { world : World 
+  , ship  : Ship
+  , keys  : Keyboard.Model
+  }
+
 initModel : Model
 initModel = 
   { world = world
@@ -11,19 +21,13 @@ initModel =
   , keys  = fst Keyboard.init
   }
 
-oxygenSprite =
-  { src = "stuff/oxygen-tank"
-  , w   = 20
-  , h   = 20
-  }
-
 world : World
 world = 
-  { renderedSectors = 
-    [ (10, 10)
-    , (11, 10)
-    , (10, 11)
-    , (11, 11)
+  { sectors = 
+    [ [ "r", "g", "r", "g" ]
+    , [ "r", "r", "g", "g" ]
+    , [ "r", "g", "r", "r" ]
+    , [ "g", "r", "g", "g" ]
     ]
   , content =
     [ { x      = 50
@@ -73,14 +77,10 @@ world =
     ]
   }
 
-type Msg 
-  = Refresh Time
-  | HandleKeys Keyboard.Msg
-
-type alias Model =
-  { world : World 
-  , ship  : Ship
-  , keys  : Keyboard.Model
+oxygenSprite =
+  { src = "stuff/oxygen-tank"
+  , w   = 20
+  , h   = 20
   }
 
 type alias Sprite =
@@ -88,7 +88,6 @@ type alias Sprite =
   , w   : Int
   , h   : Int
   }
-
 
 type alias Thing =
   { x           : Float
@@ -105,7 +104,7 @@ type alias Thing =
   }
 
 type alias World = 
-  { renderedSectors: List (Int, Int)
+  { sectors: List (List String) 
   , content: List Thing
   }
 
@@ -152,15 +151,15 @@ thrusters =
 
 frege : Thrusters -> Ship
 frege t = 
-  { x            = 0
-  , y            = 0
+  { x            = -50
+  , y            = -50
   , a            = 0
 
   , vx           = 0
   , vy           = 0
   , va           = 0
 
-  , sector       = (10, 10) 
+  , sector       = (0, 0) 
 
   , fuel         = 1410.1
   , oxygen       = 166

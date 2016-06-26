@@ -9,7 +9,7 @@ import Transform        exposing (..)
 import Types            exposing (..)
 import DrawShip         exposing (drawShip)
 import DrawStuff        exposing (populate)
-import List exposing (filter)
+import List             exposing (filter)
 
 
 gameView : (Ship, World) -> Html Msg
@@ -46,6 +46,8 @@ rotateArea : Ship -> Form -> Form
 rotateArea s area' =
   layerer [ rotate (degrees -s.a) area' ]
   |>toForm
+
+--tile : (Int, Int) -> 
 
 tile : String -> Form
 tile t =
