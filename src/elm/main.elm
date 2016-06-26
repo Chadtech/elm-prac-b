@@ -8,7 +8,6 @@ import Time             exposing (..)
 import Debug            exposing (log)
 import AnimationFrame   exposing (..)
 import Positioning      exposing (shipPosition)
-import ThingPosition    exposing (thingPosition)
 import Keyboard.Extra   as Keyboard
 import ThrusterState    exposing (setThrusters)
 import Thrust           exposing (setThrust)
@@ -31,18 +30,11 @@ subscriptions model =
 
 refresh : Model -> Float -> Model
 refresh m dt =
-  let world = m.world
-  in
   { m 
   | ship = 
-    m.ship
-    |>shipPosition dt
-    |>setThrust
-  , world = 
-    { world 
-      | content = 
-        (map (thingPosition dt) world.content)
-    }
+      m.ship
+      |>shipPosition dt
+      |>setThrust
   }
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -57,13 +49,14 @@ update msg m =
         (keys', kCmd) = 
           Keyboard.update keyMsg m.keys
         ship = m.ship
-        t = setThrusters keys'
       in
         (,)
           { m 
           | keys = keys'
           , ship = 
-            { ship | thrusters = t }
+            { ship 
+            | thrusters = setThrusters keys' 
+            }
           } 
           (Cmd.map HandleKeys kCmd)
 

@@ -32,6 +32,16 @@ moduloAngle : Float -> Float
 moduloAngle =
   moduloClockwise >> moduloCClockwise
 
+pos : Float -> Bool
+pos n = n > 0
+
+passedAxis : (Float, Float) -> Float
+passedAxis (p, f) =
+  if not ((p > 0) == (f > 0)) then 
+    f - p
+  else 
+    0
+
 shipPosition : Float -> Ship -> Ship
 shipPosition dt s =
   let 
@@ -42,7 +52,9 @@ shipPosition dt s =
     ym = modulo y'
     xm = modulo x'
 
-    (sx, sy) = s.sector
+    ye = log "P,F" (passedAxis (s.y, y'))
+
+    --(sx, sy) = s.sector
 
     dyt = (round (y' - ym)) // 600 
     dxt = (round (x' - xm)) // 600
