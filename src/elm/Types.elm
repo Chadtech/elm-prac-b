@@ -8,6 +8,20 @@ type Msg
   = Refresh Time
   | HandleKeys Keyboard.Msg
 
+type Quadrant 
+  = A
+  | B
+  | C
+  | D
+
+--      |
+--   A  |  B
+--      |
+--  ---------
+--      |
+--   C  |  D
+--      |
+
 type alias Model =
   { ship  : Ship
   , keys  : Keyboard.Model
@@ -40,7 +54,8 @@ type alias Ship =
   , vy          : Float
   , va          : Float
 
-  --, sector      : (Int, Int)
+  , sector      : (Int, Int)
+  , quadrant    : Quadrant
 
   , fuel        : Float
   , oxygen      : Float
@@ -71,7 +86,8 @@ frege t =
   , vy           = 0
   , va           = 0
 
-  --, sector       = (0, 0) 
+  , sector       = (0, 0) 
+  , quadrant     = C
 
   , fuel         = 1410.1
   , oxygen       = 166

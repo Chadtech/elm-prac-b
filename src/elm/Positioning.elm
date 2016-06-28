@@ -3,6 +3,8 @@ module Positioning exposing (shipPosition)
 import Types exposing (..)
 import Debug exposing (log)
 
+
+
 moduloPos : Float -> Float
 moduloPos n =
   if n > 300 then moduloPos (n - 600)
@@ -32,15 +34,18 @@ moduloAngle : Float -> Float
 moduloAngle =
   moduloClockwise >> moduloCClockwise
 
-pos : Float -> Bool
-pos n = n > 0
-
-passedAxis : (Float, Float) -> Float
+passedAxis : (Float, Float) -> Int
 passedAxis (p, f) =
-  if not ((p > 0) == (f > 0)) then 
-    f - p
-  else 
-    0
+  if (p > 0) /= (f > 0) then 
+    ((f // 600) + 1) * (abs f // f)
+  else 0
+
+setQuadrant : (Float, Float) -> Quadrant
+setQuadrant (x, y) =
+  if x > 0 then
+    if y > 0 then B else D
+  else
+    if y > 0 then A else C
 
 shipPosition : Float -> Ship -> Ship
 shipPosition dt s =
@@ -52,17 +57,15 @@ shipPosition dt s =
     ym = modulo y'
     xm = modulo x'
 
-    ye = log "P,F" (passedAxis (s.y, y'))
-
-    --(sx, sy) = s.sector
-
-    dyt = (round (y' - ym)) // 600 
-    dxt = (round (x' - xm)) // 600
+    (sx, sy) = s.sector
+    dsy      = passedAxis (s.y, y')
+    dsx      = passedAxis (s.x, x')
   in
     { s
-    | x      = xm
-    , y      = ym
-    , a      = moduloAngle a'
-    --, sector = (sx + dxt, sy + dyt)
+    | x        = xm
+    , y        = ym
+    , a        = moduloAngle a'
+    , sector   = (sx + dsx, sy + dsy)
+    , quadrant = setQuadrant (xm, ym)
     } 
 

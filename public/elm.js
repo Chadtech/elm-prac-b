@@ -11371,14 +11371,7 @@ var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
 		_elm_lang$core$Set$toList(model.keysDown));
 };
 
-var _user$project$Types$frege = function (t) {
-	return {x: -50, y: -50, a: 0, vx: 0, vy: 0, va: 0, fuel: 1410.1, oxygen: 166, weight: 852, thrusters: t};
-};
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
-var _user$project$Types$initModel = {
-	ship: _user$project$Types$frege(_user$project$Types$thrusters),
-	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init)
-};
 var _user$project$Types$Model = F2(
 	function (a, b) {
 		return {ship: a, keys: b};
@@ -11397,7 +11390,11 @@ var _user$project$Types$Ship = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {x: a, y: b, a: c, vx: d, vy: e, va: f, fuel: g, oxygen: h, weight: i, thrusters: j};
+										return function (k) {
+											return function (l) {
+												return {x: a, y: b, a: c, vx: d, vy: e, va: f, sector: g, quadrant: h, fuel: i, oxygen: j, weight: k, thrusters: l};
+											};
+										};
 									};
 								};
 							};
@@ -11414,6 +11411,30 @@ var _user$project$Types$HandleKeys = function (a) {
 var _user$project$Types$Refresh = function (a) {
 	return {ctor: 'Refresh', _0: a};
 };
+var _user$project$Types$D = {ctor: 'D'};
+var _user$project$Types$C = {ctor: 'C'};
+var _user$project$Types$frege = function (t) {
+	return {
+		x: -50,
+		y: -50,
+		a: 0,
+		vx: 0,
+		vy: 0,
+		va: 0,
+		sector: {ctor: '_Tuple2', _0: 0, _1: 0},
+		quadrant: _user$project$Types$C,
+		fuel: 1410.1,
+		oxygen: 166,
+		weight: 852,
+		thrusters: t
+	};
+};
+var _user$project$Types$initModel = {
+	ship: _user$project$Types$frege(_user$project$Types$thrusters),
+	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init)
+};
+var _user$project$Types$B = {ctor: 'B'};
+var _user$project$Types$A = {ctor: 'A'};
 
 var _user$project$Source$root = './';
 var _user$project$Source$src = function (str) {
@@ -11689,24 +11710,24 @@ var _user$project$View$view = function (model) {
 			]));
 };
 
-var _user$project$Positioning$passedAxis = function (_p0) {
+var _user$project$Positioning$setQuadrant = function (_p0) {
 	var _p1 = _p0;
-	var _p3 = _p1._0;
 	var _p2 = _p1._1;
-	return _elm_lang$core$Basics$not(
-		_elm_lang$core$Native_Utils.eq(
-			_elm_lang$core$Native_Utils.cmp(_p3, 0) > 0,
-			_elm_lang$core$Native_Utils.cmp(_p2, 0) > 0)) ? (_p2 - _p3) : 0;
+	return (_elm_lang$core$Native_Utils.cmp(_p1._0, 0) > 0) ? ((_elm_lang$core$Native_Utils.cmp(_p2, 0) > 0) ? _user$project$Types$B : _user$project$Types$D) : ((_elm_lang$core$Native_Utils.cmp(_p2, 0) > 0) ? _user$project$Types$A : _user$project$Types$C);
 };
-var _user$project$Positioning$pos = function (n) {
-	return _elm_lang$core$Native_Utils.cmp(n, 0) > 0;
+var _user$project$Positioning$passedAxis = function (_p3) {
+	var _p4 = _p3;
+	var _p5 = _p4._1;
+	return (!_elm_lang$core$Native_Utils.eq(
+		_elm_lang$core$Native_Utils.cmp(_p4._0, 0) > 0,
+		_elm_lang$core$Native_Utils.cmp(_p5, 0) > 0)) ? ((((_p5 / 600) | 0) + 1) * ((_elm_lang$core$Basics$abs(_p5) / _p5) | 0)) : 0;
 };
 var _user$project$Positioning$moduloCClockwise = function (a) {
 	moduloCClockwise:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(a, -180) < 0) {
-			var _v1 = a + 360;
-			a = _v1;
+			var _v2 = a + 360;
+			a = _v2;
 			continue moduloCClockwise;
 		} else {
 			return a;
@@ -11717,24 +11738,24 @@ var _user$project$Positioning$moduloClockwise = function (a) {
 	moduloClockwise:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(a, 180) > 0) {
-			var _v2 = a - 360;
-			a = _v2;
+			var _v3 = a - 360;
+			a = _v3;
 			continue moduloClockwise;
 		} else {
 			return a;
 		}
 	}
 };
-var _user$project$Positioning$moduloAngle = function (_p4) {
+var _user$project$Positioning$moduloAngle = function (_p6) {
 	return _user$project$Positioning$moduloCClockwise(
-		_user$project$Positioning$moduloClockwise(_p4));
+		_user$project$Positioning$moduloClockwise(_p6));
 };
 var _user$project$Positioning$moduloNeg = function (n) {
 	moduloNeg:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(n, -300) < 0) {
-			var _v3 = n + 600;
-			n = _v3;
+			var _v4 = n + 600;
+			n = _v4;
 			continue moduloNeg;
 		} else {
 			return n;
@@ -11745,38 +11766,41 @@ var _user$project$Positioning$moduloPos = function (n) {
 	moduloPos:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(n, 300) > 0) {
-			var _v4 = n - 600;
-			n = _v4;
+			var _v5 = n - 600;
+			n = _v5;
 			continue moduloPos;
 		} else {
 			return n;
 		}
 	}
 };
-var _user$project$Positioning$modulo = function (_p5) {
+var _user$project$Positioning$modulo = function (_p7) {
 	return _user$project$Positioning$moduloNeg(
-		_user$project$Positioning$moduloPos(_p5));
+		_user$project$Positioning$moduloPos(_p7));
 };
 var _user$project$Positioning$shipPosition = F2(
 	function (dt, s) {
+		var _p8 = s.sector;
+		var sx = _p8._0;
+		var sy = _p8._1;
 		var a$ = s.a + (dt * s.va);
 		var x$ = s.x + (dt * s.vx);
 		var xm = _user$project$Positioning$modulo(x$);
-		var dxt = (_elm_lang$core$Basics$round(x$ - xm) / 600) | 0;
+		var dsx = _user$project$Positioning$passedAxis(
+			{ctor: '_Tuple2', _0: s.x, _1: x$});
 		var y$ = s.y + (dt * s.vy);
 		var ym = _user$project$Positioning$modulo(y$);
-		var ye = A2(
-			_elm_lang$core$Debug$log,
-			'P,F',
-			_user$project$Positioning$passedAxis(
-				{ctor: '_Tuple2', _0: s.y, _1: y$}));
-		var dyt = (_elm_lang$core$Basics$round(y$ - ym) / 600) | 0;
+		var dsy = _user$project$Positioning$passedAxis(
+			{ctor: '_Tuple2', _0: s.y, _1: y$});
 		return _elm_lang$core$Native_Utils.update(
 			s,
 			{
 				x: xm,
 				y: ym,
-				a: _user$project$Positioning$moduloAngle(a$)
+				a: _user$project$Positioning$moduloAngle(a$),
+				sector: {ctor: '_Tuple2', _0: sx + dsx, _1: sy + dsy},
+				quadrant: _user$project$Positioning$setQuadrant(
+					{ctor: '_Tuple2', _0: xm, _1: ym})
 			});
 	});
 
