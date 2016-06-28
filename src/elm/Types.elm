@@ -2,7 +2,7 @@ module Types exposing (..)
 
 import Time             exposing (..)
 import Keyboard.Extra   as Keyboard
-import List             exposing (map, take, drop, head, tail, append, repeat)
+
 
 type Msg 
   = Refresh Time
@@ -23,16 +23,58 @@ type Quadrant
 --      |
 
 type alias Model =
-  { ship  : Ship
-  , keys  : Keyboard.Model
+  { ship   : Ship
+  , keys   : Keyboard.Model
+  , things : List Thing
   }
 
 initModel : Model
 initModel = 
-  { ship  = frege thrusters
-  , keys  = fst Keyboard.init
+  { ship   = frege thrusters
+  , keys   = fst Keyboard.init
+  , things = [ o2Box ]
   }
 
+type alias World = 
+  { things : List Thing }
+
+type alias Thing =
+  { x : Float
+  , y : Float
+  , a : Float
+
+  , vx : Float
+  , vy : Float
+  , va : Float
+
+  , sector : (Int, Int)
+
+  , sprite : Sprite
+  }
+
+type alias Sprite =
+  { w   : Int
+  , h   : Int
+  , src : String
+  }
+
+o2Box : Thing
+o2Box =
+  { x = 550
+  , y = 575
+  , a = 0
+
+  , vx = 0
+  , vy = 0
+  , va = 0
+
+  , sector = (0, 0)
+  , sprite = 
+    { w    = 20
+    , h    = 20
+    , src  = "stuff/oxygen-tank"
+    }
+  }
 
 type alias Thrusters =
   { leftFront  : Int

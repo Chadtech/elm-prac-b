@@ -1,8 +1,7 @@
-module Positioning exposing (shipPosition)
+module ShipPosition exposing (shipPosition)
 
 import Types exposing (..)
 import Debug exposing (log)
-
 
 
 moduloPos : Float -> Float
@@ -34,8 +33,8 @@ moduloAngle : Float -> Float
 moduloAngle =
   moduloClockwise >> moduloCClockwise
 
-passedAxis : (Float, Float) -> Int
-passedAxis (p, f) =
+axisCrosses : (Float, Float) -> Int
+axisCrosses (p, f) =
   if (p > 0) /= (f > 0) then 
     ((f // 600) + 1) * (abs f // f)
   else 0
@@ -58,14 +57,15 @@ shipPosition dt s =
     xm = modulo x'
 
     (sx, sy) = s.sector
-    dsy      = passedAxis (s.y, y')
-    dsx      = passedAxis (s.x, x')
+    dsy      = axisCrosses (s.y, y')
+    dsx      = axisCrosses (s.x, x')
+
   in
-    { s
-    | x        = xm
-    , y        = ym
-    , a        = moduloAngle a'
-    , sector   = (sx + dsx, sy + dsy)
-    , quadrant = setQuadrant (xm, ym)
-    } 
+  { s
+  | x        = xm
+  , y        = ym
+  , a        = moduloAngle a'
+  , sector   = (sx + dsx, sy + dsy)
+  , quadrant = setQuadrant (xm, ym)
+  } 
 

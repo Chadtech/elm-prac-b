@@ -7,7 +7,8 @@ import View             exposing (view)
 import Time             exposing (..)
 import Debug            exposing (log)
 import AnimationFrame   exposing (..)
-import Positioning      exposing (shipPosition)
+import ShipPosition     exposing (shipPosition)
+import ThingPosition    exposing (thingPosition)
 import Keyboard.Extra   as Keyboard
 import ThrusterState    exposing (setThrusters)
 import Thrust           exposing (setThrust)
@@ -35,6 +36,7 @@ refresh m dt =
       m.ship
       |>shipPosition dt
       |>setThrust
+  , things = map (thingPosition dt) m.things
   }
 
 update : Msg -> Model -> (Model, Cmd Msg)

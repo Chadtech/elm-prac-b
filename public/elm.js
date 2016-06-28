@@ -11372,9 +11372,30 @@ var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
 };
 
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
-var _user$project$Types$Model = F2(
-	function (a, b) {
-		return {ship: a, keys: b};
+var _user$project$Types$o2Box = {
+	x: 550,
+	y: 575,
+	a: 0,
+	vx: 0,
+	vy: 0,
+	va: 0,
+	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
+	sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
+};
+var _user$project$Types$Model = F3(
+	function (a, b, c) {
+		return {ship: a, keys: b, things: c};
+	});
+var _user$project$Types$World = function (a) {
+	return {things: a};
+};
+var _user$project$Types$Thing = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {x: a, y: b, a: c, vx: d, vy: e, va: f, sector: g, sprite: h};
+	});
+var _user$project$Types$Sprite = F3(
+	function (a, b, c) {
+		return {w: a, h: b, src: c};
 	});
 var _user$project$Types$Thrusters = F8(
 	function (a, b, c, d, e, f, g, h) {
@@ -11431,7 +11452,9 @@ var _user$project$Types$frege = function (t) {
 };
 var _user$project$Types$initModel = {
 	ship: _user$project$Types$frege(_user$project$Types$thrusters),
-	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init)
+	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init),
+	things: _elm_lang$core$Native_List.fromArray(
+		[_user$project$Types$o2Box])
 };
 var _user$project$Types$B = {ctor: 'B'};
 var _user$project$Types$A = {ctor: 'A'};
@@ -11614,28 +11637,71 @@ var _user$project$GameView$tile = function (t) {
 		A3(_evancz$elm_graphics$Element$image, 601, 601, t));
 };
 var _user$project$GameView$stars = _user$project$GameView$tile('./stars/stars.png');
+var _user$project$GameView$nearEnough = F2(
+	function (_p0, t) {
+		var _p1 = _p0;
+		var _p2 = t.sector;
+		var tx = _p2._0;
+		var ty = _p2._1;
+		var dx = _p1._1._0 - tx;
+		var ex = function (i) {
+			return _elm_lang$core$Native_Utils.eq(dx, 0) || _elm_lang$core$Native_Utils.eq(dx, i);
+		};
+		var dy = _p1._1._1 - ty;
+		var ey = function (i) {
+			return _elm_lang$core$Native_Utils.eq(dy, 0) || _elm_lang$core$Native_Utils.eq(dy, i);
+		};
+		var _p3 = _p1._0;
+		switch (_p3.ctor) {
+			case 'A':
+				return (ex(1) && ey(1)) ? true : false;
+			case 'B':
+				return (ex(-1) && ey(1)) ? true : false;
+			case 'C':
+				return (ex(-1) && ey(-1)) ? true : false;
+			default:
+				return (ex(1) && ey(-1)) ? true : false;
+		}
+	});
 var _user$project$GameView$layerer = A2(_evancz$elm_graphics$Collage$collage, 1200, 1200);
-var _user$project$GameView$area = _evancz$elm_graphics$Collage$toForm(
-	_user$project$GameView$layerer(
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_evancz$elm_graphics$Collage$move,
-				{ctor: '_Tuple2', _0: -300, _1: 300},
-				_user$project$GameView$stars),
-				A2(
-				_evancz$elm_graphics$Collage$move,
-				{ctor: '_Tuple2', _0: 300, _1: 300},
-				_user$project$GameView$stars),
-				A2(
-				_evancz$elm_graphics$Collage$move,
-				{ctor: '_Tuple2', _0: 300, _1: -300},
-				_user$project$GameView$stars),
-				A2(
-				_evancz$elm_graphics$Collage$move,
-				{ctor: '_Tuple2', _0: -300, _1: -300},
-				_user$project$GameView$stars)
-			])));
+var _user$project$GameView$area = function (m) {
+	var ss = m.ship.sector;
+	var q = m.ship.quadrant;
+	var ts = A2(
+		_elm_lang$core$List$filter,
+		_user$project$GameView$nearEnough(
+			{ctor: '_Tuple2', _0: q, _1: ss}),
+		m.things);
+	var ye = A2(
+		_elm_lang$core$Debug$log,
+		'THINGS',
+		{
+			ctor: '_Tuple2',
+			_0: {ctor: '_Tuple2', _0: q, _1: ss},
+			_1: ts
+		});
+	return _evancz$elm_graphics$Collage$toForm(
+		_user$project$GameView$layerer(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_evancz$elm_graphics$Collage$move,
+					{ctor: '_Tuple2', _0: -300, _1: 300},
+					_user$project$GameView$stars),
+					A2(
+					_evancz$elm_graphics$Collage$move,
+					{ctor: '_Tuple2', _0: 300, _1: 300},
+					_user$project$GameView$stars),
+					A2(
+					_evancz$elm_graphics$Collage$move,
+					{ctor: '_Tuple2', _0: 300, _1: -300},
+					_user$project$GameView$stars),
+					A2(
+					_evancz$elm_graphics$Collage$move,
+					{ctor: '_Tuple2', _0: -300, _1: -300},
+					_user$project$GameView$stars)
+				])));
+};
 var _user$project$GameView$positionArea = F2(
 	function (s, area$) {
 		return _evancz$elm_graphics$Collage$toForm(
@@ -11660,7 +11726,7 @@ var _user$project$GameView$rotateArea = F2(
 						area$)
 					])));
 	});
-var _user$project$GameView$gameView = function (ship) {
+var _user$project$GameView$gameView = function (m) {
 	return _evancz$elm_graphics$Element$toHtml(
 		A3(
 			_evancz$elm_graphics$Collage$collage,
@@ -11674,9 +11740,12 @@ var _user$project$GameView$gameView = function (ship) {
 							[
 								A2(
 								_user$project$GameView$rotateArea,
-								ship,
-								A2(_user$project$GameView$positionArea, ship, _user$project$GameView$area)),
-								_user$project$DrawShip$drawShip(ship.thrusters)
+								m.ship,
+								A2(
+									_user$project$GameView$positionArea,
+									m.ship,
+									_user$project$GameView$area(m))),
+								_user$project$DrawShip$drawShip(m.ship.thrusters)
 							])))
 				])));
 };
@@ -11705,24 +11774,24 @@ var _user$project$View$view = function (model) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_user$project$GameView$gameView(model.ship)
+						_user$project$GameView$gameView(model)
 					]))
 			]));
 };
 
-var _user$project$Positioning$setQuadrant = function (_p0) {
+var _user$project$ShipPosition$setQuadrant = function (_p0) {
 	var _p1 = _p0;
 	var _p2 = _p1._1;
 	return (_elm_lang$core$Native_Utils.cmp(_p1._0, 0) > 0) ? ((_elm_lang$core$Native_Utils.cmp(_p2, 0) > 0) ? _user$project$Types$B : _user$project$Types$D) : ((_elm_lang$core$Native_Utils.cmp(_p2, 0) > 0) ? _user$project$Types$A : _user$project$Types$C);
 };
-var _user$project$Positioning$passedAxis = function (_p3) {
+var _user$project$ShipPosition$axisCrosses = function (_p3) {
 	var _p4 = _p3;
 	var _p5 = _p4._1;
 	return (!_elm_lang$core$Native_Utils.eq(
 		_elm_lang$core$Native_Utils.cmp(_p4._0, 0) > 0,
 		_elm_lang$core$Native_Utils.cmp(_p5, 0) > 0)) ? ((((_p5 / 600) | 0) + 1) * ((_elm_lang$core$Basics$abs(_p5) / _p5) | 0)) : 0;
 };
-var _user$project$Positioning$moduloCClockwise = function (a) {
+var _user$project$ShipPosition$moduloCClockwise = function (a) {
 	moduloCClockwise:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(a, -180) < 0) {
@@ -11734,7 +11803,7 @@ var _user$project$Positioning$moduloCClockwise = function (a) {
 		}
 	}
 };
-var _user$project$Positioning$moduloClockwise = function (a) {
+var _user$project$ShipPosition$moduloClockwise = function (a) {
 	moduloClockwise:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(a, 180) > 0) {
@@ -11746,11 +11815,11 @@ var _user$project$Positioning$moduloClockwise = function (a) {
 		}
 	}
 };
-var _user$project$Positioning$moduloAngle = function (_p6) {
-	return _user$project$Positioning$moduloCClockwise(
-		_user$project$Positioning$moduloClockwise(_p6));
+var _user$project$ShipPosition$moduloAngle = function (_p6) {
+	return _user$project$ShipPosition$moduloCClockwise(
+		_user$project$ShipPosition$moduloClockwise(_p6));
 };
-var _user$project$Positioning$moduloNeg = function (n) {
+var _user$project$ShipPosition$moduloNeg = function (n) {
 	moduloNeg:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(n, -300) < 0) {
@@ -11762,7 +11831,7 @@ var _user$project$Positioning$moduloNeg = function (n) {
 		}
 	}
 };
-var _user$project$Positioning$moduloPos = function (n) {
+var _user$project$ShipPosition$moduloPos = function (n) {
 	moduloPos:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(n, 300) > 0) {
@@ -11774,33 +11843,111 @@ var _user$project$Positioning$moduloPos = function (n) {
 		}
 	}
 };
-var _user$project$Positioning$modulo = function (_p7) {
-	return _user$project$Positioning$moduloNeg(
-		_user$project$Positioning$moduloPos(_p7));
+var _user$project$ShipPosition$modulo = function (_p7) {
+	return _user$project$ShipPosition$moduloNeg(
+		_user$project$ShipPosition$moduloPos(_p7));
 };
-var _user$project$Positioning$shipPosition = F2(
+var _user$project$ShipPosition$shipPosition = F2(
 	function (dt, s) {
 		var _p8 = s.sector;
 		var sx = _p8._0;
 		var sy = _p8._1;
 		var a$ = s.a + (dt * s.va);
 		var x$ = s.x + (dt * s.vx);
-		var xm = _user$project$Positioning$modulo(x$);
-		var dsx = _user$project$Positioning$passedAxis(
+		var xm = _user$project$ShipPosition$modulo(x$);
+		var dsx = _user$project$ShipPosition$axisCrosses(
 			{ctor: '_Tuple2', _0: s.x, _1: x$});
 		var y$ = s.y + (dt * s.vy);
-		var ym = _user$project$Positioning$modulo(y$);
-		var dsy = _user$project$Positioning$passedAxis(
+		var ym = _user$project$ShipPosition$modulo(y$);
+		var dsy = _user$project$ShipPosition$axisCrosses(
 			{ctor: '_Tuple2', _0: s.y, _1: y$});
 		return _elm_lang$core$Native_Utils.update(
 			s,
 			{
 				x: xm,
 				y: ym,
-				a: _user$project$Positioning$moduloAngle(a$),
+				a: _user$project$ShipPosition$moduloAngle(a$),
 				sector: {ctor: '_Tuple2', _0: sx + dsx, _1: sy + dsy},
-				quadrant: _user$project$Positioning$setQuadrant(
+				quadrant: _user$project$ShipPosition$setQuadrant(
 					{ctor: '_Tuple2', _0: xm, _1: ym})
+			});
+	});
+
+var _user$project$ThingPosition$moduloCClockwise = function (a) {
+	moduloCClockwise:
+	while (true) {
+		if (_elm_lang$core$Native_Utils.cmp(a, -180) < 0) {
+			var _v0 = a + 360;
+			a = _v0;
+			continue moduloCClockwise;
+		} else {
+			return a;
+		}
+	}
+};
+var _user$project$ThingPosition$moduloClockwise = function (a) {
+	moduloClockwise:
+	while (true) {
+		if (_elm_lang$core$Native_Utils.cmp(a, 180) > 0) {
+			var _v1 = a - 360;
+			a = _v1;
+			continue moduloClockwise;
+		} else {
+			return a;
+		}
+	}
+};
+var _user$project$ThingPosition$moduloAngle = function (_p0) {
+	return _user$project$ThingPosition$moduloCClockwise(
+		_user$project$ThingPosition$moduloClockwise(_p0));
+};
+var _user$project$ThingPosition$moduloBottom = function (n) {
+	moduloBottom:
+	while (true) {
+		if (_elm_lang$core$Native_Utils.cmp(0, n) > 0) {
+			var _v2 = n + 600;
+			n = _v2;
+			continue moduloBottom;
+		} else {
+			return n;
+		}
+	}
+};
+var _user$project$ThingPosition$moduloTop = function (n) {
+	moduloTop:
+	while (true) {
+		if (_elm_lang$core$Native_Utils.cmp(n, 600) > 0) {
+			var _v3 = n - 600;
+			n = _v3;
+			continue moduloTop;
+		} else {
+			return n;
+		}
+	}
+};
+var _user$project$ThingPosition$modulo = function (_p1) {
+	return _user$project$ThingPosition$moduloBottom(
+		_user$project$ThingPosition$moduloTop(_p1));
+};
+var _user$project$ThingPosition$thingPosition = F2(
+	function (dt, t) {
+		var _p2 = t.sector;
+		var tx = _p2._0;
+		var ty = _p2._1;
+		var a$ = t.a + (dt * t.va);
+		var x$ = t.x + (dt * t.vx);
+		var xm = _user$project$ThingPosition$modulo(x$);
+		var dtx = (_elm_lang$core$Basics$round(x$ - xm) / 600) | 0;
+		var y$ = t.y + (dt * t.vy);
+		var ym = _user$project$ThingPosition$modulo(y$);
+		var dty = (_elm_lang$core$Basics$round(y$ - ym) / 600) | 0;
+		return _elm_lang$core$Native_Utils.update(
+			t,
+			{
+				x: xm,
+				y: ym,
+				a: _user$project$ThingPosition$moduloAngle(a$),
+				sector: {ctor: '_Tuple2', _0: tx + dtx, _1: ty + dty}
 			});
 	});
 
@@ -11958,7 +12105,11 @@ var _user$project$Main$refresh = F2(
 			m,
 			{
 				ship: _user$project$Thrust$setThrust(
-					A2(_user$project$Positioning$shipPosition, dt, m.ship))
+					A2(_user$project$ShipPosition$shipPosition, dt, m.ship)),
+				things: A2(
+					_elm_lang$core$List$map,
+					_user$project$ThingPosition$thingPosition(dt),
+					m.things)
 			});
 	});
 var _user$project$Main$update = F2(
@@ -12011,50 +12162,6 @@ var _user$project$Main$main = {
 		})
 };
 
-var _user$project$ShipType$frege = function (t) {
-	return {
-		x: 0,
-		y: 0,
-		a: 0,
-		vx: 0,
-		vy: 0,
-		va: 0,
-		sector: {ctor: '_Tuple2', _0: 10, _1: 10},
-		fuel: 1410.1,
-		oxygen: 166,
-		weight: 852,
-		thrusters: t
-	};
-};
-var _user$project$ShipType$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
-var _user$project$ShipType$Thrusters = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {leftFront: a, leftSide: b, leftBack: c, main: d, rightFront: e, rightSide: f, rightBack: g, boost: h};
-	});
-var _user$project$ShipType$Ship = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return {x: a, y: b, a: c, vx: d, vy: e, va: f, sector: g, fuel: h, oxygen: i, weight: j, thrusters: k};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-
 var Elm = {};
 Elm['DrawShip'] = Elm['DrawShip'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['DrawShip'], 'DrawShip', typeof _user$project$DrawShip$main === 'undefined' ? null : _user$project$DrawShip$main);
@@ -12064,12 +12171,12 @@ Elm['Main'] = Elm['Main'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
 Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
-Elm['Positioning'] = Elm['Positioning'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['Positioning'], 'Positioning', typeof _user$project$Positioning$main === 'undefined' ? null : _user$project$Positioning$main);
-Elm['ShipType'] = Elm['ShipType'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['ShipType'], 'ShipType', typeof _user$project$ShipType$main === 'undefined' ? null : _user$project$ShipType$main);
+Elm['ShipPosition'] = Elm['ShipPosition'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['ShipPosition'], 'ShipPosition', typeof _user$project$ShipPosition$main === 'undefined' ? null : _user$project$ShipPosition$main);
 Elm['Source'] = Elm['Source'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Source'], 'Source', typeof _user$project$Source$main === 'undefined' ? null : _user$project$Source$main);
+Elm['ThingPosition'] = Elm['ThingPosition'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['ThingPosition'], 'ThingPosition', typeof _user$project$ThingPosition$main === 'undefined' ? null : _user$project$ThingPosition$main);
 Elm['Thrust'] = Elm['Thrust'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Thrust'], 'Thrust', typeof _user$project$Thrust$main === 'undefined' ? null : _user$project$Thrust$main);
 Elm['ThrusterState'] = Elm['ThrusterState'] || {};
