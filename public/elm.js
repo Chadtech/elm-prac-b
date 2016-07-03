@@ -11428,12 +11428,12 @@ var _user$project$Types$o2Box = {
 	x: 550,
 	y: 575,
 	a: 0,
-	vx: 0,
+	vx: 10,
 	vy: 0,
-	va: 0,
+	va: 10,
 	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
 	quadrant: _user$project$Types$C,
-	sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
+	sprite: {w: 20, h: 20, src: './stuff/oxygen-tank.png'}
 };
 var _user$project$Types$frege = function (t) {
 	return {
@@ -11666,7 +11666,7 @@ var _user$project$GameView$nearEnough = F2(
 				return ex(1) && ey(-1);
 		}
 	});
-var _user$project$GameView$setQuadrant = F2(
+var _user$project$GameView$adjustPosition = F2(
 	function (_p4, t) {
 		var _p5 = _p4;
 		var _p9 = _p5._0;
@@ -11707,6 +11707,21 @@ var _user$project$GameView$setQuadrant = F2(
 			_1: t
 		};
 	});
+var _user$project$GameView$drawAt = function (_p10) {
+	var _p11 = _p10;
+	var _p12 = _p11._1;
+	var sprite = _p12.sprite.src;
+	var h = _p12.sprite.h;
+	var w = _p12.sprite.w;
+	return A2(
+		_evancz$elm_graphics$Collage$rotate,
+		_elm_lang$core$Basics$degrees(_p12.a),
+		A2(
+			_evancz$elm_graphics$Collage$move,
+			_p11._0,
+			_evancz$elm_graphics$Collage$toForm(
+				A3(_evancz$elm_graphics$Element$image, w, h, sprite))));
+};
 var _user$project$GameView$layerer = A2(_evancz$elm_graphics$Collage$collage, 1200, 1200);
 var _user$project$GameView$positionArea = F2(
 	function (s, area$) {
@@ -11738,17 +11753,24 @@ var _user$project$GameView$populateArea = F2(
 		var q = m.ship.quadrant;
 		var ts = A2(
 			_elm_lang$core$List$map,
-			_user$project$GameView$setQuadrant(
-				{ctor: '_Tuple2', _0: q, _1: ss}),
+			_user$project$GameView$drawAt,
 			A2(
-				_elm_lang$core$List$filter,
-				_user$project$GameView$nearEnough(
+				_elm_lang$core$List$map,
+				_user$project$GameView$adjustPosition(
 					{ctor: '_Tuple2', _0: q, _1: ss}),
-				m.things));
+				A2(
+					_elm_lang$core$List$filter,
+					_user$project$GameView$nearEnough(
+						{ctor: '_Tuple2', _0: q, _1: ss}),
+					m.things)));
 		return _evancz$elm_graphics$Collage$toForm(
 			_user$project$GameView$layerer(
 				_elm_lang$core$Native_List.fromArray(
-					[area])));
+					[
+						area,
+						_evancz$elm_graphics$Collage$toForm(
+						_user$project$GameView$layerer(ts))
+					])));
 	});
 var _user$project$GameView$area = function (m) {
 	return _evancz$elm_graphics$Collage$toForm(

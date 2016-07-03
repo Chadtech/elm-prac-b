@@ -65,16 +65,16 @@ o2Box =
   , y = 575
   , a = 0
 
-  , vx = 0
+  , vx = 10
   , vy = 0
-  , va = 0
+  , va = 10
 
   , sector   = (0, 0)
   , quadrant = C
   , sprite = 
     { w    = 20
     , h    = 20
-    , src  = "stuff/oxygen-tank"
+    , src  = "./stuff/oxygen-tank.png"
     }
   }
 

@@ -46,16 +46,29 @@ populateArea m area =
     ts = 
       m.things
       |>filter (nearEnough (q, ss))
-      |>map (setQuadrant (q, ss))
-      --|>
-
+      |>map (adjustPosition (q, ss))
+      |>map drawAt
   in
   layerer
-  [ area ]
+  [ area 
+  , toForm <| layerer <| ts
+  ]
   |>toForm
 
-setQuadrant : (Quadrant, (Int, Int) )-> Thing -> ((Float, Float), Thing) 
-setQuadrant (q,(sx,sy)) t = 
+drawAt : ((Float, Float), Thing) -> Form
+drawAt (p, t) =
+  let
+    w      = t.sprite.w
+    h      = t.sprite.h
+    sprite = t.sprite.src
+  in
+    image w h sprite
+    |>toForm
+    |>move p
+    |>rotate (degrees t.a)
+
+adjustPosition : (Quadrant, (Int, Int) )-> Thing -> ((Float, Float), Thing) 
+adjustPosition (q,(sx,sy)) t = 
   let
     (tx, ty) = t.sector
 
