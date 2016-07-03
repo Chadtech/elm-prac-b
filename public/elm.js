@@ -11372,16 +11372,6 @@ var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
 };
 
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
-var _user$project$Types$o2Box = {
-	x: 550,
-	y: 575,
-	a: 0,
-	vx: 0,
-	vy: 0,
-	va: 0,
-	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
-	sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
-};
 var _user$project$Types$Model = F3(
 	function (a, b, c) {
 		return {ship: a, keys: b, things: c};
@@ -11389,9 +11379,9 @@ var _user$project$Types$Model = F3(
 var _user$project$Types$World = function (a) {
 	return {things: a};
 };
-var _user$project$Types$Thing = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {x: a, y: b, a: c, vx: d, vy: e, va: f, sector: g, sprite: h};
+var _user$project$Types$Thing = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {x: a, y: b, a: c, vx: d, vy: e, va: f, sector: g, quadrant: h, sprite: i};
 	});
 var _user$project$Types$Sprite = F3(
 	function (a, b, c) {
@@ -11434,6 +11424,17 @@ var _user$project$Types$Refresh = function (a) {
 };
 var _user$project$Types$D = {ctor: 'D'};
 var _user$project$Types$C = {ctor: 'C'};
+var _user$project$Types$o2Box = {
+	x: 550,
+	y: 575,
+	a: 0,
+	vx: 0,
+	vy: 0,
+	va: 0,
+	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
+	quadrant: _user$project$Types$C,
+	sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
+};
 var _user$project$Types$frege = function (t) {
 	return {
 		x: -50,
@@ -11632,11 +11633,13 @@ var _user$project$DrawShip$drawShip = function (t) {
 				ship)));
 };
 
-var _user$project$GameView$tile = function (t) {
-	return _evancz$elm_graphics$Collage$toForm(
-		A3(_evancz$elm_graphics$Element$image, 601, 601, t));
+var _user$project$GameView$stars = function (pos) {
+	return A2(
+		_evancz$elm_graphics$Collage$move,
+		pos,
+		_evancz$elm_graphics$Collage$toForm(
+			A3(_evancz$elm_graphics$Element$image, 601, 601, './stars/stars.png')));
 };
-var _user$project$GameView$stars = _user$project$GameView$tile('./stars/stars.png');
 var _user$project$GameView$nearEnough = F2(
 	function (_p0, t) {
 		var _p1 = _p0;
@@ -11654,54 +11657,57 @@ var _user$project$GameView$nearEnough = F2(
 		var _p3 = _p1._0;
 		switch (_p3.ctor) {
 			case 'A':
-				return (ex(1) && ey(1)) ? true : false;
+				return ex(1) && ey(1);
 			case 'B':
-				return (ex(-1) && ey(1)) ? true : false;
+				return ex(-1) && ey(1);
 			case 'C':
-				return (ex(-1) && ey(-1)) ? true : false;
+				return ex(-1) && ey(-1);
 			default:
-				return (ex(1) && ey(-1)) ? true : false;
+				return ex(1) && ey(-1);
 		}
 	});
-var _user$project$GameView$layerer = A2(_evancz$elm_graphics$Collage$collage, 1200, 1200);
-var _user$project$GameView$area = function (m) {
-	var ss = m.ship.sector;
-	var q = m.ship.quadrant;
-	var ts = A2(
-		_elm_lang$core$List$filter,
-		_user$project$GameView$nearEnough(
-			{ctor: '_Tuple2', _0: q, _1: ss}),
-		m.things);
-	var ye = A2(
-		_elm_lang$core$Debug$log,
-		'THINGS',
-		{
+var _user$project$GameView$setQuadrant = F2(
+	function (_p4, t) {
+		var _p5 = _p4;
+		var _p9 = _p5._0;
+		var _p6 = t.sector;
+		var tx = _p6._0;
+		var ty = _p6._1;
+		var sameX = _elm_lang$core$Native_Utils.eq(tx - _p5._1._0, 0);
+		var x$ = function () {
+			var _p7 = _p9;
+			switch (_p7.ctor) {
+				case 'A':
+					return sameX ? (t.x - 600) : t.x;
+				case 'B':
+					return sameX ? t.x : (t.x - 600);
+				case 'C':
+					return sameX ? (t.x - 600) : t.x;
+				default:
+					return sameX ? t.x : (t.x - 600);
+			}
+		}();
+		var sameY = _elm_lang$core$Native_Utils.eq(ty - _p5._1._1, 0);
+		var y$ = function () {
+			var _p8 = _p9;
+			switch (_p8.ctor) {
+				case 'A':
+					return sameY ? t.y : (t.y - 600);
+				case 'B':
+					return sameY ? t.y : (t.y - 600);
+				case 'C':
+					return sameY ? (t.y - 600) : t.y;
+				default:
+					return sameY ? (t.y - 600) : t.y;
+			}
+		}();
+		return {
 			ctor: '_Tuple2',
-			_0: {ctor: '_Tuple2', _0: q, _1: ss},
-			_1: ts
-		});
-	return _evancz$elm_graphics$Collage$toForm(
-		_user$project$GameView$layerer(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_evancz$elm_graphics$Collage$move,
-					{ctor: '_Tuple2', _0: -300, _1: 300},
-					_user$project$GameView$stars),
-					A2(
-					_evancz$elm_graphics$Collage$move,
-					{ctor: '_Tuple2', _0: 300, _1: 300},
-					_user$project$GameView$stars),
-					A2(
-					_evancz$elm_graphics$Collage$move,
-					{ctor: '_Tuple2', _0: 300, _1: -300},
-					_user$project$GameView$stars),
-					A2(
-					_evancz$elm_graphics$Collage$move,
-					{ctor: '_Tuple2', _0: -300, _1: -300},
-					_user$project$GameView$stars)
-				])));
-};
+			_0: {ctor: '_Tuple2', _0: x$, _1: y$},
+			_1: t
+		};
+	});
+var _user$project$GameView$layerer = A2(_evancz$elm_graphics$Collage$collage, 1200, 1200);
 var _user$project$GameView$positionArea = F2(
 	function (s, area$) {
 		return _evancz$elm_graphics$Collage$toForm(
@@ -11726,6 +11732,39 @@ var _user$project$GameView$rotateArea = F2(
 						area$)
 					])));
 	});
+var _user$project$GameView$populateArea = F2(
+	function (m, area) {
+		var ss = m.ship.sector;
+		var q = m.ship.quadrant;
+		var ts = A2(
+			_elm_lang$core$List$map,
+			_user$project$GameView$setQuadrant(
+				{ctor: '_Tuple2', _0: q, _1: ss}),
+			A2(
+				_elm_lang$core$List$filter,
+				_user$project$GameView$nearEnough(
+					{ctor: '_Tuple2', _0: q, _1: ss}),
+				m.things));
+		return _evancz$elm_graphics$Collage$toForm(
+			_user$project$GameView$layerer(
+				_elm_lang$core$Native_List.fromArray(
+					[area])));
+	});
+var _user$project$GameView$area = function (m) {
+	return _evancz$elm_graphics$Collage$toForm(
+		_user$project$GameView$layerer(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$GameView$stars(
+					{ctor: '_Tuple2', _0: -300, _1: 300}),
+					_user$project$GameView$stars(
+					{ctor: '_Tuple2', _0: 300, _1: 300}),
+					_user$project$GameView$stars(
+					{ctor: '_Tuple2', _0: 300, _1: -300}),
+					_user$project$GameView$stars(
+					{ctor: '_Tuple2', _0: -300, _1: -300})
+				])));
+};
 var _user$project$GameView$gameView = function (m) {
 	return _evancz$elm_graphics$Element$toHtml(
 		A3(
@@ -11744,7 +11783,10 @@ var _user$project$GameView$gameView = function (m) {
 								A2(
 									_user$project$GameView$positionArea,
 									m.ship,
-									_user$project$GameView$area(m))),
+									A2(
+										_user$project$GameView$populateArea,
+										m,
+										_user$project$GameView$area(m)))),
 								_user$project$DrawShip$drawShip(m.ship.thrusters)
 							])))
 				])));

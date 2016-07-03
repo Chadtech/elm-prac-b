@@ -59,7 +59,6 @@ shipPosition dt s =
     (sx, sy) = s.sector
     dsy      = axisCrosses (s.y, y')
     dsx      = axisCrosses (s.x, x')
-
   in
   { s
   | x        = xm

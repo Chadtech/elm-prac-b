@@ -47,7 +47,8 @@ type alias Thing =
   , vy : Float
   , va : Float
 
-  , sector : (Int, Int)
+  , sector   : (Int, Int)
+  , quadrant : Quadrant
 
   , sprite : Sprite
   }
@@ -68,7 +69,8 @@ o2Box =
   , vy = 0
   , va = 0
 
-  , sector = (0, 0)
+  , sector   = (0, 0)
+  , quadrant = C
   , sprite = 
     { w    = 20
     , h    = 20

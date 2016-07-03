@@ -46,9 +46,6 @@ thingPosition dt t =
     (tx, ty) = t.sector
     dty = (round (y' - ym)) // 600
     dtx = (round (x' - xm)) // 600
-
-    --ye = log "Ys" (y', ym)
-
   in
   { t
   | x = xm
