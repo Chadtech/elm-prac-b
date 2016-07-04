@@ -21,21 +21,19 @@ gameView m =
       |>positionArea m.ship
       |>rotateArea   m.ship
     , drawShip       m.ship.thrusters 
-    ]|>toForm
+    ]
   ]|>toHtml
 
-layerer : List Form -> Element
-layerer = collage 1200 1200
+layerer : List Form -> Form
+layerer l = toForm <| collage 1200 1200 l
 
 positionArea : Ship -> Form -> Form
 positionArea s area' = 
   layerer [ move (-s.x, -s.y) area' ]
-  |>toForm
 
 rotateArea : Ship -> Form -> Form
 rotateArea s area' =
   layerer [ rotate (degrees -s.a) area' ]
-  |>toForm
 
 populateArea : Model-> Form -> Form
 populateArea m area =
@@ -48,12 +46,9 @@ populateArea m area =
       |>filter (nearEnough (q, ss))
       |>map (adjustPosition (q, ss))
       |>map drawAt
-  in
-  layerer
-  [ area 
-  , toForm <| layerer <| ts
-  ]
-  |>toForm
+      |>layerer
+
+  in layerer [ area, ts ]
 
 drawAt : ((Float, Float), Thing) -> Form
 drawAt (p, t) =
@@ -67,13 +62,15 @@ drawAt (p, t) =
     |>move p
     |>rotate (degrees t.a)
 
-adjustPosition : (Quadrant, (Int, Int) )-> Thing -> ((Float, Float), Thing) 
+adjustPosition : (Quadrant, (Int, Int)) -> Thing -> ((Float, Float), Thing) 
 adjustPosition (q,(sx,sy)) t = 
   let
     (tx, ty) = t.sector
 
     sameX = tx - sx == 0
     sameY = ty - sy == 0
+
+    ye = log "adjustments" ((sameX, sameY),((tx, ty), (sx,sy)))
 
     x' =
       case q of
@@ -119,10 +116,11 @@ nearEnough (q,(sx,sy)) t =
     ey = \i -> dy == 0 || dy == i
   in
   case q of
-    A -> ex 1  && ey 1 
-    B -> ex -1 && ey 1  
+    A -> ex -1  && ey 1 
+    B -> ex 1 && ey 1  
     C -> ex -1 && ey -1 
     D -> ex 1  && ey -1 
+
 
 area : Model -> Form
 area m = 
@@ -132,7 +130,6 @@ area m =
   , stars (300, -300)  -- C
   , stars (-300, -300) -- D
   ]
-  |>toForm
 
 stars : (Float, Float) -> Form
 stars pos = 

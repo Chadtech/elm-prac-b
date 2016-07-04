@@ -11428,7 +11428,7 @@ var _user$project$Types$o2Box = {
 	x: 550,
 	y: 575,
 	a: 0,
-	vx: 10,
+	vx: -60,
 	vy: 0,
 	va: 10,
 	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
@@ -11657,9 +11657,9 @@ var _user$project$GameView$nearEnough = F2(
 		var _p3 = _p1._0;
 		switch (_p3.ctor) {
 			case 'A':
-				return ex(1) && ey(1);
-			case 'B':
 				return ex(-1) && ey(1);
+			case 'B':
+				return ex(1) && ey(1);
 			case 'C':
 				return ex(-1) && ey(-1);
 			default:
@@ -11669,11 +11669,13 @@ var _user$project$GameView$nearEnough = F2(
 var _user$project$GameView$adjustPosition = F2(
 	function (_p4, t) {
 		var _p5 = _p4;
+		var _p11 = _p5._1._1;
+		var _p10 = _p5._1._0;
 		var _p9 = _p5._0;
 		var _p6 = t.sector;
 		var tx = _p6._0;
 		var ty = _p6._1;
-		var sameX = _elm_lang$core$Native_Utils.eq(tx - _p5._1._0, 0);
+		var sameX = _elm_lang$core$Native_Utils.eq(tx - _p10, 0);
 		var x$ = function () {
 			var _p7 = _p9;
 			switch (_p7.ctor) {
@@ -11687,7 +11689,7 @@ var _user$project$GameView$adjustPosition = F2(
 					return sameX ? t.x : (t.x - 600);
 			}
 		}();
-		var sameY = _elm_lang$core$Native_Utils.eq(ty - _p5._1._1, 0);
+		var sameY = _elm_lang$core$Native_Utils.eq(ty - _p11, 0);
 		var y$ = function () {
 			var _p8 = _p9;
 			switch (_p8.ctor) {
@@ -11701,91 +11703,99 @@ var _user$project$GameView$adjustPosition = F2(
 					return sameY ? (t.y - 600) : t.y;
 			}
 		}();
+		var ye = A2(
+			_elm_lang$core$Debug$log,
+			'adjustments',
+			{
+				ctor: '_Tuple2',
+				_0: {ctor: '_Tuple2', _0: sameX, _1: sameY},
+				_1: {
+					ctor: '_Tuple2',
+					_0: {ctor: '_Tuple2', _0: tx, _1: ty},
+					_1: {ctor: '_Tuple2', _0: _p10, _1: _p11}
+				}
+			});
 		return {
 			ctor: '_Tuple2',
 			_0: {ctor: '_Tuple2', _0: x$, _1: y$},
 			_1: t
 		};
 	});
-var _user$project$GameView$drawAt = function (_p10) {
-	var _p11 = _p10;
-	var _p12 = _p11._1;
-	var sprite = _p12.sprite.src;
-	var h = _p12.sprite.h;
-	var w = _p12.sprite.w;
+var _user$project$GameView$drawAt = function (_p12) {
+	var _p13 = _p12;
+	var _p14 = _p13._1;
+	var sprite = _p14.sprite.src;
+	var h = _p14.sprite.h;
+	var w = _p14.sprite.w;
 	return A2(
 		_evancz$elm_graphics$Collage$rotate,
-		_elm_lang$core$Basics$degrees(_p12.a),
+		_elm_lang$core$Basics$degrees(_p14.a),
 		A2(
 			_evancz$elm_graphics$Collage$move,
-			_p11._0,
+			_p13._0,
 			_evancz$elm_graphics$Collage$toForm(
 				A3(_evancz$elm_graphics$Element$image, w, h, sprite))));
 };
-var _user$project$GameView$layerer = A2(_evancz$elm_graphics$Collage$collage, 1200, 1200);
+var _user$project$GameView$layerer = function (l) {
+	return _evancz$elm_graphics$Collage$toForm(
+		A3(_evancz$elm_graphics$Collage$collage, 1200, 1200, l));
+};
 var _user$project$GameView$positionArea = F2(
 	function (s, area$) {
-		return _evancz$elm_graphics$Collage$toForm(
-			_user$project$GameView$layerer(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_evancz$elm_graphics$Collage$move,
-						{ctor: '_Tuple2', _0: 0 - s.x, _1: 0 - s.y},
-						area$)
-					])));
+		return _user$project$GameView$layerer(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_evancz$elm_graphics$Collage$move,
+					{ctor: '_Tuple2', _0: 0 - s.x, _1: 0 - s.y},
+					area$)
+				]));
 	});
 var _user$project$GameView$rotateArea = F2(
 	function (s, area$) {
-		return _evancz$elm_graphics$Collage$toForm(
-			_user$project$GameView$layerer(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_evancz$elm_graphics$Collage$rotate,
-						_elm_lang$core$Basics$degrees(0 - s.a),
-						area$)
-					])));
+		return _user$project$GameView$layerer(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_evancz$elm_graphics$Collage$rotate,
+					_elm_lang$core$Basics$degrees(0 - s.a),
+					area$)
+				]));
 	});
 var _user$project$GameView$populateArea = F2(
 	function (m, area) {
 		var ss = m.ship.sector;
 		var q = m.ship.quadrant;
-		var ts = A2(
-			_elm_lang$core$List$map,
-			_user$project$GameView$drawAt,
+		var ts = _user$project$GameView$layerer(
 			A2(
 				_elm_lang$core$List$map,
-				_user$project$GameView$adjustPosition(
-					{ctor: '_Tuple2', _0: q, _1: ss}),
+				_user$project$GameView$drawAt,
 				A2(
-					_elm_lang$core$List$filter,
-					_user$project$GameView$nearEnough(
+					_elm_lang$core$List$map,
+					_user$project$GameView$adjustPosition(
 						{ctor: '_Tuple2', _0: q, _1: ss}),
-					m.things)));
-		return _evancz$elm_graphics$Collage$toForm(
-			_user$project$GameView$layerer(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						area,
-						_evancz$elm_graphics$Collage$toForm(
-						_user$project$GameView$layerer(ts))
-					])));
+					A2(
+						_elm_lang$core$List$filter,
+						_user$project$GameView$nearEnough(
+							{ctor: '_Tuple2', _0: q, _1: ss}),
+						m.things))));
+		return _user$project$GameView$layerer(
+			_elm_lang$core$Native_List.fromArray(
+				[area, ts]));
 	});
 var _user$project$GameView$area = function (m) {
-	return _evancz$elm_graphics$Collage$toForm(
-		_user$project$GameView$layerer(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_user$project$GameView$stars(
-					{ctor: '_Tuple2', _0: -300, _1: 300}),
-					_user$project$GameView$stars(
-					{ctor: '_Tuple2', _0: 300, _1: 300}),
-					_user$project$GameView$stars(
-					{ctor: '_Tuple2', _0: 300, _1: -300}),
-					_user$project$GameView$stars(
-					{ctor: '_Tuple2', _0: -300, _1: -300})
-				])));
+	return _user$project$GameView$layerer(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$GameView$stars(
+				{ctor: '_Tuple2', _0: -300, _1: 300}),
+				_user$project$GameView$stars(
+				{ctor: '_Tuple2', _0: 300, _1: 300}),
+				_user$project$GameView$stars(
+				{ctor: '_Tuple2', _0: 300, _1: -300}),
+				_user$project$GameView$stars(
+				{ctor: '_Tuple2', _0: -300, _1: -300})
+			]));
 };
 var _user$project$GameView$gameView = function (m) {
 	return _evancz$elm_graphics$Element$toHtml(
@@ -11795,22 +11805,21 @@ var _user$project$GameView$gameView = function (m) {
 			600,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_evancz$elm_graphics$Collage$toForm(
 					_user$project$GameView$layerer(
-						_elm_lang$core$Native_List.fromArray(
-							[
-								A2(
-								_user$project$GameView$rotateArea,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_user$project$GameView$rotateArea,
+							m.ship,
+							A2(
+								_user$project$GameView$positionArea,
 								m.ship,
 								A2(
-									_user$project$GameView$positionArea,
-									m.ship,
-									A2(
-										_user$project$GameView$populateArea,
-										m,
-										_user$project$GameView$area(m)))),
-								_user$project$DrawShip$drawShip(m.ship.thrusters)
-							])))
+									_user$project$GameView$populateArea,
+									m,
+									_user$project$GameView$area(m)))),
+							_user$project$DrawShip$drawShip(m.ship.thrusters)
+						]))
 				])));
 };
 
