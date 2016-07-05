@@ -66,5 +66,7 @@ shipPosition dt s =
   , a        = moduloAngle a'
   , sector   = (sx + dsx, sy + dsy)
   , quadrant = setQuadrant (xm, ym)
+  , gx       = s.gx + (dt * s.vx)
+  , gy       = s.gy + (dt * s.vy)
   } 
 

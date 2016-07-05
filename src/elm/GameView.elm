@@ -9,7 +9,7 @@ import Transform        exposing (..)
 import Types            exposing (..)
 import DrawShip         exposing (drawShip)
 import List             exposing (filter, map)
-import Debug exposing (log)
+import Debug            exposing (log)
 
 
 gameView : Model -> Html Msg
@@ -19,6 +19,7 @@ gameView m =
     [ area m
       |>populateArea m
       |>positionArea m.ship
+      |>backdrop     m.ship
       |>rotateArea   m.ship
     , drawShip       m.ship.thrusters 
     ]
@@ -26,6 +27,20 @@ gameView m =
 
 layerer : List Form -> Form
 layerer l = toForm <| collage 1200 1200 l
+
+backdrop : Ship -> Form -> Form
+backdrop s area =
+  let
+    pos = (-s.gx * 0.005, -s.gy * 0.005)
+  in
+    layerer
+    [ "./stars/real-stars.png" 
+      |>image 320 250
+      |>toForm
+      |>alpha 0.1
+      |>move pos
+    , area
+    ]
 
 positionArea : Ship -> Form -> Form
 positionArea s area' = 
@@ -70,37 +85,19 @@ adjustPosition (q,(sx,sy)) t =
     sameX = tx - sx == 0
     sameY = ty - sy == 0
 
-    ye = log "adjustments" ((sameX, sameY),((tx, ty), (sx,sy)))
-
     x' =
       case q of
-        A -> 
-          if sameX then t.x - 600
-          else t.x
-        B ->
-          if sameX then t.x
-          else t.x - 600
-        C ->
-          if sameX then t.x - 600
-          else t.x
-        D ->
-          if sameX then t.x
-          else t.x - 600
+        A -> if sameX then t.x - 600 else t.x
+        B -> if sameX then t.x else t.x - 600
+        C -> if sameX then t.x - 600 else t.x
+        D -> if sameX then t.x else t.x - 600
 
     y' = 
       case q of
-        A ->
-          if sameY then t.y
-          else t.y - 600
-        B ->
-          if sameY then t.y
-          else t.y - 600
-        C ->
-          if sameY then t.y - 600
-          else t.y
-        D ->
-          if sameY then t.y - 600
-          else t.y
+        A -> if sameY then t.y else t.y - 600
+        B -> if sameY then t.y else t.y - 600
+        C -> if sameY then t.y - 600 else t.y
+        D -> if sameY then t.y - 600 else t.y
 
   in ((x', y'), t)
 
