@@ -12066,7 +12066,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 											_evancz$elm_graphics$Collage$alpha,
 											0.1,
 											_evancz$elm_graphics$Collage$toForm(
-												A3(_evancz$elm_graphics$Element$image, 160, 125, './stars/real-stars.png'))))),
+												A3(_evancz$elm_graphics$Element$image, 80, 63, './stars/real-stars.png'))))),
 									A2(
 									_evancz$elm_graphics$Collage$move,
 									{
@@ -12113,6 +12113,17 @@ var _user$project$View$view = function (model) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('left-hud')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_evancz$elm_graphics$Element$toHtml(
+								A3(_evancz$elm_graphics$Element$image, 156, 131, './key-diagram.png'))
+							])),
 						A2(
 						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(

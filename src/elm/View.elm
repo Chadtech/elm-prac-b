@@ -7,6 +7,10 @@ import Types            exposing (..)
 import GameView         exposing (gameView)
 import RightHud         exposing (rightHud)
 
+import Collage          exposing (..)
+import Element          exposing (..)
+import Transform        exposing (..)
+
 (.) = (,)
 
 view : Model -> Html Msg
@@ -15,7 +19,13 @@ view model =
   [ class "root" ]
   [ div 
     [ class "main" ]
-    [ div 
+    [ div
+      [ class "left-hud" ]
+      [ "./key-diagram.png" 
+        |>image 156 131
+        |>toHtml
+      ]
+    , div 
       [ class "game-view" ] 
       [ gameView model ]
     , rightHud model

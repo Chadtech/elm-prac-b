@@ -16,7 +16,7 @@ miniMap m =
   [ class "mini-map-container" ]
   [ concat 
     [ [ "./stars/real-stars.png"
-        |>image 160 125
+        |>image 80 63
         |>toForm
         |>alpha 0.1
         |>rotate (degrees 0)
