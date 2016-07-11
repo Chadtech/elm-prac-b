@@ -12022,19 +12022,22 @@ var _user$project$ReadOut$readOut = function (s) {
 			]));
 };
 
-var _user$project$RightHud$drawThing = function (t) {
-	var ym = (t.gy * 1.85e-3) - 111;
-	var xm = (t.gx * 1.85e-3) - 111;
+var _user$project$MiniMap$p = function (f) {
+	return (f * 1.85e-3) - 111;
+};
+var _user$project$MiniMap$drawThing = function (t) {
 	return A2(
 		_evancz$elm_graphics$Collage$move,
-		{ctor: '_Tuple2', _0: xm, _1: ym},
+		{
+			ctor: '_Tuple2',
+			_0: _user$project$MiniMap$p(t.gx),
+			_1: _user$project$MiniMap$p(t.gy)
+		},
 		_evancz$elm_graphics$Collage$toForm(
 			A3(_evancz$elm_graphics$Element$image, 1, 1, t.sprite.src)));
 };
-var _user$project$RightHud$miniMap = function (m) {
+var _user$project$MiniMap$miniMap = function (m) {
 	var s = m.ship;
-	var xm = (s.gx * 1.85e-3) - 111;
-	var ym = (s.gy * 1.85e-3) - 111;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -12051,7 +12054,6 @@ var _user$project$RightHud$miniMap = function (m) {
 					_elm_lang$core$List$concat(
 						_elm_lang$core$Native_List.fromArray(
 							[
-								A2(_elm_lang$core$List$map, _user$project$RightHud$drawThing, m.things),
 								_elm_lang$core$Native_List.fromArray(
 								[
 									A2(
@@ -12067,13 +12069,19 @@ var _user$project$RightHud$miniMap = function (m) {
 												A3(_evancz$elm_graphics$Element$image, 160, 125, './stars/real-stars.png'))))),
 									A2(
 									_evancz$elm_graphics$Collage$move,
-									{ctor: '_Tuple2', _0: xm, _1: ym},
+									{
+										ctor: '_Tuple2',
+										_0: _user$project$MiniMap$p(s.gx),
+										_1: _user$project$MiniMap$p(s.gy)
+									},
 									_evancz$elm_graphics$Collage$toForm(
 										A3(_evancz$elm_graphics$Element$image, 1, 1, './ship/ship.png')))
-								])
+								]),
+								A2(_elm_lang$core$List$map, _user$project$MiniMap$drawThing, m.things)
 							]))))
 			]));
 };
+
 var _user$project$RightHud$rightHud = function (m) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -12083,7 +12091,7 @@ var _user$project$RightHud$rightHud = function (m) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$RightHud$miniMap(m),
+				_user$project$MiniMap$miniMap(m),
 				_user$project$ReadOut$readOut(m.ship)
 			]));
 };
@@ -12521,6 +12529,8 @@ Elm['GameView'] = Elm['GameView'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['GameView'], 'GameView', typeof _user$project$GameView$main === 'undefined' ? null : _user$project$GameView$main);
 Elm['Main'] = Elm['Main'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
+Elm['MiniMap'] = Elm['MiniMap'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['MiniMap'], 'MiniMap', typeof _user$project$MiniMap$main === 'undefined' ? null : _user$project$MiniMap$main);
 Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['ReadOut'] = Elm['ReadOut'] || {};
