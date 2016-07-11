@@ -47,6 +47,10 @@ type alias Thing =
   , vy : Float
   , va : Float
 
+  -- the g is for 'global'.
+  , gx          : Float
+  , gy          : Float
+
   , sector   : (Int, Int)
 
   , sprite : Sprite
@@ -64,9 +68,12 @@ o2Box =
   , y = 575
   , a = 0
 
-  , vx = 0
-  , vy = 10
-  , va = 10
+  , vx = 33
+  , vy = 50
+  , va = 1
+
+  , gx = 0
+  , gy = 0
 
   , sector   = (0, 0)
 

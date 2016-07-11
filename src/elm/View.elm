@@ -5,16 +5,19 @@ import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Types            exposing (..)
 import GameView         exposing (gameView)
+import RightHud         exposing (rightHud)
 
+(.) = (,)
 
 view : Model -> Html Msg
 view model = 
   div
-  [ class "game" ]
+  [ class "root" ]
   [ div 
-    [ class "view-port" ] 
-    [ gameView model ]
+    [ class "main" ]
+    [ div 
+      [ class "game-view" ] 
+      [ gameView model ]
+    , rightHud model
+    ]
   ]
-
-
-

@@ -17,6 +17,7 @@ ignorable       = #807872
 veryIgnorable   = #54574d
 
 background      = #030907
+actualBlack     = #000000
 
 critical        = #f21d23
 good            = #366317
@@ -31,19 +32,60 @@ body
   padding    0
   margin     0
   
-.game
+.point
+  font-family  HFNSS
+  color        pointColor
+  font-size    standardSize
+  margin       0 
+  
+.root
   width  100%
   height 100%
 
-.view-port
+.main
   margin            auto
   height            600px
-  width             600px
+  width             863px
   position          relative
-  background-color  #000000
-  border-radius     50%
   top               50%
   transform         translateY(-50%)
+
+.right-hud
+  margin-left       11px
+  display   inline-block
+  width 248px
+
+.mini-map-container
+  background-color #030e0c 
+  border-style solid
+  border-width 2px
+  border-color pointColor
+  padding 11px
+  width 222px
+  height 222px
+  float  right
+  margin-bottom 11px
+
+.read-out-container
+  background-color  actualBlack
+  border-style      solid
+  border-width      2px
+  border-color      pointColor
+  padding           11px
+  width             222px
+  height            296px
+  float right
+
+.read-out-column
+  float left 
+  width 111px 
+  
+.game-view
+  background-color  actualBlack
+  border-radius     50%
+  width             600px
+  height            600px
+  display           inline-block
   overflow          hidden 
   border            2px solid pointColor
   

@@ -31,14 +31,15 @@ layerer l = toForm <| collage 1200 1200 l
 backdrop : Ship -> Form -> Form
 backdrop s area =
   let
-    pos = (-s.gx * 0.005, -s.gy * 0.005)
+    x' = (-s.gx * 0.005) + 100
+    y' = (-s.gy * 0.005) + 275
   in
     layerer
     [ "./stars/real-stars.png" 
       |>image 320 250
       |>toForm
       |>alpha 0.1
-      |>move pos
+      |>move (x', y')
     , area
     ]
 

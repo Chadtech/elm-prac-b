@@ -11376,9 +11376,11 @@ var _user$project$Types$o2Box = {
 	x: 550,
 	y: 575,
 	a: 0,
-	vx: 0,
-	vy: 10,
-	va: 10,
+	vx: 33,
+	vy: 50,
+	va: 1,
+	gx: 0,
+	gy: 0,
 	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
 	sprite: {w: 20, h: 20, src: './stuff/oxygen-tank.png'}
 };
@@ -11389,10 +11391,27 @@ var _user$project$Types$Model = F3(
 var _user$project$Types$World = function (a) {
 	return {things: a};
 };
-var _user$project$Types$Thing = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {x: a, y: b, a: c, vx: d, vy: e, va: f, sector: g, sprite: h};
-	});
+var _user$project$Types$Thing = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, sector: i, sprite: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$Types$Sprite = F3(
 	function (a, b, c) {
 		return {w: a, h: b, src: c};
@@ -11464,6 +11483,19 @@ var _user$project$Types$initModel = {
 };
 var _user$project$Types$B = {ctor: 'B'};
 var _user$project$Types$A = {ctor: 'A'};
+
+var _user$project$Components$point = function (s) {
+	return A2(
+		_elm_lang$html$Html$p,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('point')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(s)
+			]));
+};
 
 var _user$project$Source$root = './';
 var _user$project$Source$src = function (str) {
@@ -11733,13 +11765,14 @@ var _user$project$GameView$layerer = function (l) {
 };
 var _user$project$GameView$backdrop = F2(
 	function (s, area) {
-		var pos = {ctor: '_Tuple2', _0: (0 - s.gx) * 5.0e-3, _1: (0 - s.gy) * 5.0e-3};
+		var y$ = ((0 - s.gy) * 5.0e-3) + 275;
+		var x$ = ((0 - s.gx) * 5.0e-3) + 100;
 		return _user$project$GameView$layerer(
 			_elm_lang$core$Native_List.fromArray(
 				[
 					A2(
 					_evancz$elm_graphics$Collage$move,
-					pos,
+					{ctor: '_Tuple2', _0: x$, _1: y$},
 					A2(
 						_evancz$elm_graphics$Collage$alpha,
 						0.1,
@@ -11841,12 +11874,226 @@ var _user$project$Ports$request = _elm_lang$core$Native_Platform.outgoingPort(
 	});
 var _user$project$Ports$response = _elm_lang$core$Native_Platform.incomingPort('response', _elm_lang$core$Json_Decode$int);
 
+var _user$project$ReadOut$round$ = function (f) {
+	return _elm_lang$core$Basics$toFloat(
+		_elm_lang$core$Basics$round(f * 10)) / 10;
+};
+var _user$project$ReadOut$pad = function (s) {
+	pad:
+	while (true) {
+		if (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$String$length(s),
+			4) > -1) {
+			return s;
+		} else {
+			var _v0 = A2(_elm_lang$core$Basics_ops['++'], s, '_');
+			s = _v0;
+			continue pad;
+		}
+	}
+};
+var _user$project$ReadOut$cut = F2(
+	function (limit, str) {
+		return (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$String$length(str),
+			limit) > 0) ? A3(_elm_lang$core$String$slice, 0, limit, str) : str;
+	});
+var _user$project$ReadOut$nf = F2(
+	function (i, f) {
+		return A2(
+			_user$project$ReadOut$cut,
+			i,
+			_elm_lang$core$Basics$toString(f));
+	});
+var _user$project$ReadOut_ops = _user$project$ReadOut_ops || {};
+_user$project$ReadOut_ops['.'] = F2(
+	function (v0, v1) {
+		return {ctor: '_Tuple2', _0: v0, _1: v1};
+	});
+var _user$project$ReadOut$content = function (s) {
+	var _p0 = s.sector;
+	var sx = _p0._0;
+	var sy = _p0._1;
+	return _elm_lang$core$List$unzip(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
+				A2(_user$project$ReadOut_ops['.'], 'STATUS', 'NOMINAL'),
+				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				'ang vel ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(_user$project$ReadOut$nf, 4, (0 - s.va) * (10 / 9)),
+					' rpm')),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				'velocity',
+				A2(
+					_user$project$ReadOut$nf,
+					8,
+					Math.pow(
+						Math.pow(s.vx, 2) + Math.pow(s.vy, 2),
+						0.5) / 10)),
+				A2(_user$project$ReadOut_ops['.'], 'dir', 'xxxxxxxx'),
+				A2(_user$project$ReadOut_ops['.'], 'position', '--------'),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				': angle',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					function (_p1) {
+						return _user$project$ReadOut$pad(
+							A2(
+								_user$project$ReadOut$nf,
+								5,
+								_elm_lang$core$Basics$toFloat(
+									_elm_lang$core$Basics$round(_p1))));
+					}((0 - s.a) / 0.9),
+					'/200')),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				': x',
+				A2(_user$project$ReadOut$nf, 8, s.gx)),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				': y',
+				A2(_user$project$ReadOut$nf, 8, s.gy)),
+				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				'FUEL',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_user$project$ReadOut$nf,
+						6,
+						_user$project$ReadOut$round$(s.fuel)),
+					'l')),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				'OXYGEN',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_user$project$ReadOut$nf,
+						6,
+						_user$project$ReadOut$round$(s.oxygen)),
+					'l')),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				'WEIGHT',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_user$project$ReadOut$nf,
+						6,
+						_user$project$ReadOut$round$(s.weight)),
+					' yH'))
+			]));
+};
+var _user$project$ReadOut$column = function (list) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('read-out-column')
+			]),
+		list);
+};
+var _user$project$ReadOut$readOut = function (s) {
+	var _p2 = _user$project$ReadOut$content(s);
+	var keys = _p2._0;
+	var values = _p2._1;
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('read-out-container')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Components$point('READ OUT'),
+				_user$project$ReadOut$column(
+				A2(_elm_lang$core$List$map, _user$project$Components$point, keys)),
+				_user$project$ReadOut$column(
+				A2(_elm_lang$core$List$map, _user$project$Components$point, values))
+			]));
+};
+
+var _user$project$RightHud$drawThing = function (t) {
+	var ym = (t.gy * 1.85e-3) - 111;
+	var xm = (t.gx * 1.85e-3) - 111;
+	return A2(
+		_evancz$elm_graphics$Collage$move,
+		{ctor: '_Tuple2', _0: xm, _1: ym},
+		_evancz$elm_graphics$Collage$toForm(
+			A3(_evancz$elm_graphics$Element$image, 1, 1, t.sprite.src)));
+};
+var _user$project$RightHud$miniMap = function (m) {
+	var s = m.ship;
+	var xm = (s.gx * 1.85e-3) - 111;
+	var ym = (s.gy * 1.85e-3) - 111;
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('mini-map-container')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_evancz$elm_graphics$Element$toHtml(
+				A3(
+					_evancz$elm_graphics$Collage$collage,
+					222,
+					222,
+					_elm_lang$core$List$concat(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(_elm_lang$core$List$map, _user$project$RightHud$drawThing, m.things),
+								_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_evancz$elm_graphics$Collage$move,
+									{ctor: '_Tuple2', _0: -50, _1: 0},
+									A2(
+										_evancz$elm_graphics$Collage$rotate,
+										_elm_lang$core$Basics$degrees(0),
+										A2(
+											_evancz$elm_graphics$Collage$alpha,
+											0.1,
+											_evancz$elm_graphics$Collage$toForm(
+												A3(_evancz$elm_graphics$Element$image, 160, 125, './stars/real-stars.png'))))),
+									A2(
+									_evancz$elm_graphics$Collage$move,
+									{ctor: '_Tuple2', _0: xm, _1: ym},
+									_evancz$elm_graphics$Collage$toForm(
+										A3(_evancz$elm_graphics$Element$image, 1, 1, './ship/ship.png')))
+								])
+							]))))
+			]));
+};
+var _user$project$RightHud$rightHud = function (m) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('right-hud')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$RightHud$miniMap(m),
+				_user$project$ReadOut$readOut(m.ship)
+			]));
+};
+
 var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('game')
+				_elm_lang$html$Html_Attributes$class('root')
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -11854,14 +12101,29 @@ var _user$project$View$view = function (model) {
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('view-port')
+						_elm_lang$html$Html_Attributes$class('main')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_user$project$GameView$gameView(model)
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('game-view')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_user$project$GameView$gameView(model)
+							])),
+						_user$project$RightHud$rightHud(model)
 					]))
 			]));
 };
+var _user$project$View_ops = _user$project$View_ops || {};
+_user$project$View_ops['.'] = F2(
+	function (v0, v1) {
+		return {ctor: '_Tuple2', _0: v0, _1: v1};
+	});
 
 var _user$project$ShipPosition$setQuadrant = function (_p0) {
 	var _p1 = _p0;
@@ -12033,7 +12295,9 @@ var _user$project$ThingPosition$thingPosition = F2(
 				x: xm,
 				y: ym,
 				a: _user$project$ThingPosition$moduloAngle(a$),
-				sector: {ctor: '_Tuple2', _0: tx + dtx, _1: ty + dty}
+				sector: {ctor: '_Tuple2', _0: tx + dtx, _1: ty + dty},
+				gx: t.gx + (dt * t.vx),
+				gy: t.gy + (dt * t.vy)
 			});
 	});
 
@@ -12249,6 +12513,8 @@ var _user$project$Main$main = {
 };
 
 var Elm = {};
+Elm['Components'] = Elm['Components'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Components'], 'Components', typeof _user$project$Components$main === 'undefined' ? null : _user$project$Components$main);
 Elm['DrawShip'] = Elm['DrawShip'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['DrawShip'], 'DrawShip', typeof _user$project$DrawShip$main === 'undefined' ? null : _user$project$DrawShip$main);
 Elm['GameView'] = Elm['GameView'] || {};
@@ -12257,6 +12523,10 @@ Elm['Main'] = Elm['Main'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
 Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
+Elm['ReadOut'] = Elm['ReadOut'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['ReadOut'], 'ReadOut', typeof _user$project$ReadOut$main === 'undefined' ? null : _user$project$ReadOut$main);
+Elm['RightHud'] = Elm['RightHud'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['RightHud'], 'RightHud', typeof _user$project$RightHud$main === 'undefined' ? null : _user$project$RightHud$main);
 Elm['ShipPosition'] = Elm['ShipPosition'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ShipPosition'], 'ShipPosition', typeof _user$project$ShipPosition$main === 'undefined' ? null : _user$project$ShipPosition$main);
 Elm['Source'] = Elm['Source'] || {};

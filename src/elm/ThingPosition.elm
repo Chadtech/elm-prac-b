@@ -52,4 +52,6 @@ thingPosition dt t =
   , y = ym
   , a = moduloAngle a'
   , sector = (tx + dtx, ty + dty)
+  , gx     = t.gx + (dt * t.vx)
+  , gy     = t.gy + (dt * t.vy)
   }
