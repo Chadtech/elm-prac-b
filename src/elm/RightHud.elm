@@ -32,8 +32,7 @@ miniMap m =
   div
   [ class "mini-map-container" ]
   [ concat 
-    [ (map drawThing m.things)
-    , [ "./stars/real-stars.png"
+    [ [ "./stars/real-stars.png"
         |>image 160 125
         |>toForm
         |>alpha 0.1
@@ -44,6 +43,7 @@ miniMap m =
         |>toForm
         |>move (xm, ym)
       ]
+    , (map drawThing m.things)
     ]
     |>collage 222 222 
     |>toHtml
