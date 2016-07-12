@@ -11874,10 +11874,17 @@ var _user$project$Ports$request = _elm_lang$core$Native_Platform.outgoingPort(
 	});
 var _user$project$Ports$response = _elm_lang$core$Native_Platform.incomingPort('response', _elm_lang$core$Json_Decode$int);
 
-var _user$project$ReadOut$round$ = function (f) {
+var _user$project$ReadOut$oneDecimal = function (f) {
 	return _elm_lang$core$Basics$toFloat(
 		_elm_lang$core$Basics$round(f * 10)) / 10;
 };
+var _user$project$ReadOut$nf = F2(
+	function (i, f) {
+		var s = _elm_lang$core$Basics$toString(f);
+		return (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$String$length(s),
+			i) > 0) ? A3(_elm_lang$core$String$slice, 0, i, s) : s;
+	});
 var _user$project$ReadOut$pad = function (s) {
 	pad:
 	while (true) {
@@ -11892,28 +11899,26 @@ var _user$project$ReadOut$pad = function (s) {
 		}
 	}
 };
-var _user$project$ReadOut$cut = F2(
-	function (limit, str) {
-		return (_elm_lang$core$Native_Utils.cmp(
-			_elm_lang$core$String$length(str),
-			limit) > 0) ? A3(_elm_lang$core$String$slice, 0, limit, str) : str;
-	});
-var _user$project$ReadOut$nf = F2(
-	function (i, f) {
-		return A2(
-			_user$project$ReadOut$cut,
-			i,
-			_elm_lang$core$Basics$toString(f));
-	});
+var _user$project$ReadOut$angleFormat = function (_p0) {
+	return function (s) {
+		return A2(_elm_lang$core$Basics_ops['++'], s, '/200');
+	}(
+		_user$project$ReadOut$pad(
+			A2(
+				_user$project$ReadOut$nf,
+				5,
+				_elm_lang$core$Basics$toFloat(
+					_elm_lang$core$Basics$round(_p0)))));
+};
 var _user$project$ReadOut_ops = _user$project$ReadOut_ops || {};
 _user$project$ReadOut_ops['.'] = F2(
 	function (v0, v1) {
 		return {ctor: '_Tuple2', _0: v0, _1: v1};
 	});
 var _user$project$ReadOut$content = function (s) {
-	var _p0 = s.sector;
-	var sx = _p0._0;
-	var sy = _p0._1;
+	var _p1 = s.sector;
+	var sx = _p1._0;
+	var sy = _p1._1;
 	return _elm_lang$core$List$unzip(
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -11939,33 +11944,13 @@ var _user$project$ReadOut$content = function (s) {
 				A2(
 				_user$project$ReadOut_ops['.'],
 				'dir',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					function (_p1) {
-						return _user$project$ReadOut$pad(
-							A2(
-								_user$project$ReadOut$nf,
-								5,
-								_elm_lang$core$Basics$toFloat(
-									_elm_lang$core$Basics$round(_p1))));
-					}(
-						(A2(_elm_lang$core$Basics$atan2, s.vx, s.vy) / _elm_lang$core$Basics$pi) * 200),
-					'/200')),
+				_user$project$ReadOut$angleFormat(
+					(A2(_elm_lang$core$Basics$atan2, s.vx, s.vy) / _elm_lang$core$Basics$pi) * 200)),
 				A2(_user$project$ReadOut_ops['.'], 'position', '--------'),
 				A2(
 				_user$project$ReadOut_ops['.'],
 				': angle',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					function (_p2) {
-						return _user$project$ReadOut$pad(
-							A2(
-								_user$project$ReadOut$nf,
-								5,
-								_elm_lang$core$Basics$toFloat(
-									_elm_lang$core$Basics$round(_p2))));
-					}((0 - s.a) / 0.9),
-					'/200')),
+				_user$project$ReadOut$angleFormat((0 - s.a) / 0.9)),
 				A2(
 				_user$project$ReadOut_ops['.'],
 				': x',
@@ -11983,7 +11968,7 @@ var _user$project$ReadOut$content = function (s) {
 					A2(
 						_user$project$ReadOut$nf,
 						6,
-						_user$project$ReadOut$round$(s.fuel)),
+						_user$project$ReadOut$oneDecimal(s.fuel)),
 					'l')),
 				A2(
 				_user$project$ReadOut_ops['.'],
@@ -11993,7 +11978,7 @@ var _user$project$ReadOut$content = function (s) {
 					A2(
 						_user$project$ReadOut$nf,
 						6,
-						_user$project$ReadOut$round$(s.oxygen)),
+						_user$project$ReadOut$oneDecimal(s.oxygen)),
 					'l')),
 				A2(
 				_user$project$ReadOut_ops['.'],
@@ -12003,7 +11988,7 @@ var _user$project$ReadOut$content = function (s) {
 					A2(
 						_user$project$ReadOut$nf,
 						6,
-						_user$project$ReadOut$round$(s.weight)),
+						_user$project$ReadOut$oneDecimal(s.weight)),
 					' yH'))
 			]));
 };
@@ -12017,9 +12002,9 @@ var _user$project$ReadOut$column = function (list) {
 		list);
 };
 var _user$project$ReadOut$readOut = function (s) {
-	var _p3 = _user$project$ReadOut$content(s);
-	var keys = _p3._0;
-	var values = _p3._1;
+	var _p2 = _user$project$ReadOut$content(s);
+	var keys = _p2._0;
+	var values = _p2._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
