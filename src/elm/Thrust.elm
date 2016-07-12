@@ -22,7 +22,7 @@ mainPower = weakPower * 7
 
 rotatePower : Int -> Float
 rotatePower i = 
-  (toFloat i) * weakPower * 0.5
+  (toFloat i) * weakPower * 0.3
 
 wp : Float -> Int -> Float
 wp f i = weakPower * f * toFloat i

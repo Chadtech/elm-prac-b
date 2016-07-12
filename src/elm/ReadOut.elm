@@ -34,7 +34,8 @@ content s =
   , "--------"  . "--------"
   , "ang vel "  . ((nf 4 (-s.va * (10/9))) ++ " rpm")
   , "velocity"  . nf 8 ((((s.vx ^ 2) + (s.vy ^ 2)) ^ 0.5)/10)
-  , "dir"       . "xxxxxxxx"
+  --, "dir"       . "xxxxxxxx"
+  , "dir"         . (((pad << (nf 5) << toFloat << round) (((atan2 s.vx s.vy) / pi) * 200)) ++ "/200")
   --, "dir"       . nf (sin ((s.vy / s.vx) / (((s.vx ^ 2) + (s.vy ^ 2)) ^ 0.5)))
   , "position"  . "--------"
   , ": angle"   . (((pad << (nf 5) << toFloat << round) (-s.a / 0.9)) ++ "/200")

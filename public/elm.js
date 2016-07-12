@@ -11936,11 +11936,9 @@ var _user$project$ReadOut$content = function (s) {
 					Math.pow(
 						Math.pow(s.vx, 2) + Math.pow(s.vy, 2),
 						0.5) / 10)),
-				A2(_user$project$ReadOut_ops['.'], 'dir', 'xxxxxxxx'),
-				A2(_user$project$ReadOut_ops['.'], 'position', '--------'),
 				A2(
 				_user$project$ReadOut_ops['.'],
-				': angle',
+				'dir',
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					function (_p1) {
@@ -11950,6 +11948,22 @@ var _user$project$ReadOut$content = function (s) {
 								5,
 								_elm_lang$core$Basics$toFloat(
 									_elm_lang$core$Basics$round(_p1))));
+					}(
+						(A2(_elm_lang$core$Basics$atan2, s.vx, s.vy) / _elm_lang$core$Basics$pi) * 200),
+					'/200')),
+				A2(_user$project$ReadOut_ops['.'], 'position', '--------'),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				': angle',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					function (_p2) {
+						return _user$project$ReadOut$pad(
+							A2(
+								_user$project$ReadOut$nf,
+								5,
+								_elm_lang$core$Basics$toFloat(
+									_elm_lang$core$Basics$round(_p2))));
 					}((0 - s.a) / 0.9),
 					'/200')),
 				A2(
@@ -12003,9 +12017,9 @@ var _user$project$ReadOut$column = function (list) {
 		list);
 };
 var _user$project$ReadOut$readOut = function (s) {
-	var _p2 = _user$project$ReadOut$content(s);
-	var keys = _p2._0;
-	var values = _p2._1;
+	var _p3 = _user$project$ReadOut$content(s);
+	var keys = _p3._0;
+	var values = _p3._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -12365,7 +12379,7 @@ var _user$project$Thrust$getThrust = F2(
 var _user$project$Thrust$weakPower = 0.128;
 var _user$project$Thrust$mainPower = _user$project$Thrust$weakPower * 7;
 var _user$project$Thrust$rotatePower = function (i) {
-	return (_elm_lang$core$Basics$toFloat(i) * _user$project$Thrust$weakPower) * 0.5;
+	return (_elm_lang$core$Basics$toFloat(i) * _user$project$Thrust$weakPower) * 0.3;
 };
 var _user$project$Thrust$thrustA = function (t) {
 	return A2(
