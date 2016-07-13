@@ -11376,8 +11376,8 @@ var _user$project$Types$o2Box = {
 	x: 550,
 	y: 575,
 	a: 0,
-	vx: 33,
-	vy: 50,
+	vx: 66,
+	vy: 100,
 	va: 1,
 	gx: 0,
 	gy: 0,
@@ -11677,7 +11677,7 @@ var _user$project$GameView$stars = function (pos) {
 		_evancz$elm_graphics$Collage$toForm(
 			A3(_evancz$elm_graphics$Element$image, 601, 601, './stars/stars.png')));
 };
-var _user$project$GameView$nearEnough = F2(
+var _user$project$GameView$nearEnoughToRender = F2(
 	function (_p0, t) {
 		var _p1 = _p0;
 		var _p2 = t.sector;
@@ -11759,9 +11759,9 @@ var _user$project$GameView$drawAt = function (_p10) {
 			_evancz$elm_graphics$Collage$toForm(
 				A3(_evancz$elm_graphics$Element$image, w, h, sprite))));
 };
-var _user$project$GameView$layerer = function (l) {
+var _user$project$GameView$layerer = function (_p13) {
 	return _evancz$elm_graphics$Collage$toForm(
-		A3(_evancz$elm_graphics$Collage$collage, 1200, 1200, l));
+		A3(_evancz$elm_graphics$Collage$collage, 1200, 1200, _p13));
 };
 var _user$project$GameView$backdrop = F2(
 	function (s, area) {
@@ -11817,7 +11817,7 @@ var _user$project$GameView$populateArea = F2(
 						{ctor: '_Tuple2', _0: q, _1: ss}),
 					A2(
 						_elm_lang$core$List$filter,
-						_user$project$GameView$nearEnough(
+						_user$project$GameView$nearEnoughToRender(
 							{ctor: '_Tuple2', _0: q, _1: ss}),
 						m.things))));
 		return _user$project$GameView$layerer(
@@ -11838,6 +11838,52 @@ var _user$project$GameView$area = function (m) {
 				{ctor: '_Tuple2', _0: -300, _1: -300})
 			]));
 };
+var _user$project$GameView$nearEnoughToMark = F2(
+	function (_p14, t) {
+		var _p15 = _p14;
+		var _p16 = t.sector;
+		var tx = _p16._0;
+		var ty = _p16._1;
+		var dx = _elm_lang$core$Basics$abs(_p15._0 - tx);
+		var nearEnoughX = (_elm_lang$core$Native_Utils.cmp(dx, 5) < 0) && (_elm_lang$core$Native_Utils.cmp(1, dx) < 0);
+		var dy = _elm_lang$core$Basics$abs(_p15._1 - ty);
+		var nearEnoughY = (_elm_lang$core$Native_Utils.cmp(dy, 5) < 0) && (_elm_lang$core$Native_Utils.cmp(1, dy) < 0);
+		return nearEnoughX || nearEnoughY;
+	});
+var _user$project$GameView$drawMark = F2(
+	function (_p17, t) {
+		var _p18 = _p17;
+		var dy = _p18._1 - t.gy;
+		var dx = _p18._0 - t.gx;
+		var dir = A2(_elm_lang$core$Basics$atan2, dx, dy);
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Basics$sin(dir) * -300,
+				_1: _elm_lang$core$Basics$cos(dir) * -300
+			},
+			_evancz$elm_graphics$Collage$toForm(
+				A3(_evancz$elm_graphics$Element$image, 20, 20, './ship/lander-gear.png')));
+	});
+var _user$project$GameView$drawMarkers = F2(
+	function (m, area) {
+		var sg = {ctor: '_Tuple2', _0: m.ship.gx, _1: m.ship.gy};
+		return _user$project$GameView$layerer(
+			_elm_lang$core$List$concat(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$core$Native_List.fromArray(
+						[area]),
+						A2(
+						_elm_lang$core$List$map,
+						_user$project$GameView$drawMark(sg),
+						A2(
+							_elm_lang$core$List$filter,
+							_user$project$GameView$nearEnoughToMark(m.ship.sector),
+							m.things))
+					])));
+	});
 var _user$project$GameView$gameView = function (m) {
 	return _evancz$elm_graphics$Element$toHtml(
 		A3(
@@ -11853,15 +11899,18 @@ var _user$project$GameView$gameView = function (m) {
 							_user$project$GameView$rotateArea,
 							m.ship,
 							A2(
-								_user$project$GameView$backdrop,
-								m.ship,
+								_user$project$GameView$drawMarkers,
+								m,
 								A2(
-									_user$project$GameView$positionArea,
+									_user$project$GameView$backdrop,
 									m.ship,
 									A2(
-										_user$project$GameView$populateArea,
-										m,
-										_user$project$GameView$area(m))))),
+										_user$project$GameView$positionArea,
+										m.ship,
+										A2(
+											_user$project$GameView$populateArea,
+											m,
+											_user$project$GameView$area(m)))))),
 							_user$project$DrawShip$drawShip(m.ship.thrusters)
 						]))
 				])));
@@ -12137,11 +12186,6 @@ var _user$project$View$view = function (model) {
 					]))
 			]));
 };
-var _user$project$View_ops = _user$project$View_ops || {};
-_user$project$View_ops['.'] = F2(
-	function (v0, v1) {
-		return {ctor: '_Tuple2', _0: v0, _1: v1};
-	});
 
 var _user$project$ShipPosition$setQuadrant = function (_p0) {
 	var _p1 = _p0;

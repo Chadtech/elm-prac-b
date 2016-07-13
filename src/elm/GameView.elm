@@ -8,7 +8,7 @@ import Element          exposing (..)
 import Transform        exposing (..)
 import Types            exposing (..)
 import DrawShip         exposing (drawShip)
-import List             exposing (filter, map)
+import List             exposing (filter, map, concat, foldr)
 import Debug            exposing (log)
 
 
@@ -20,13 +20,49 @@ gameView m =
       |>populateArea m
       |>positionArea m.ship
       |>backdrop     m.ship
+      |>drawMarkers  m
       |>rotateArea   m.ship
     , drawShip       m.ship.thrusters 
     ]
   ]|>toHtml
 
+drawMarkers : Model -> Form -> Form
+drawMarkers m area =
+  let sg = (m.ship.gx, m.ship.gy)
+  in
+  layerer 
+  <|concat
+    [ [area] 
+    , m.things
+      |>filter (nearEnoughToMark m.ship.sector)
+      |>map (drawMark sg) 
+    ]
+
+drawMark : (Float, Float) -> Thing -> Form
+drawMark (sgx, sgy) t =
+  let 
+    dx = sgx - t.gx
+    dy = sgy - t.gy
+    dir = atan2 dx dy
+  in
+  "./ship/lander-gear.png"
+  |>image 20 20 
+  |>toForm
+  |>move ((sin dir) * -300, (cos dir) * -300)
+
+nearEnoughToMark : (Int, Int) -> Thing -> Bool
+nearEnoughToMark (sx,sy) t =
+  let
+    (tx, ty) = t.sector
+    dx = abs (sx - tx)
+    dy = abs (sy - ty)
+    nearEnoughX = dx < 5 && 1 < dx
+    nearEnoughY = dy < 5 && 1 < dy
+  in 
+  nearEnoughX || nearEnoughY
+
 layerer : List Form -> Form
-layerer l = toForm <| collage 1200 1200 l
+layerer = toForm << collage 1200 1200
 
 backdrop : Ship -> Form -> Form
 backdrop s area =
@@ -59,7 +95,7 @@ populateArea m area =
 
     ts = 
       m.things
-      |>filter (nearEnough (q, ss))
+      |>filter (nearEnoughToRender (q, ss))
       |>map (adjustPosition (q, ss))
       |>map drawAt
       |>layerer
@@ -102,8 +138,8 @@ adjustPosition (q,(sx,sy)) t =
 
   in ((x', y'), t)
 
-nearEnough : (Quadrant, (Int, Int)) -> Thing -> Bool
-nearEnough (q,(sx,sy)) t =
+nearEnoughToRender : (Quadrant, (Int, Int)) -> Thing -> Bool
+nearEnoughToRender (q,(sx,sy)) t =
   let
     (tx, ty) = t.sector
 
@@ -114,8 +150,8 @@ nearEnough (q,(sx,sy)) t =
     ey = \i -> dy == 0 || dy == i
   in
   case q of
-    A -> ex -1  && ey 1 
-    B -> ex 1 && ey 1  
+    A -> ex -1 && ey 1 
+    B -> ex 1  && ey 1  
     C -> ex -1 && ey -1 
     D -> ex 1  && ey -1 
 

@@ -6,12 +6,9 @@ import Html.Events      exposing (..)
 import Types            exposing (..)
 import GameView         exposing (gameView)
 import RightHud         exposing (rightHud)
-
 import Collage          exposing (..)
 import Element          exposing (..)
 import Transform        exposing (..)
-
-(.) = (,)
 
 view : Model -> Html Msg
 view model = 
