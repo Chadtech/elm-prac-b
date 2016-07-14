@@ -5,7 +5,7 @@ import Element          exposing (..)
 import Types            exposing (..)
 import List             exposing (foldr, append)
 import Debug            exposing (log)
-import Source           exposing (src)
+import Pather           exposing (root)
 
 drawShip : Thrusters -> Form
 drawShip t =
@@ -18,16 +18,20 @@ drawShip t =
     , rightFront   t.rightFront t.boost
     , rightBack    t.rightBack  t.boost
     , rightSide    t.rightSide  t.boost
-    , [ toForm <| image 47 47 (src "ship/ship") ]
+    , [ image' 47 47 (root "ship/ship") ]
     ]
   in
-    toForm
-    <|collage 138 138
-    <|foldr append [] ship
+  ship
+  |>foldr append []
+  |>collage 138 138
+  |>toForm
+
+image' : Int -> Int -> String -> Form
+image' w h src = image w h src |> toForm
 
 drawThruster : (Int, Int) -> (Float, Float) -> String -> Form
 drawThruster (w, h) p str =
-  move p <| toForm <| image w h str
+  move p <| image' w h str
 
 transform : Int -> List (Form -> Form) -> Form -> List Form
 transform f tfs thruster =
@@ -41,8 +45,8 @@ isFiring i f = if i > 0 then [f] else []
 
 srcBlast : Bool -> String -> String
 srcBlast b str =
-  if b then src str
-  else src (str ++ "-weak")
+  if b then root str
+  else root (str ++ "-weak")
 
 mainThruster : Int -> Bool -> List Form
 mainThruster firing boost =

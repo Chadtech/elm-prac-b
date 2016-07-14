@@ -48,10 +48,10 @@ type alias Thing =
   , va : Float
 
   -- the g is for 'global'.
-  , gx          : Float
-  , gy          : Float
+  , gx     : Float
+  , gy     : Float
 
-  , sector   : (Int, Int)
+  , sector : (Int, Int)
 
   , sprite : Sprite
   }
@@ -80,7 +80,7 @@ o2Box =
   , sprite = 
     { w    = 20
     , h    = 20
-    , src  = "./stuff/oxygen-tank.png"
+    , src  = "stuff/oxygen-tank"
     }
   }
 

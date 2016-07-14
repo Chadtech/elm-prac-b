@@ -11382,7 +11382,7 @@ var _user$project$Types$o2Box = {
 	gx: 0,
 	gy: 0,
 	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
-	sprite: {w: 20, h: 20, src: './stuff/oxygen-tank.png'}
+	sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
 };
 var _user$project$Types$Model = F3(
 	function (a, b, c) {
@@ -11497,17 +11497,17 @@ var _user$project$Components$point = function (s) {
 			]));
 };
 
-var _user$project$Source$root = './';
-var _user$project$Source$src = function (str) {
+var _user$project$Pather$root$ = './';
+var _user$project$Pather$root = function (s) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
-		_user$project$Source$root,
-		A2(_elm_lang$core$Basics_ops['++'], str, '.png'));
+		_user$project$Pather$root$,
+		A2(_elm_lang$core$Basics_ops['++'], s, '.png'));
 };
 
 var _user$project$DrawShip$srcBlast = F2(
 	function (b, str) {
-		return b ? _user$project$Source$src(str) : _user$project$Source$src(
+		return b ? _user$project$Pather$root(str) : _user$project$Pather$root(
 			A2(_elm_lang$core$Basics_ops['++'], str, '-weak'));
 	});
 var _user$project$DrawShip$isFiring = F2(
@@ -11532,14 +11532,18 @@ var _user$project$DrawShip$transform = F3(
 				thruster,
 				tfs));
 	});
+var _user$project$DrawShip$image$ = F3(
+	function (w, h, src) {
+		return _evancz$elm_graphics$Collage$toForm(
+			A3(_evancz$elm_graphics$Element$image, w, h, src));
+	});
 var _user$project$DrawShip$drawThruster = F3(
 	function (_p0, p, str) {
 		var _p1 = _p0;
 		return A2(
 			_evancz$elm_graphics$Collage$move,
 			p,
-			_evancz$elm_graphics$Collage$toForm(
-				A3(_evancz$elm_graphics$Element$image, _p1._0, _p1._1, str)));
+			A3(_user$project$DrawShip$image$, _p1._0, _p1._1, str));
 	});
 var _user$project$DrawShip$mainThruster = F2(
 	function (firing, boost) {
@@ -11649,12 +11653,11 @@ var _user$project$DrawShip$drawShip = function (t) {
 			A2(_user$project$DrawShip$rightSide, t.rightSide, t.boost),
 			_elm_lang$core$Native_List.fromArray(
 			[
-				_evancz$elm_graphics$Collage$toForm(
 				A3(
-					_evancz$elm_graphics$Element$image,
-					47,
-					47,
-					_user$project$Source$src('ship/ship')))
+				_user$project$DrawShip$image$,
+				47,
+				47,
+				_user$project$Pather$root('ship/ship'))
 			])
 		]);
 	return _evancz$elm_graphics$Collage$toForm(
@@ -11670,14 +11673,22 @@ var _user$project$DrawShip$drawShip = function (t) {
 				ship)));
 };
 
+var _user$project$GameView$image$ = F3(
+	function (w, h, src) {
+		return _evancz$elm_graphics$Collage$toForm(
+			A3(
+				_evancz$elm_graphics$Element$image,
+				w,
+				h,
+				_user$project$Pather$root(src)));
+	});
 var _user$project$GameView$stars = function (pos) {
 	return A2(
 		_evancz$elm_graphics$Collage$move,
 		pos,
-		_evancz$elm_graphics$Collage$toForm(
-			A3(_evancz$elm_graphics$Element$image, 601, 601, './stars/stars.png')));
+		A3(_user$project$GameView$image$, 601, 601, 'stars/stars'));
 };
-var _user$project$GameView$nearEnoughToRender = F2(
+var _user$project$GameView$nearEnough = F2(
 	function (_p0, t) {
 		var _p1 = _p0;
 		var _p2 = t.sector;
@@ -11756,8 +11767,7 @@ var _user$project$GameView$drawAt = function (_p10) {
 		A2(
 			_evancz$elm_graphics$Collage$move,
 			_p11._0,
-			_evancz$elm_graphics$Collage$toForm(
-				A3(_evancz$elm_graphics$Element$image, w, h, sprite))));
+			A3(_user$project$GameView$image$, w, h, sprite)));
 };
 var _user$project$GameView$layerer = function (_p13) {
 	return _evancz$elm_graphics$Collage$toForm(
@@ -11776,8 +11786,7 @@ var _user$project$GameView$backdrop = F2(
 					A2(
 						_evancz$elm_graphics$Collage$alpha,
 						0.1,
-						_evancz$elm_graphics$Collage$toForm(
-							A3(_evancz$elm_graphics$Element$image, 320, 250, './stars/real-stars.png')))),
+						A3(_user$project$GameView$image$, 320, 250, 'stars/real-stars'))),
 					area
 				]));
 	});
@@ -11817,7 +11826,7 @@ var _user$project$GameView$populateArea = F2(
 						{ctor: '_Tuple2', _0: q, _1: ss}),
 					A2(
 						_elm_lang$core$List$filter,
-						_user$project$GameView$nearEnoughToRender(
+						_user$project$GameView$nearEnough(
 							{ctor: '_Tuple2', _0: q, _1: ss}),
 						m.things))));
 		return _user$project$GameView$layerer(
@@ -11838,52 +11847,6 @@ var _user$project$GameView$area = function (m) {
 				{ctor: '_Tuple2', _0: -300, _1: -300})
 			]));
 };
-var _user$project$GameView$nearEnoughToMark = F2(
-	function (_p14, t) {
-		var _p15 = _p14;
-		var _p16 = t.sector;
-		var tx = _p16._0;
-		var ty = _p16._1;
-		var dx = _elm_lang$core$Basics$abs(_p15._0 - tx);
-		var nearEnoughX = (_elm_lang$core$Native_Utils.cmp(dx, 5) < 0) && (_elm_lang$core$Native_Utils.cmp(1, dx) < 0);
-		var dy = _elm_lang$core$Basics$abs(_p15._1 - ty);
-		var nearEnoughY = (_elm_lang$core$Native_Utils.cmp(dy, 5) < 0) && (_elm_lang$core$Native_Utils.cmp(1, dy) < 0);
-		return nearEnoughX || nearEnoughY;
-	});
-var _user$project$GameView$drawMark = F2(
-	function (_p17, t) {
-		var _p18 = _p17;
-		var dy = _p18._1 - t.gy;
-		var dx = _p18._0 - t.gx;
-		var dir = A2(_elm_lang$core$Basics$atan2, dx, dy);
-		return A2(
-			_evancz$elm_graphics$Collage$move,
-			{
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Basics$sin(dir) * -300,
-				_1: _elm_lang$core$Basics$cos(dir) * -300
-			},
-			_evancz$elm_graphics$Collage$toForm(
-				A3(_evancz$elm_graphics$Element$image, 20, 20, './ship/lander-gear.png')));
-	});
-var _user$project$GameView$drawMarkers = F2(
-	function (m, area) {
-		var sg = {ctor: '_Tuple2', _0: m.ship.gx, _1: m.ship.gy};
-		return _user$project$GameView$layerer(
-			_elm_lang$core$List$concat(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$core$Native_List.fromArray(
-						[area]),
-						A2(
-						_elm_lang$core$List$map,
-						_user$project$GameView$drawMark(sg),
-						A2(
-							_elm_lang$core$List$filter,
-							_user$project$GameView$nearEnoughToMark(m.ship.sector),
-							m.things))
-					])));
-	});
 var _user$project$GameView$gameView = function (m) {
 	return _evancz$elm_graphics$Element$toHtml(
 		A3(
@@ -11899,18 +11862,15 @@ var _user$project$GameView$gameView = function (m) {
 							_user$project$GameView$rotateArea,
 							m.ship,
 							A2(
-								_user$project$GameView$drawMarkers,
-								m,
+								_user$project$GameView$backdrop,
+								m.ship,
 								A2(
-									_user$project$GameView$backdrop,
+									_user$project$GameView$positionArea,
 									m.ship,
 									A2(
-										_user$project$GameView$positionArea,
-										m.ship,
-										A2(
-											_user$project$GameView$populateArea,
-											m,
-											_user$project$GameView$area(m)))))),
+										_user$project$GameView$populateArea,
+										m,
+										_user$project$GameView$area(m))))),
 							_user$project$DrawShip$drawShip(m.ship.thrusters)
 						]))
 				])));
@@ -12070,6 +12030,11 @@ var _user$project$ReadOut$readOut = function (s) {
 			]));
 };
 
+var _user$project$MiniMap$image$ = F3(
+	function (w, h, src) {
+		return _evancz$elm_graphics$Collage$toForm(
+			A3(_evancz$elm_graphics$Element$image, w, h, src));
+	});
 var _user$project$MiniMap$p = function (f) {
 	return (f * 1.85e-3) - 111;
 };
@@ -12081,8 +12046,11 @@ var _user$project$MiniMap$drawThing = function (t) {
 			_0: _user$project$MiniMap$p(t.gx),
 			_1: _user$project$MiniMap$p(t.gy)
 		},
-		_evancz$elm_graphics$Collage$toForm(
-			A3(_evancz$elm_graphics$Element$image, 1, 1, t.sprite.src)));
+		A3(
+			_user$project$MiniMap$image$,
+			1,
+			1,
+			_user$project$Pather$root(t.sprite.src)));
 };
 var _user$project$MiniMap$miniMap = function (m) {
 	var s = m.ship;
@@ -12113,8 +12081,11 @@ var _user$project$MiniMap$miniMap = function (m) {
 										A2(
 											_evancz$elm_graphics$Collage$alpha,
 											0.1,
-											_evancz$elm_graphics$Collage$toForm(
-												A3(_evancz$elm_graphics$Element$image, 80, 63, './stars/real-stars.png'))))),
+											A3(
+												_user$project$MiniMap$image$,
+												80,
+												63,
+												_user$project$Pather$root('stars/real-stars'))))),
 									A2(
 									_evancz$elm_graphics$Collage$move,
 									{
@@ -12122,8 +12093,11 @@ var _user$project$MiniMap$miniMap = function (m) {
 										_0: _user$project$MiniMap$p(s.gx),
 										_1: _user$project$MiniMap$p(s.gy)
 									},
-									_evancz$elm_graphics$Collage$toForm(
-										A3(_evancz$elm_graphics$Element$image, 1, 1, './ship/ship.png')))
+									A3(
+										_user$project$MiniMap$image$,
+										1,
+										1,
+										_user$project$Pather$root('ship/ship')))
 								]),
 								A2(_elm_lang$core$List$map, _user$project$MiniMap$drawThing, m.things)
 							]))))
@@ -12142,6 +12116,100 @@ var _user$project$RightHud$rightHud = function (m) {
 				_user$project$MiniMap$miniMap(m),
 				_user$project$ReadOut$readOut(m.ship)
 			]));
+};
+
+var _user$project$NavMarkers$r = 290;
+var _user$project$NavMarkers$image$ = F3(
+	function (w, h, src) {
+		return _evancz$elm_graphics$Collage$toForm(
+			A3(
+				_evancz$elm_graphics$Element$image,
+				w,
+				h,
+				_user$project$Pather$root(src)));
+	});
+var _user$project$NavMarkers$nearEnough = F2(
+	function (_p0, t) {
+		var _p1 = _p0;
+		var dy = _elm_lang$core$Basics$abs(_p1._1 - t.gy);
+		var nearEnoughY = (_elm_lang$core$Native_Utils.cmp(dy, 6000) < 0) && (_elm_lang$core$Native_Utils.cmp(300, dy) < 0);
+		var dx = _elm_lang$core$Basics$abs(_p1._0 - t.gx);
+		var nearEnoughX = (_elm_lang$core$Native_Utils.cmp(dx, 6000) < 0) && (_elm_lang$core$Native_Utils.cmp(300, dx) < 0);
+		return nearEnoughX || nearEnoughY;
+	});
+var _user$project$NavMarkers$drawThing = F2(
+	function (_p2, t) {
+		var _p3 = _p2;
+		var dy = _p3._1 - t.gy;
+		var dx = _p3._0 - t.gx;
+		var dir = A2(_elm_lang$core$Basics$atan2, dx, dy);
+		var x = _elm_lang$core$Basics$sin(dir) * (0 - _user$project$NavMarkers$r);
+		var y = _elm_lang$core$Basics$cos(dir) * (0 - _user$project$NavMarkers$r);
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: x, _1: y},
+			A3(_user$project$NavMarkers$image$, 20, 20, 'markers/yellow'));
+	});
+var _user$project$NavMarkers$thingMarkers = function (m) {
+	var sg = {ctor: '_Tuple2', _0: m.ship.gx, _1: m.ship.gy};
+	return A2(
+		_elm_lang$core$List$map,
+		_user$project$NavMarkers$drawThing(sg),
+		A2(
+			_elm_lang$core$List$filter,
+			_user$project$NavMarkers$nearEnough(sg),
+			m.things));
+};
+var _user$project$NavMarkers$northMarker = A2(
+	_evancz$elm_graphics$Collage$move,
+	{ctor: '_Tuple2', _0: 0, _1: _user$project$NavMarkers$r},
+	A3(_user$project$NavMarkers$image$, 20, 20, 'markers/north'));
+var _user$project$NavMarkers$directionMarker = function (_p4) {
+	var _p5 = _p4;
+	var dir = A2(_elm_lang$core$Basics$atan2, _p5._0, _p5._1);
+	return A2(
+		_evancz$elm_graphics$Collage$rotate,
+		0 - dir,
+		A2(
+			_evancz$elm_graphics$Collage$move,
+			{
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Basics$sin(dir) * _user$project$NavMarkers$r,
+				_1: _elm_lang$core$Basics$cos(dir) * _user$project$NavMarkers$r
+			},
+			A3(_user$project$NavMarkers$image$, 20, 20, 'markers/direction')));
+};
+var _user$project$NavMarkers$navMarkers = function (m) {
+	var s = m.ship;
+	var markers = _elm_lang$core$List$concat(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$NavMarkers$thingMarkers(m),
+				_elm_lang$core$Native_List.fromArray(
+				[_user$project$NavMarkers$northMarker]),
+				_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$NavMarkers$directionMarker(
+					{ctor: '_Tuple2', _0: s.vx, _1: s.vy})
+				])
+			]));
+	return function (l) {
+		return _evancz$elm_graphics$Element$toHtml(
+			A3(
+				_evancz$elm_graphics$Collage$collage,
+				600,
+				600,
+				A2(
+					_elm_lang$core$List_ops['::'],
+					l,
+					_elm_lang$core$Native_List.fromArray(
+						[]))));
+	}(
+		A2(
+			_evancz$elm_graphics$Collage$rotate,
+			_elm_lang$core$Basics$degrees(0 - s.a),
+			_evancz$elm_graphics$Collage$toForm(
+				A3(_evancz$elm_graphics$Collage$collage, 600, 600, markers))));
 };
 
 var _user$project$View$view = function (model) {
@@ -12180,7 +12248,17 @@ var _user$project$View$view = function (model) {
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_user$project$GameView$gameView(model)
+								_user$project$GameView$gameView(model),
+								A2(
+								_elm_lang$html$Html$div,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$class('nav-markers')
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_user$project$NavMarkers$navMarkers(model)
+									]))
 							])),
 						_user$project$RightHud$rightHud(model)
 					]))
@@ -12585,6 +12663,10 @@ Elm['Main'] = Elm['Main'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
 Elm['MiniMap'] = Elm['MiniMap'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['MiniMap'], 'MiniMap', typeof _user$project$MiniMap$main === 'undefined' ? null : _user$project$MiniMap$main);
+Elm['NavMarkers'] = Elm['NavMarkers'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['NavMarkers'], 'NavMarkers', typeof _user$project$NavMarkers$main === 'undefined' ? null : _user$project$NavMarkers$main);
+Elm['Pather'] = Elm['Pather'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Pather'], 'Pather', typeof _user$project$Pather$main === 'undefined' ? null : _user$project$Pather$main);
 Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['ReadOut'] = Elm['ReadOut'] || {};
@@ -12593,8 +12675,6 @@ Elm['RightHud'] = Elm['RightHud'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['RightHud'], 'RightHud', typeof _user$project$RightHud$main === 'undefined' ? null : _user$project$RightHud$main);
 Elm['ShipPosition'] = Elm['ShipPosition'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ShipPosition'], 'ShipPosition', typeof _user$project$ShipPosition$main === 'undefined' ? null : _user$project$ShipPosition$main);
-Elm['Source'] = Elm['Source'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['Source'], 'Source', typeof _user$project$Source$main === 'undefined' ? null : _user$project$Source$main);
 Elm['ThingPosition'] = Elm['ThingPosition'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ThingPosition'], 'ThingPosition', typeof _user$project$ThingPosition$main === 'undefined' ? null : _user$project$ThingPosition$main);
 Elm['Thrust'] = Elm['Thrust'] || {};

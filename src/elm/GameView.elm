@@ -9,8 +9,7 @@ import Transform        exposing (..)
 import Types            exposing (..)
 import DrawShip         exposing (drawShip)
 import List             exposing (filter, map, concat, foldr)
-import Debug            exposing (log)
-
+import Pather           exposing (root)
 
 gameView : Model -> Html Msg
 gameView m =
@@ -20,46 +19,10 @@ gameView m =
       |>populateArea m
       |>positionArea m.ship
       |>backdrop     m.ship
-      |>drawMarkers  m
       |>rotateArea   m.ship
     , drawShip       m.ship.thrusters 
     ]
   ]|>toHtml
-
-drawMarkers : Model -> Form -> Form
-drawMarkers m area =
-  let sg = (m.ship.gx, m.ship.gy)
-  in
-  layerer 
-  <|concat
-    [ [area] 
-    , m.things
-      |>filter (nearEnoughToMark m.ship.sector)
-      |>map (drawMark sg) 
-    ]
-
-drawMark : (Float, Float) -> Thing -> Form
-drawMark (sgx, sgy) t =
-  let 
-    dx = sgx - t.gx
-    dy = sgy - t.gy
-    dir = atan2 dx dy
-  in
-  "./ship/lander-gear.png"
-  |>image 20 20 
-  |>toForm
-  |>move ((sin dir) * -300, (cos dir) * -300)
-
-nearEnoughToMark : (Int, Int) -> Thing -> Bool
-nearEnoughToMark (sx,sy) t =
-  let
-    (tx, ty) = t.sector
-    dx = abs (sx - tx)
-    dy = abs (sy - ty)
-    nearEnoughX = dx < 5 && 1 < dx
-    nearEnoughY = dy < 5 && 1 < dy
-  in 
-  nearEnoughX || nearEnoughY
 
 layerer : List Form -> Form
 layerer = toForm << collage 1200 1200
@@ -70,14 +33,13 @@ backdrop s area =
     x' = (-s.gx * 0.005) + 100
     y' = (-s.gy * 0.005) + 275
   in
-    layerer
-    [ "./stars/real-stars.png" 
-      |>image 320 250
-      |>toForm
-      |>alpha 0.1
-      |>move (x', y')
-    , area
-    ]
+  layerer
+  [ "stars/real-stars" 
+    |>image' 320 250
+    |>alpha 0.1
+    |>move (x', y')
+  , area
+  ]
 
 positionArea : Ship -> Form -> Form
 positionArea s area' = 
@@ -95,7 +57,7 @@ populateArea m area =
 
     ts = 
       m.things
-      |>filter (nearEnoughToRender (q, ss))
+      |>filter (nearEnough (q, ss))
       |>map (adjustPosition (q, ss))
       |>map drawAt
       |>layerer
@@ -109,10 +71,9 @@ drawAt (p, t) =
     h      = t.sprite.h
     sprite = t.sprite.src
   in
-    image w h sprite
-    |>toForm
-    |>move p
-    |>rotate (degrees t.a)
+  image' w h sprite
+  |>move p
+  |>rotate (degrees t.a)
 
 adjustPosition : (Quadrant, (Int, Int)) -> Thing -> ((Float, Float), Thing) 
 adjustPosition (q,(sx,sy)) t = 
@@ -138,8 +99,8 @@ adjustPosition (q,(sx,sy)) t =
 
   in ((x', y'), t)
 
-nearEnoughToRender : (Quadrant, (Int, Int)) -> Thing -> Bool
-nearEnoughToRender (q,(sx,sy)) t =
+nearEnough : (Quadrant, (Int, Int)) -> Thing -> Bool
+nearEnough (q,(sx,sy)) t =
   let
     (tx, ty) = t.sector
 
@@ -167,11 +128,10 @@ area m =
 
 stars : (Float, Float) -> Form
 stars pos = 
-  "./stars/stars.png"
-  |>image 601 601
-  |>toForm
+  "stars/stars"
+  |>image' 601 601
   |>move pos
 
-
-
-
+image' : Int -> Int -> String -> Form
+image' w h src = 
+  root src |> image w h |> toForm
