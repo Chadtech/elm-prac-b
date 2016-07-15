@@ -11381,6 +11381,7 @@ var _user$project$Types$o2Box = {
 	va: 1,
 	gx: 0,
 	gy: 0,
+	dir: 0,
 	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
 	sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
 };
@@ -11401,7 +11402,9 @@ var _user$project$Types$Thing = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, sector: i, sprite: j};
+										return function (k) {
+											return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, dir: i, sector: j, sprite: k};
+										};
 									};
 								};
 							};
@@ -11434,7 +11437,9 @@ var _user$project$Types$Ship = function (a) {
 											return function (l) {
 												return function (m) {
 													return function (n) {
-														return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, sector: i, quadrant: j, fuel: k, oxygen: l, weight: m, thrusters: n};
+														return function (o) {
+															return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, dir: i, sector: j, quadrant: k, fuel: l, oxygen: m, weight: n, thrusters: o};
+														};
 													};
 												};
 											};
@@ -11469,6 +11474,7 @@ var _user$project$Types$frege = function (t) {
 		quadrant: _user$project$Types$C,
 		gx: 0,
 		gy: 0,
+		dir: 0,
 		fuel: 1410.1,
 		oxygen: 166,
 		weight: 852,
@@ -11925,9 +11931,6 @@ _user$project$ReadOut_ops['.'] = F2(
 		return {ctor: '_Tuple2', _0: v0, _1: v1};
 	});
 var _user$project$ReadOut$content = function (s) {
-	var _p1 = s.sector;
-	var sx = _p1._0;
-	var sy = _p1._1;
 	return _elm_lang$core$List$unzip(
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -11953,8 +11956,7 @@ var _user$project$ReadOut$content = function (s) {
 				A2(
 				_user$project$ReadOut_ops['.'],
 				'dir',
-				_user$project$ReadOut$angleFormat(
-					(A2(_elm_lang$core$Basics$atan2, s.vx, s.vy) / _elm_lang$core$Basics$pi) * 200)),
+				_user$project$ReadOut$angleFormat((s.dir / _elm_lang$core$Basics$pi) * 200)),
 				A2(_user$project$ReadOut_ops['.'], 'position', '--------'),
 				A2(
 				_user$project$ReadOut_ops['.'],
@@ -12011,9 +12013,9 @@ var _user$project$ReadOut$column = function (list) {
 		list);
 };
 var _user$project$ReadOut$readOut = function (s) {
-	var _p2 = _user$project$ReadOut$content(s);
-	var keys = _p2._0;
-	var values = _p2._1;
+	var _p1 = _user$project$ReadOut$content(s);
+	var keys = _p1._0;
+	var values = _p1._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -12067,40 +12069,38 @@ var _user$project$MiniMap$miniMap = function (m) {
 					_evancz$elm_graphics$Collage$collage,
 					222,
 					222,
-					_elm_lang$core$List$concat(
+					A2(
+						_elm_lang$core$List$append,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$core$Native_List.fromArray(
-								[
+								A2(
+								_evancz$elm_graphics$Collage$move,
+								{ctor: '_Tuple2', _0: -50, _1: 0},
+								A2(
+									_evancz$elm_graphics$Collage$rotate,
+									_elm_lang$core$Basics$degrees(0),
 									A2(
-									_evancz$elm_graphics$Collage$move,
-									{ctor: '_Tuple2', _0: -50, _1: 0},
-									A2(
-										_evancz$elm_graphics$Collage$rotate,
-										_elm_lang$core$Basics$degrees(0),
-										A2(
-											_evancz$elm_graphics$Collage$alpha,
-											0.1,
-											A3(
-												_user$project$MiniMap$image$,
-												80,
-												63,
-												_user$project$Pather$root('stars/real-stars'))))),
-									A2(
-									_evancz$elm_graphics$Collage$move,
-									{
-										ctor: '_Tuple2',
-										_0: _user$project$MiniMap$p(s.gx),
-										_1: _user$project$MiniMap$p(s.gy)
-									},
-									A3(
-										_user$project$MiniMap$image$,
-										1,
-										1,
-										_user$project$Pather$root('ship/ship')))
-								]),
-								A2(_elm_lang$core$List$map, _user$project$MiniMap$drawThing, m.things)
-							]))))
+										_evancz$elm_graphics$Collage$alpha,
+										0.1,
+										A3(
+											_user$project$MiniMap$image$,
+											80,
+											63,
+											_user$project$Pather$root('stars/real-stars'))))),
+								A2(
+								_evancz$elm_graphics$Collage$move,
+								{
+									ctor: '_Tuple2',
+									_0: _user$project$MiniMap$p(s.gx),
+									_1: _user$project$MiniMap$p(s.gy)
+								},
+								A3(
+									_user$project$MiniMap$image$,
+									1,
+									1,
+									_user$project$Pather$root('ship/ship')))
+							]),
+						A2(_elm_lang$core$List$map, _user$project$MiniMap$drawThing, m.things))))
 			]));
 };
 
@@ -12164,9 +12164,7 @@ var _user$project$NavMarkers$northMarker = A2(
 	_evancz$elm_graphics$Collage$move,
 	{ctor: '_Tuple2', _0: 0, _1: _user$project$NavMarkers$r},
 	A3(_user$project$NavMarkers$image$, 20, 20, 'markers/north'));
-var _user$project$NavMarkers$directionMarker = function (_p4) {
-	var _p5 = _p4;
-	var dir = A2(_elm_lang$core$Basics$atan2, _p5._0, _p5._1);
+var _user$project$NavMarkers$directionMarker = function (dir) {
 	return A2(
 		_evancz$elm_graphics$Collage$rotate,
 		0 - dir,
@@ -12189,8 +12187,7 @@ var _user$project$NavMarkers$navMarkers = function (m) {
 				[_user$project$NavMarkers$northMarker]),
 				_elm_lang$core$Native_List.fromArray(
 				[
-					_user$project$NavMarkers$directionMarker(
-					{ctor: '_Tuple2', _0: s.vx, _1: s.vy})
+					_user$project$NavMarkers$directionMarker(s.dir)
 				])
 			]));
 	return function (l) {
@@ -12357,7 +12354,8 @@ var _user$project$ShipPosition$shipPosition = F2(
 				quadrant: _user$project$ShipPosition$setQuadrant(
 					{ctor: '_Tuple2', _0: xm, _1: ym}),
 				gx: s.gx + (dt * s.vx),
-				gy: s.gy + (dt * s.vy)
+				gy: s.gy + (dt * s.vy),
+				dir: A2(_elm_lang$core$Basics$atan2, s.vx, s.vy)
 			});
 	});
 

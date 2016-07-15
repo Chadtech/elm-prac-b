@@ -8,7 +8,7 @@ import Element          exposing (..)
 import Transform        exposing (..)
 import Types            exposing (..)
 import DrawShip         exposing (drawShip)
-import List             exposing (filter, map, concat, foldr)
+import List             exposing (filter, map)
 import Pather           exposing (root)
 
 gameView : Model -> Html Msg

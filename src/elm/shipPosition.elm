@@ -68,5 +68,6 @@ shipPosition dt s =
   , quadrant = setQuadrant (xm, ym)
   , gx       = s.gx + (dt * s.vx)
   , gy       = s.gy + (dt * s.vy)
+  , dir      = atan2 s.vx s.vy
   } 
 

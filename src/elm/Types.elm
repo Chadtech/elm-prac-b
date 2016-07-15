@@ -51,6 +51,8 @@ type alias Thing =
   , gx     : Float
   , gy     : Float
 
+  , dir    : Float
+
   , sector : (Int, Int)
 
   , sprite : Sprite
@@ -74,6 +76,8 @@ o2Box =
 
   , gx = 0
   , gy = 0
+
+  , dir = 0
 
   , sector   = (0, 0)
 
@@ -107,6 +111,8 @@ type alias Ship =
   -- the g is for 'global'.
   , gx          : Float
   , gy          : Float
+
+  , dir         : Float
 
   , sector      : (Int, Int)
   , quadrant    : Quadrant
@@ -145,6 +151,8 @@ frege t =
 
   , gx           = 0
   , gy           = 0
+
+  , dir          = 0
 
   , fuel         = 1410.1
   , oxygen       = 166

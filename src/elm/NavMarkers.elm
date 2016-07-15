@@ -19,7 +19,7 @@ navMarkers m =
       concat
       [ thingMarkers m
       , [ northMarker ]
-      , [ directionMarker (s.vx, s.vy) ]
+      , [ directionMarker s.dir ]
       ]
   in
   markers
@@ -30,9 +30,8 @@ navMarkers m =
   |>collage 600 600 
   |>toHtml 
 
-directionMarker : (Float, Float) -> Form
-directionMarker (vx, vy) =
-  let dir = atan2 vx vy in
+directionMarker : Float -> Form
+directionMarker dir =
   "markers/direction"
   |>image' 20 20
   |>move ((sin dir) * r, (cos dir) * r)

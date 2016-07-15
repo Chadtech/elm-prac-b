@@ -7,7 +7,7 @@ import Collage          exposing (..)
 import Element          exposing (..)
 import Transform        exposing (..)
 import Types            exposing (..)
-import List             exposing (concat, map)
+import List             exposing (append, map)
 import Pather           exposing (root)
 
 miniMap : Model -> Html Msg
@@ -15,18 +15,17 @@ miniMap m =
   let s = m.ship in
   div
   [ class "mini-map-container" ]
-  [ concat 
-    [ [ root "stars/real-stars"
-        |>image' 80 63
-        |>alpha 0.1
-        |>rotate (degrees 0)
-        |>move (-50, 0)
-      , root "ship/ship"
-        |>image' 1 1
-        |>move (p s.gx, p s.gy)
-      ]
-    , map drawThing m.things
+  [ append
+    [ root "stars/real-stars"
+      |>image' 80 63
+      |>alpha 0.1
+      |>rotate (degrees 0)
+      |>move (-50, 0)
+    , root "ship/ship"
+      |>image' 1 1
+      |>move (p s.gx, p s.gy)
     ]
+    (map drawThing m.things)
     |>collage 222 222 
     |>toHtml
   ]

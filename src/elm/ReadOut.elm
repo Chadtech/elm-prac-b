@@ -27,14 +27,13 @@ column list =
 
 content : Ship -> (List String, List String)
 content s =
-  let (sx, sy) = s.sector in
   unzip
   [ "--------"  . "--------"
   , "STATUS"    . "NOMINAL"
   , "--------"  . "--------"
   , "ang vel "  . ((nf 4 (-s.va * (10/9))) ++ " rpm")
   , "velocity"  . nf 8 ((((s.vx ^ 2) + (s.vy ^ 2)) ^ 0.5)/10)
-  , "dir"       . (angleFormat (((atan2 s.vx s.vy) / pi) * 200))
+  , "dir"       . (angleFormat ((s.dir / pi) * 200))
   , "position"  . "--------"
   , ": angle"   . (angleFormat (-s.a / 0.9))
   , ": x"       . nf 8 s.gx
