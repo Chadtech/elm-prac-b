@@ -9,6 +9,7 @@ import Element          exposing (..)
 import Transform        exposing (..)
 import List             exposing (filter, map, concat, append)
 import Pather           exposing (root)
+import Debug            exposing (log)
 
 
 navMarkers : Model -> Html Msg
@@ -17,9 +18,9 @@ navMarkers m =
     s = m.ship
     markers =
       concat
-      [ thingMarkers m
-      , [ northMarker ]
+      [ [ northMarker ]
       , [ directionMarker s.dir ]
+      , thingMarkers m
       ]
   in
   markers
@@ -45,34 +46,45 @@ northMarker =
 
 thingMarkers : Model -> List Form
 thingMarkers m =
-  let sg = (m.ship.gx, m.ship.gy)
-  in
-    m.things
-    |>filter (nearEnough sg)
-    |>map (drawThing sg)
+  let s = m.ship in
+  m.things
+  |>filter (nearEnough (s.gx, s.gy))
+  |>map (drawThing m.ship)
 
-drawThing : (Float, Float) -> Thing -> Form
-drawThing (sgx, sgy) t =
+drawThing : Ship -> Thing -> Form
+drawThing s t =
   let 
-    dx  = sgx - t.gx
-    dy  = sgy - t.gy
-    dir = atan2 dx dy
-    x   = (sin dir) * -r
-    y   = (cos dir) * -r
+    rvx = s.vx - t.vx
+    rvy = s.vy - t.vy
+    rv  = sqrt ((rvx^2) + (rvy^2))
+    dir = atan2 rvx rvy
+
+    dx   = s.gx - t.gx
+    dy   = s.gy - t.gy
+
+    pos  = atan2 dx dy
+    x    = (sin pos) * -r
+    y    = (cos pos) * -r
+
+    markerType =
+      if rv < 80 then
+        if rv < 40 then "normal"
+        else "highlight"
+      else "urgent"
   in
-  "markers/yellow"
+  "markers/thing-" ++ markerType
   |>image' 20 20 
   |>move (x, y)
+  |>rotate (pi - dir)
 
 nearEnough : (Float, Float) -> Thing -> Bool
 nearEnough (sgx,sgy) t =
   let
-    dx = abs (sgx - t.gx)
-    dy = abs (sgy - t.gy)
-    nearEnoughX = dx < 6000 && 300 < dx
-    nearEnoughY = dy < 6000 && 300 < dy
+    dx   = sgx - t.gx
+    dy   = sgy - t.gy
+    dist = sqrt ((dx^2) + (dy^2))
   in 
-  nearEnoughX || nearEnoughY
+  dist < 12000 && 300 < dist
 
 image' : Int -> Int -> String -> Form
 image' w h src = 

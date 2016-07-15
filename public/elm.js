@@ -11381,7 +11381,6 @@ var _user$project$Types$o2Box = {
 	va: 1,
 	gx: 0,
 	gy: 0,
-	dir: 0,
 	sector: {ctor: '_Tuple2', _0: 0, _1: 0},
 	sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
 };
@@ -11402,9 +11401,7 @@ var _user$project$Types$Thing = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return function (k) {
-											return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, dir: i, sector: j, sprite: k};
-										};
+										return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, sector: i, sprite: j};
 									};
 								};
 							};
@@ -12131,33 +12128,46 @@ var _user$project$NavMarkers$image$ = F3(
 var _user$project$NavMarkers$nearEnough = F2(
 	function (_p0, t) {
 		var _p1 = _p0;
-		var dy = _elm_lang$core$Basics$abs(_p1._1 - t.gy);
-		var nearEnoughY = (_elm_lang$core$Native_Utils.cmp(dy, 6000) < 0) && (_elm_lang$core$Native_Utils.cmp(300, dy) < 0);
-		var dx = _elm_lang$core$Basics$abs(_p1._0 - t.gx);
-		var nearEnoughX = (_elm_lang$core$Native_Utils.cmp(dx, 6000) < 0) && (_elm_lang$core$Native_Utils.cmp(300, dx) < 0);
-		return nearEnoughX || nearEnoughY;
+		var dy = _p1._1 - t.gy;
+		var dx = _p1._0 - t.gx;
+		var dist = _elm_lang$core$Basics$sqrt(
+			Math.pow(dx, 2) + Math.pow(dy, 2));
+		return (_elm_lang$core$Native_Utils.cmp(dist, 12000) < 0) && (_elm_lang$core$Native_Utils.cmp(300, dist) < 0);
 	});
 var _user$project$NavMarkers$drawThing = F2(
-	function (_p2, t) {
-		var _p3 = _p2;
-		var dy = _p3._1 - t.gy;
-		var dx = _p3._0 - t.gx;
-		var dir = A2(_elm_lang$core$Basics$atan2, dx, dy);
-		var x = _elm_lang$core$Basics$sin(dir) * (0 - _user$project$NavMarkers$r);
-		var y = _elm_lang$core$Basics$cos(dir) * (0 - _user$project$NavMarkers$r);
+	function (s, t) {
+		var dy = s.gy - t.gy;
+		var dx = s.gx - t.gx;
+		var pos = A2(_elm_lang$core$Basics$atan2, dx, dy);
+		var x = _elm_lang$core$Basics$sin(pos) * (0 - _user$project$NavMarkers$r);
+		var y = _elm_lang$core$Basics$cos(pos) * (0 - _user$project$NavMarkers$r);
+		var rvy = s.vy - t.vy;
+		var rvx = s.vx - t.vx;
+		var rv = _elm_lang$core$Basics$sqrt(
+			Math.pow(rvx, 2) + Math.pow(rvy, 2));
+		var markerType = (_elm_lang$core$Native_Utils.cmp(rv, 80) < 0) ? ((_elm_lang$core$Native_Utils.cmp(rv, 40) < 0) ? 'normal' : 'highlight') : 'urgent';
+		var dir = A2(_elm_lang$core$Basics$atan2, rvx, rvy);
 		return A2(
-			_evancz$elm_graphics$Collage$move,
-			{ctor: '_Tuple2', _0: x, _1: y},
-			A3(_user$project$NavMarkers$image$, 20, 20, 'markers/yellow'));
+			_evancz$elm_graphics$Collage$rotate,
+			_elm_lang$core$Basics$pi - dir,
+			A2(
+				_evancz$elm_graphics$Collage$move,
+				{ctor: '_Tuple2', _0: x, _1: y},
+				A3(
+					_user$project$NavMarkers$image$,
+					20,
+					20,
+					A2(_elm_lang$core$Basics_ops['++'], 'markers/thing-', markerType))));
 	});
 var _user$project$NavMarkers$thingMarkers = function (m) {
-	var sg = {ctor: '_Tuple2', _0: m.ship.gx, _1: m.ship.gy};
+	var s = m.ship;
 	return A2(
 		_elm_lang$core$List$map,
-		_user$project$NavMarkers$drawThing(sg),
+		_user$project$NavMarkers$drawThing(m.ship),
 		A2(
 			_elm_lang$core$List$filter,
-			_user$project$NavMarkers$nearEnough(sg),
+			_user$project$NavMarkers$nearEnough(
+				{ctor: '_Tuple2', _0: s.gx, _1: s.gy}),
 			m.things));
 };
 var _user$project$NavMarkers$northMarker = A2(
@@ -12182,13 +12192,13 @@ var _user$project$NavMarkers$navMarkers = function (m) {
 	var markers = _elm_lang$core$List$concat(
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$NavMarkers$thingMarkers(m),
 				_elm_lang$core$Native_List.fromArray(
 				[_user$project$NavMarkers$northMarker]),
 				_elm_lang$core$Native_List.fromArray(
 				[
 					_user$project$NavMarkers$directionMarker(s.dir)
-				])
+				]),
+				_user$project$NavMarkers$thingMarkers(m)
 			]));
 	return function (l) {
 		return _evancz$elm_graphics$Element$toHtml(

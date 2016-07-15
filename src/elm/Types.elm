@@ -51,8 +51,6 @@ type alias Thing =
   , gx     : Float
   , gy     : Float
 
-  , dir    : Float
-
   , sector : (Int, Int)
 
   , sprite : Sprite
@@ -76,8 +74,6 @@ o2Box =
 
   , gx = 0
   , gy = 0
-
-  , dir = 0
 
   , sector   = (0, 0)
 
