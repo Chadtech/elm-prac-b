@@ -34,14 +34,14 @@ navMarkers m =
 directionMarker : Float -> Form
 directionMarker dir =
   "markers/direction"
-  |>image' 20 20
+  |>marker
   |>move ((sin dir) * r, (cos dir) * r)
   |>rotate -dir
 
 northMarker : Form
 northMarker = 
   "markers/north"
-  |>image' 20 20
+  |>marker
   |>move (0, r)
 
 thingMarkers : Model -> List Form
@@ -73,7 +73,7 @@ drawThing s t =
       else "urgent"
   in
   "markers/thing-" ++ markerType
-  |>image' 20 20 
+  |>marker
   |>move (x, y)
   |>rotate (pi - dir)
 
@@ -86,9 +86,9 @@ nearEnough (sgx,sgy) t =
   in 
   dist < 12000 && 300 < dist
 
-image' : Int -> Int -> String -> Form
-image' w h src = 
-  root src |> image w h |> toForm
+marker : String -> Form
+marker src = 
+  root src |> image 20 20 |> toForm
 
 r : Float
 r = 290

@@ -11947,9 +11947,8 @@ var _user$project$ReadOut$content = function (s) {
 				A2(
 					_user$project$ReadOut$nf,
 					8,
-					Math.pow(
-						Math.pow(s.vx, 2) + Math.pow(s.vy, 2),
-						0.5) / 10)),
+					_elm_lang$core$Basics$sqrt(
+						Math.pow(s.vx, 2) + Math.pow(s.vy, 2)) / 10)),
 				A2(
 				_user$project$ReadOut_ops['.'],
 				'dir',
@@ -12116,15 +12115,14 @@ var _user$project$RightHud$rightHud = function (m) {
 };
 
 var _user$project$NavMarkers$r = 290;
-var _user$project$NavMarkers$image$ = F3(
-	function (w, h, src) {
-		return _evancz$elm_graphics$Collage$toForm(
-			A3(
-				_evancz$elm_graphics$Element$image,
-				w,
-				h,
-				_user$project$Pather$root(src)));
-	});
+var _user$project$NavMarkers$marker = function (src) {
+	return _evancz$elm_graphics$Collage$toForm(
+		A3(
+			_evancz$elm_graphics$Element$image,
+			20,
+			20,
+			_user$project$Pather$root(src)));
+};
 var _user$project$NavMarkers$nearEnough = F2(
 	function (_p0, t) {
 		var _p1 = _p0;
@@ -12153,10 +12151,7 @@ var _user$project$NavMarkers$drawThing = F2(
 			A2(
 				_evancz$elm_graphics$Collage$move,
 				{ctor: '_Tuple2', _0: x, _1: y},
-				A3(
-					_user$project$NavMarkers$image$,
-					20,
-					20,
+				_user$project$NavMarkers$marker(
 					A2(_elm_lang$core$Basics_ops['++'], 'markers/thing-', markerType))));
 	});
 var _user$project$NavMarkers$thingMarkers = function (m) {
@@ -12173,7 +12168,7 @@ var _user$project$NavMarkers$thingMarkers = function (m) {
 var _user$project$NavMarkers$northMarker = A2(
 	_evancz$elm_graphics$Collage$move,
 	{ctor: '_Tuple2', _0: 0, _1: _user$project$NavMarkers$r},
-	A3(_user$project$NavMarkers$image$, 20, 20, 'markers/north'));
+	_user$project$NavMarkers$marker('markers/north'));
 var _user$project$NavMarkers$directionMarker = function (dir) {
 	return A2(
 		_evancz$elm_graphics$Collage$rotate,
@@ -12185,7 +12180,7 @@ var _user$project$NavMarkers$directionMarker = function (dir) {
 				_0: _elm_lang$core$Basics$sin(dir) * _user$project$NavMarkers$r,
 				_1: _elm_lang$core$Basics$cos(dir) * _user$project$NavMarkers$r
 			},
-			A3(_user$project$NavMarkers$image$, 20, 20, 'markers/direction')));
+			_user$project$NavMarkers$marker('markers/direction')));
 };
 var _user$project$NavMarkers$navMarkers = function (m) {
 	var s = m.ship;
@@ -12597,6 +12592,23 @@ var _user$project$Thrust$setThrust = function (s) {
 		});
 };
 
+var _user$project$Main$gravity = F2(
+	function (dt, s) {
+		var angle = A2(_elm_lang$core$Basics$atan2, s.gx - 60000, s.gy - 60000);
+		var ass = A2(_elm_lang$core$Debug$log, 'angle', angle / _elm_lang$core$Basics$pi);
+		var vx$ = dt * _elm_lang$core$Basics$sin(angle);
+		var vy$ = dt * _elm_lang$core$Basics$cos(angle);
+		var ya = A2(
+			_elm_lang$core$Debug$log,
+			'vx vy',
+			{ctor: '_Tuple2', _0: vx$, _1: vy$});
+		var dist = _elm_lang$core$Basics$sqrt(
+			Math.pow(s.gx - 60000, 2) + Math.pow(s.gy - 60000, 2));
+		var dist$ = 100000 / dist;
+		return _elm_lang$core$Native_Utils.update(
+			s,
+			{vx: s.vx - vx$, vy: s.vy - vy$});
+	});
 var _user$project$Main$refresh = F2(
 	function (m, dt) {
 		return _elm_lang$core$Native_Utils.update(
