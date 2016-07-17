@@ -37,6 +37,13 @@ body
   color        pointColor
   font-size    standardSize
   margin       0 
+  &.urgent
+    color importantText
+  &.urgenter
+    color importanterText
+  &.critical
+    color critical
+    
   
 .root
   width  100%
@@ -100,6 +107,19 @@ body
   overflow          hidden 
   border            2px solid pointColor
   
+.velocity-gauge
+  padding 11px
+  z-index 5
+  position fixed
+  top 23px
+  right 258px
+  width 58px
+  height 40px
+  background-color  actualBlack
+  border-style      solid
+  border-width      2px
+  border-color      pointColor
+
 .nav-markers
   z-index 5
   overflow visible

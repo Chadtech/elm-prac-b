@@ -11752,47 +11752,30 @@ var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
 };
 
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
-var _user$project$Types$o2box = F2(
-	function (_p1, _p0) {
+var _user$project$Types$o2box = F3(
+	function (_p1, _p0, va) {
 		var _p2 = _p1;
 		var _p5 = _p2._1;
 		var _p4 = _p2._0;
 		var _p3 = _p0;
-		var sy = (_elm_lang$core$Basics$round(_p5) / 600) | 0;
-		var sx = (_elm_lang$core$Basics$round(_p4) / 600) | 0;
-		var y = _elm_lang$core$Basics$toFloat(
-			A2(
-				_elm_lang$core$Basics_ops['%'],
-				_elm_lang$core$Basics$round(_p5),
-				600)) + (_p5 - _elm_lang$core$Basics$toFloat(
-			_elm_lang$core$Basics$round(_p5)));
-		var x = _elm_lang$core$Basics$toFloat(
-			A2(
-				_elm_lang$core$Basics_ops['%'],
-				_elm_lang$core$Basics$round(_p4),
-				600)) + (_p4 - _elm_lang$core$Basics$toFloat(
-			_elm_lang$core$Basics$round(_p4)));
-		var ye = A2(
-			_elm_lang$core$Debug$log,
-			'cors and sectors',
-			{
-				ctor: '_Tuple2',
-				_0: {ctor: '_Tuple2', _0: x, _1: y},
-				_1: {ctor: '_Tuple2', _0: sx, _1: sy}
-			});
+		var gy$ = _elm_lang$core$Basics$round(_p5);
+		var gx$ = _elm_lang$core$Basics$round(_p4);
 		return {
-			x: x,
-			y: y,
+			x: (_elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics_ops['%'], gx$, 600)) + _p4) - _elm_lang$core$Basics$toFloat(gx$),
+			y: (_elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics_ops['%'], gy$, 600)) + _p5) - _elm_lang$core$Basics$toFloat(gy$),
 			a: 0,
 			vx: _p3._0,
 			vy: _p3._1,
-			va: 1,
+			va: va,
 			gx: _p4,
 			gy: _p5,
 			sector: {ctor: '_Tuple2', _0: 0, _1: 0},
 			sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
 		};
 	});
+var _user$project$Types$angleGen = A2(_elm_lang$core$Random$float, -30, 30);
 var _user$project$Types$Model = F3(
 	function (a, b, c) {
 		return {ship: a, keys: b, things: c};
@@ -11892,14 +11875,46 @@ var _user$project$Types$initModel = {
 	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init),
 	things: _elm_lang$core$Native_List.fromArray(
 		[
-			A2(
+			A3(
 			_user$project$Types$o2box,
 			{ctor: '_Tuple2', _0: 550, _1: 575},
-			{ctor: '_Tuple2', _0: 0, _1: 150}),
-			A2(
+			{ctor: '_Tuple2', _0: 0, _1: 150},
+			30),
+			A3(
 			_user$project$Types$o2box,
 			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: 5, _1: 150})
+			{ctor: '_Tuple2', _0: 5, _1: 150},
+			-30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 557},
+			{ctor: '_Tuple2', _0: 6, _1: 150},
+			25),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 557},
+			{ctor: '_Tuple2', _0: 1, _1: 154},
+			90),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 557},
+			{ctor: '_Tuple2', _0: -4, _1: 140},
+			55),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 557},
+			{ctor: '_Tuple2', _0: 5, _1: 151},
+			-87),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 557},
+			{ctor: '_Tuple2', _0: 3, _1: 140},
+			-3),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 557},
+			{ctor: '_Tuple2', _0: 10, _1: 140},
+			11)
 		])
 };
 var _user$project$Types$B = {ctor: 'B'};
@@ -12322,6 +12337,13 @@ var _user$project$Gravity$shipGravity = F2(
 			{vx: s.vx - vx$, vy: s.vy - vy$});
 	});
 
+var _user$project$KeyDiagram$keyDiagram = _evancz$elm_graphics$Element$toHtml(
+	A3(
+		_evancz$elm_graphics$Element$image,
+		156,
+		131,
+		_user$project$Pather$root('key-diagram')));
+
 var _user$project$Ports$request = _elm_lang$core$Native_Platform.outgoingPort(
 	'request',
 	function (v) {
@@ -12569,6 +12591,10 @@ var _user$project$RightHud$rightHud = function (m) {
 			]));
 };
 
+var _user$project$NavMarkers$listify = function (f) {
+	return _elm_lang$core$Native_List.fromArray(
+		[f]);
+};
 var _user$project$NavMarkers$r = 290;
 var _user$project$NavMarkers$marker = function (src) {
 	return _evancz$elm_graphics$Collage$toForm(
@@ -12637,36 +12663,71 @@ var _user$project$NavMarkers$directionMarker = function (dir) {
 			},
 			_user$project$NavMarkers$marker('markers/direction')));
 };
-var _user$project$NavMarkers$navMarkers = function (m) {
-	var s = m.ship;
-	var markers = _elm_lang$core$List$concat(
+var _user$project$NavMarkers$container = function (child) {
+	return A2(
+		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$core$Native_List.fromArray(
-				[_user$project$NavMarkers$northMarker]),
-				_elm_lang$core$Native_List.fromArray(
-				[
-					_user$project$NavMarkers$directionMarker(s.dir)
-				]),
-				_user$project$NavMarkers$thingMarkers(m)
+				_elm_lang$html$Html_Attributes$class('nav-markers')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_evancz$elm_graphics$Element$toHtml(child)
 			]));
-	return function (l) {
-		return _evancz$elm_graphics$Element$toHtml(
-			A3(
-				_evancz$elm_graphics$Collage$collage,
-				600,
-				600,
+};
+var _user$project$NavMarkers$navMarkers = function (m) {
+	var s = m.ship;
+	var markers = A2(
+		_elm_lang$core$List$append,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$NavMarkers$northMarker,
+				_user$project$NavMarkers$directionMarker(s.dir)
+			]),
+		_user$project$NavMarkers$thingMarkers(m));
+	return _user$project$NavMarkers$container(
+		A3(
+			_evancz$elm_graphics$Collage$collage,
+			600,
+			600,
+			_user$project$NavMarkers$listify(
 				A2(
-					_elm_lang$core$List_ops['::'],
-					l,
-					_elm_lang$core$Native_List.fromArray(
-						[]))));
-	}(
-		A2(
-			_evancz$elm_graphics$Collage$rotate,
-			_elm_lang$core$Basics$degrees(0 - s.a),
-			_evancz$elm_graphics$Collage$toForm(
-				A3(_evancz$elm_graphics$Collage$collage, 600, 600, markers))));
+					_evancz$elm_graphics$Collage$rotate,
+					_elm_lang$core$Basics$degrees(0 - s.a),
+					_evancz$elm_graphics$Collage$toForm(
+						A3(_evancz$elm_graphics$Collage$collage, 600, 600, markers))))));
+};
+
+var _user$project$VelocityGauge$velocityGauge = function (s) {
+	var v = _elm_lang$core$Basics$sqrt(
+		Math.pow(s.vx, 2) + Math.pow(s.vy, 2)) / 10;
+	var urgency = (_elm_lang$core$Native_Utils.cmp(15, v) > 0) ? '' : ((_elm_lang$core$Native_Utils.cmp(30, v) > 0) ? 'urgent' : ((_elm_lang$core$Native_Utils.cmp(45, v) > 0) ? 'urgenter' : 'critical'));
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('velocity-gauge')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Components$point('speed'),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class(
+						A2(_elm_lang$core$Basics_ops['++'], 'point ', urgency))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A3(
+							_elm_lang$core$String$slice,
+							0,
+							5,
+							_elm_lang$core$Basics$toString(v)))
+					]))
+			]));
 };
 
 var _user$project$View$view = function (model) {
@@ -12693,10 +12754,7 @@ var _user$project$View$view = function (model) {
 								_elm_lang$html$Html_Attributes$class('left-hud')
 							]),
 						_elm_lang$core$Native_List.fromArray(
-							[
-								_evancz$elm_graphics$Element$toHtml(
-								A3(_evancz$elm_graphics$Element$image, 156, 131, './key-diagram.png'))
-							])),
+							[_user$project$KeyDiagram$keyDiagram])),
 						A2(
 						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(
@@ -12706,16 +12764,8 @@ var _user$project$View$view = function (model) {
 						_elm_lang$core$Native_List.fromArray(
 							[
 								_user$project$GameView$gameView(model),
-								A2(
-								_elm_lang$html$Html$div,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html_Attributes$class('nav-markers')
-									]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_user$project$NavMarkers$navMarkers(model)
-									]))
+								_user$project$NavMarkers$navMarkers(model),
+								_user$project$VelocityGauge$velocityGauge(model.ship)
 							])),
 						_user$project$RightHud$rightHud(model)
 					]))
@@ -13127,6 +13177,8 @@ Elm['GameView'] = Elm['GameView'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['GameView'], 'GameView', typeof _user$project$GameView$main === 'undefined' ? null : _user$project$GameView$main);
 Elm['Gravity'] = Elm['Gravity'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Gravity'], 'Gravity', typeof _user$project$Gravity$main === 'undefined' ? null : _user$project$Gravity$main);
+Elm['KeyDiagram'] = Elm['KeyDiagram'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['KeyDiagram'], 'KeyDiagram', typeof _user$project$KeyDiagram$main === 'undefined' ? null : _user$project$KeyDiagram$main);
 Elm['Main'] = Elm['Main'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
 Elm['MiniMap'] = Elm['MiniMap'] || {};
@@ -13151,6 +13203,8 @@ Elm['ThrusterState'] = Elm['ThrusterState'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ThrusterState'], 'ThrusterState', typeof _user$project$ThrusterState$main === 'undefined' ? null : _user$project$ThrusterState$main);
 Elm['Types'] = Elm['Types'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Types'], 'Types', typeof _user$project$Types$main === 'undefined' ? null : _user$project$Types$main);
+Elm['VelocityGauge'] = Elm['VelocityGauge'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['VelocityGauge'], 'VelocityGauge', typeof _user$project$VelocityGauge$main === 'undefined' ? null : _user$project$VelocityGauge$main);
 Elm['View'] = Elm['View'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['View'], 'View', typeof _user$project$View$main === 'undefined' ? null : _user$project$View$main);
 

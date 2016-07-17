@@ -14,22 +14,28 @@ import Debug            exposing (log)
 
 navMarkers : Model -> Html Msg
 navMarkers m =
-  let 
+  let
     s = m.ship
     markers =
-      concat
-      [ [ northMarker ]
-      , [ directionMarker s.dir ]
-      , thingMarkers m
+      append
+      [ northMarker
+      , directionMarker s.dir
       ]
+      <|thingMarkers m
   in
   markers
   |>collage 600 600
   |>toForm
   |>rotate (degrees -s.a)
-  |>\l -> l :: []
+  |>listify
   |>collage 600 600 
-  |>toHtml 
+  |>container
+
+container : Element -> Html Msg
+container child =
+  div
+  [ class "nav-markers" ]
+  [ toHtml child ]
 
 directionMarker : Float -> Form
 directionMarker dir =
@@ -92,4 +98,8 @@ marker src =
 
 r : Float
 r = 290
+
+listify : Form -> List Form
+listify f = [f]
+
 

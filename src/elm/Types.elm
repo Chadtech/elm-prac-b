@@ -34,8 +34,14 @@ initModel =
   { ship   = frege thrusters
   , keys   = fst Keyboard.init
   , things = 
-    [ o2box (550, 575) (0, 150) 
-    , o2box (525, 557) (5, 150)
+    [ o2box (550, 575) (0, 150) 30
+    , o2box (525, 557) (5, 150) -30
+    , o2box (525, 557) (6, 150) 25
+    , o2box (525, 557) (1, 154) 90
+    , o2box (525, 557) (-4, 140) 55
+    , o2box (525, 557) (5, 151) -87
+    , o2box (525, 557) (3, 140)  -3
+    , o2box (525, 557) (10, 140) 11
     ]
   }
 
@@ -88,24 +94,22 @@ type alias Sprite =
 --    }
 --  }
 
-o2box : (Float, Float) -> (Float, Float) -> Thing
-o2box (gx, gy) (vx, vy) =
+angleGen : Generator Float
+angleGen = float -30 30
+
+o2box : (Float, Float) -> (Float, Float) -> Float -> Thing
+o2box (gx, gy) (vx, vy) va =
   let
-    x = (toFloat ((round gx) % 600)) + (gx - (toFloat (round gx)))
-    y = (toFloat ((round gy) % 600)) + (gy - (toFloat (round gy)))
-
-    sx = (round gx) // 600
-    sy = (round gy) // 600
-
-    ye = log "cors and sectors" ((x,y),(sx,sy))
+    gx' = round gx
+    gy' = round gy
   in
-  { x = x
-  , y = y
+  { x = (toFloat (gx' % 600)) + gx - (toFloat gx')
+  , y = (toFloat (gy' % 600)) + gy - (toFloat gy')
   , a = 0
 
   , vx = vx
   , vy = vy
-  , va = 1
+  , va = va
 
   , gx = gx
   , gy = gy
