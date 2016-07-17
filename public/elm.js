@@ -12496,7 +12496,11 @@ var _user$project$ReadOut$readOut = function (s) {
 var _user$project$MiniMap$image$ = F3(
 	function (w, h, src) {
 		return _evancz$elm_graphics$Collage$toForm(
-			A3(_evancz$elm_graphics$Element$image, w, h, src));
+			A3(
+				_evancz$elm_graphics$Element$image,
+				w,
+				h,
+				_user$project$Pather$root(src)));
 	});
 var _user$project$MiniMap$p = function (f) {
 	return (f * 1.85e-3) - 111;
@@ -12509,11 +12513,7 @@ var _user$project$MiniMap$drawThing = function (t) {
 			_0: _user$project$MiniMap$p(t.gx),
 			_1: _user$project$MiniMap$p(t.gy)
 		},
-		A3(
-			_user$project$MiniMap$image$,
-			2,
-			2,
-			_user$project$Pather$root(t.sprite.src)));
+		A3(_user$project$MiniMap$image$, 2, 2, t.sprite.src));
 };
 var _user$project$MiniMap$miniMap = function (m) {
 	var s = m.ship;
@@ -12543,11 +12543,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 									A2(
 										_evancz$elm_graphics$Collage$alpha,
 										0.1,
-										A3(
-											_user$project$MiniMap$image$,
-											80,
-											63,
-											_user$project$Pather$root('stars/real-stars'))))),
+										A3(_user$project$MiniMap$image$, 80, 63, 'stars/real-stars')))),
 								A2(
 								_evancz$elm_graphics$Collage$move,
 								{
@@ -12555,11 +12551,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 									_0: _user$project$MiniMap$p(s.gx),
 									_1: _user$project$MiniMap$p(s.gy)
 								},
-								A3(
-									_user$project$MiniMap$image$,
-									2,
-									2,
-									_user$project$Pather$root('ship/ship'))),
+								A3(_user$project$MiniMap$image$, 2, 2, 'ship/ship')),
 								A2(
 								_evancz$elm_graphics$Collage$move,
 								{
@@ -12567,11 +12559,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 									_0: _user$project$MiniMap$p(60000),
 									_1: _user$project$MiniMap$p(60000)
 								},
-								A3(
-									_user$project$MiniMap$image$,
-									5,
-									5,
-									_user$project$Pather$root('markers/yellow')))
+								A3(_user$project$MiniMap$image$, 5, 5, 'markers/yellow'))
 							]),
 						A2(_elm_lang$core$List$map, _user$project$MiniMap$drawThing, m.things))))
 			]));

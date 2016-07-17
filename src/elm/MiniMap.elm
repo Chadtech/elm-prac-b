@@ -16,15 +16,15 @@ miniMap m =
   div
   [ class "mini-map-container" ]
   [ append
-    [ root "stars/real-stars"
+    [ "stars/real-stars"
       |>image' 80 63
       |>alpha 0.1
       |>rotate (degrees 0)
       |>move (-50, 0)
-    , root "ship/ship"
+    , "ship/ship"
       |>image' 2 2
       |>move (p s.gx, p s.gy)
-    , root "markers/yellow"
+    , "markers/yellow"
       |>image' 5 5
       |>move (p 60000, p 60000)
     ]
@@ -35,7 +35,7 @@ miniMap m =
 
 drawThing : Thing -> Form
 drawThing t =
-  root t.sprite.src
+  t.sprite.src
   |>image' 2 2
   |>move (p t.gx, p t.gy)
 
@@ -44,4 +44,5 @@ p : Float -> Float
 p f = (f * 0.00185) - 111
 
 image' : Int -> Int -> String -> Form
-image' w h src = image w h src |> toForm
+image' w h src = 
+  root src |> image w h |> toForm
