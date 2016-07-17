@@ -11376,8 +11376,8 @@ var _user$project$Types$o2Box = {
 	x: 550,
 	y: 575,
 	a: 0,
-	vx: 66,
-	vy: 100,
+	vx: 0,
+	vy: 150,
 	va: 1,
 	gx: 0,
 	gy: 0,
@@ -11879,6 +11879,31 @@ var _user$project$GameView$gameView = function (m) {
 				])));
 };
 
+var _user$project$Gravity$thingGravity = F2(
+	function (dt, t) {
+		var angle = A2(_elm_lang$core$Basics$atan2, t.gx - 60000, t.gy - 60000);
+		var dist = _elm_lang$core$Basics$sqrt(
+			Math.pow(t.gx - 60000, 2) + Math.pow(t.gy - 60000, 2));
+		var g = Math.pow(50000 / dist, 2);
+		var vx$ = (g * dt) * _elm_lang$core$Basics$sin(angle);
+		var vy$ = (g * dt) * _elm_lang$core$Basics$cos(angle);
+		return _elm_lang$core$Native_Utils.update(
+			t,
+			{vx: t.vx - vx$, vy: t.vy - vy$});
+	});
+var _user$project$Gravity$shipGravity = F2(
+	function (dt, s) {
+		var angle = A2(_elm_lang$core$Basics$atan2, s.gx - 60000, s.gy - 60000);
+		var dist = _elm_lang$core$Basics$sqrt(
+			Math.pow(s.gx - 60000, 2) + Math.pow(s.gy - 60000, 2));
+		var g = Math.pow(50000 / dist, 2);
+		var vx$ = (g * dt) * _elm_lang$core$Basics$sin(angle);
+		var vy$ = (g * dt) * _elm_lang$core$Basics$cos(angle);
+		return _elm_lang$core$Native_Utils.update(
+			s,
+			{vx: s.vx - vx$, vy: s.vy - vy$});
+	});
+
 var _user$project$Ports$request = _elm_lang$core$Native_Platform.outgoingPort(
 	'request',
 	function (v) {
@@ -12046,8 +12071,8 @@ var _user$project$MiniMap$drawThing = function (t) {
 		},
 		A3(
 			_user$project$MiniMap$image$,
-			1,
-			1,
+			2,
+			2,
 			_user$project$Pather$root(t.sprite.src)));
 };
 var _user$project$MiniMap$miniMap = function (m) {
@@ -12092,9 +12117,21 @@ var _user$project$MiniMap$miniMap = function (m) {
 								},
 								A3(
 									_user$project$MiniMap$image$,
-									1,
-									1,
-									_user$project$Pather$root('ship/ship')))
+									2,
+									2,
+									_user$project$Pather$root('ship/ship'))),
+								A2(
+								_evancz$elm_graphics$Collage$move,
+								{
+									ctor: '_Tuple2',
+									_0: _user$project$MiniMap$p(60000),
+									_1: _user$project$MiniMap$p(60000)
+								},
+								A3(
+									_user$project$MiniMap$image$,
+									5,
+									5,
+									_user$project$Pather$root('markers/yellow')))
 							]),
 						A2(_elm_lang$core$List$map, _user$project$MiniMap$drawThing, m.things))))
 			]));
@@ -12592,50 +12629,41 @@ var _user$project$Thrust$setThrust = function (s) {
 		});
 };
 
-var _user$project$Main$gravity = F2(
-	function (dt, s) {
-		var angle = A2(_elm_lang$core$Basics$atan2, s.gx - 60000, s.gy - 60000);
-		var ass = A2(_elm_lang$core$Debug$log, 'angle', angle / _elm_lang$core$Basics$pi);
-		var vx$ = dt * _elm_lang$core$Basics$sin(angle);
-		var vy$ = dt * _elm_lang$core$Basics$cos(angle);
-		var ya = A2(
-			_elm_lang$core$Debug$log,
-			'vx vy',
-			{ctor: '_Tuple2', _0: vx$, _1: vy$});
-		var dist = _elm_lang$core$Basics$sqrt(
-			Math.pow(s.gx - 60000, 2) + Math.pow(s.gy - 60000, 2));
-		var dist$ = 100000 / dist;
-		return _elm_lang$core$Native_Utils.update(
-			s,
-			{vx: s.vx - vx$, vy: s.vy - vy$});
-	});
 var _user$project$Main$refresh = F2(
 	function (m, dt) {
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{
 				ship: _user$project$Thrust$setThrust(
-					A2(_user$project$ShipPosition$shipPosition, dt, m.ship)),
+					A2(
+						_user$project$ShipPosition$shipPosition,
+						dt,
+						A2(_user$project$Gravity$shipGravity, dt, m.ship))),
 				things: A2(
 					_elm_lang$core$List$map,
-					_user$project$ThingPosition$thingPosition(dt),
+					function (_p0) {
+						return A2(
+							_user$project$Gravity$thingGravity,
+							dt,
+							A2(_user$project$ThingPosition$thingPosition, dt, _p0));
+					},
 					m.things)
 			});
 	});
 var _user$project$Main$update = F2(
 	function (msg, m) {
-		var _p0 = msg;
-		if (_p0.ctor === 'Refresh') {
+		var _p1 = msg;
+		if (_p1.ctor === 'Refresh') {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Main$refresh, m, _p0._0 / 120),
+				_0: A2(_user$project$Main$refresh, m, _p1._0 / 120),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
 			var ship = m.ship;
-			var _p1 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, m.keys);
-			var keys$ = _p1._0;
-			var kCmd = _p1._1;
+			var _p2 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p1._0, m.keys);
+			var keys$ = _p2._0;
+			var kCmd = _p2._1;
 			return A2(
 				F2(
 					function (v0, v1) {
@@ -12679,6 +12707,8 @@ Elm['DrawShip'] = Elm['DrawShip'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['DrawShip'], 'DrawShip', typeof _user$project$DrawShip$main === 'undefined' ? null : _user$project$DrawShip$main);
 Elm['GameView'] = Elm['GameView'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['GameView'], 'GameView', typeof _user$project$GameView$main === 'undefined' ? null : _user$project$GameView$main);
+Elm['Gravity'] = Elm['Gravity'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Gravity'], 'Gravity', typeof _user$project$Gravity$main === 'undefined' ? null : _user$project$Gravity$main);
 Elm['Main'] = Elm['Main'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
 Elm['MiniMap'] = Elm['MiniMap'] || {};

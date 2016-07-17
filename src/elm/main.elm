@@ -13,6 +13,7 @@ import Keyboard.Extra   as Keyboard
 import ThrusterState    exposing (setThrusters)
 import Thrust           exposing (setThrust)
 import List             exposing (map)
+import Gravity          exposing (shipGravity, thingGravity)
 
 main =
   App.program
@@ -34,32 +35,15 @@ refresh m dt =
   { m 
   | ship = 
       m.ship
-      --|>gravity dt
+      |>shipGravity dt
       |>shipPosition dt
       |>setThrust
-  , things = map (thingPosition dt) m.things
-  }
-
-gravity : Float -> Ship -> Ship
-gravity dt s = 
-  let
-    dist = sqrt ((s.gx - 60000)^2 + (s.gy - 60000)^2)
-    dist' = 100000/dist
-    angle = atan2 (s.gx - 60000) (s.gy - 60000)
-
-    ass = log "angle" (angle/pi)
-    vx' = (dt * (sin (angle)))
-    vy' = (dt * (cos (angle)))
-
-    ya = log "vx vy" (vx', vy')
-
-    --wa = log "angle" (angle / pi)
-    --ye = log "x and y" ((dt * dist' * (sin angle)) + s.vx, (dt * dist' * (cos angle)) + s.vy)
-  in
-  --s
-  { s
-  | vx = s.vx - vx'
-  , vy = s.vy - vy'
+  , things = 
+      m.things
+      |>map (
+          thingPosition dt
+        >>thingGravity dt
+        )
   }
 
 

@@ -22,8 +22,11 @@ miniMap m =
       |>rotate (degrees 0)
       |>move (-50, 0)
     , root "ship/ship"
-      |>image' 1 1
+      |>image' 2 2
       |>move (p s.gx, p s.gy)
+    , root "markers/yellow"
+      |>image' 5 5
+      |>move (p 60000, p 60000)
     ]
     (map drawThing m.things)
     |>collage 222 222 
@@ -33,7 +36,7 @@ miniMap m =
 drawThing : Thing -> Form
 drawThing t =
   root t.sprite.src
-  |>image' 1 1
+  |>image' 2 2
   |>move (p t.gx, p t.gy)
 
 -- position in map 
