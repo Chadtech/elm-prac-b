@@ -128,7 +128,7 @@ area m =
 
 stars : (Float, Float) -> Form
 stars pos = 
-  "stars/stars"
+  "stars/stars-1"
   |>image' 601 601
   |>move pos
 

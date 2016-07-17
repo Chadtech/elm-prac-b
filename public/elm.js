@@ -12122,7 +12122,7 @@ var _user$project$GameView$stars = function (pos) {
 	return A2(
 		_evancz$elm_graphics$Collage$move,
 		pos,
-		A3(_user$project$GameView$image$, 601, 601, 'stars/stars'));
+		A3(_user$project$GameView$image$, 601, 601, 'stars/stars-1'));
 };
 var _user$project$GameView$nearEnough = F2(
 	function (_p0, t) {
