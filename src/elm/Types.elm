@@ -1,8 +1,9 @@
 module Types exposing (..)
 
 import Time             exposing (..)
+import Random           exposing (..)
 import Keyboard.Extra   as Keyboard
-
+import Debug exposing (log)
 
 type Msg 
   = Refresh Time
@@ -32,7 +33,10 @@ initModel : Model
 initModel = 
   { ship   = frege thrusters
   , keys   = fst Keyboard.init
-  , things = [ o2Box ]
+  , things = 
+    [ o2box (550, 575) (0, 150) 
+    , o2box (525, 557) (5, 150)
+    ]
   }
 
 type alias World = 
@@ -62,14 +66,45 @@ type alias Sprite =
   , src : String
   }
 
-o2Box : Thing
-o2Box =
-  { x = 550
-  , y = 575
+--o2Box : Thing
+--o2Box =
+--  { x = 550
+--  , y = 575
+--  , a = 0
+
+--  , vx = 0
+--  , vy = 150
+--  , va = 1
+
+--  , gx = 0
+--  , gy = 0
+
+--  , sector   = (0, 0)
+
+--  , sprite = 
+--    { w    = 20
+--    , h    = 20
+--    , src  = "stuff/oxygen-tank"
+--    }
+--  }
+
+o2box : (Float, Float) -> (Float, Float) -> Thing
+o2box (gx, gy) (vx, vy) =
+  let
+    x = (toFloat ((round gx) % 600)) + (gx - (toFloat (round gx)))
+    y = (toFloat ((round gy) % 600)) + (gy - (toFloat (round gy)))
+
+    sx = (round gx) // 600
+    sy = (round gy) // 600
+
+    ye = log "cors and sectors" ((x,y),(sx,sy))
+  in
+  { x = x
+  , y = y
   , a = 0
 
-  , vx = 0
-  , vy = 150
+  , vx = vx
+  , vy = vy
   , va = 1
 
   , gx = 0
@@ -83,6 +118,7 @@ o2Box =
     , src  = "stuff/oxygen-tank"
     }
   }
+
 
 type alias Thrusters =
   { leftFront  : Int
