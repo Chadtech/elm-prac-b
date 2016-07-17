@@ -107,8 +107,8 @@ o2box (gx, gy) (vx, vy) =
   , vy = vy
   , va = 1
 
-  , gx = 0
-  , gy = 0
+  , gx = gx
+  , gy = gy
 
   , sector   = (0, 0)
 
@@ -175,14 +175,14 @@ frege t =
   , a            = 0
 
   , vx           = 0
-  , vy           = 0
+  , vy           = 150
   , va           = 0
 
   , sector       = (0, 0) 
   , quadrant     = C
 
-  , gx           = 0
-  , gy           = 0
+  , gx           = 550
+  , gy           = 550
 
   , dir          = 0
 
