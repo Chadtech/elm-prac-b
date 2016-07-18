@@ -34,7 +34,8 @@ initModel =
   { ship   = frege thrusters
   , keys   = fst Keyboard.init
   , things = 
-    [ o2box (10000, 60000) (0, 150) 30
+    [ o2box (525, 550) (0, 150) 30
+    , o2box (10000, 60000) (0, 150) 30
     , o2box (60000, 10000) (140, -10) 30
     , o2box (30000, 60000) (0, 290) 30
     , o2box (45000, 60000) (0, -400) 30
@@ -175,21 +176,48 @@ thrusters =
   , boost      = False
   }
 
+--modulo : Float -> Float
+--modulo f =
+--  let 
+--    f' = round f 
+--    m = (toFloat (f' % 600)) + (f - (toFloat f'))
+--  in
+--  if m > 300 then m - 600 else m
+
+setSector : Float -> Int
+setSector f =
+  (floor (f / 600))
+
 frege : Thrusters -> Ship
 frege t = 
-  { x            = -50
-  , y            = -50
+  let
+    gx = 45025
+    gy = 60000
+
+    x =
+      if gx > 600 then gx - 600
+      else gx
+
+    y =
+      if gy > 600 then gy - 600
+      else gy
+
+  in
+  { x            = x
+  , y            = y
   , a            = 0
 
   , vx           = 0
-  , vy           = 150
+  , vy           = -400
   , va           = 0
 
-  , sector       = (0, 0) 
+  --, sector = (0,0)
+  , sector = (setSector gx, setSector gy)
+  --, sector       = (setSector (round (modulo gx)), setSector (round (modulo gy))) 
   , quadrant     = C
 
-  , gx           = 550
-  , gy           = 550
+  , gx           = gx
+  , gy           = gy
 
   , dir          = 0
 
@@ -200,3 +228,26 @@ frege t =
   , thrusters    = t
 
   }
+  --{ x            = -50
+  --, y            = -50
+  --, a            = 0
+
+  --, vx           = 0
+  --, vy           = 150
+  --, va           = 0
+
+  --, sector       = (0, 0) 
+  --, quadrant     = C
+
+  --, gx           = 550
+  --, gy           = 550
+
+  --, dir          = 0
+
+  --, fuel         = 1410.1
+  --, oxygen       = 166
+  --, weight       = 852
+
+  --, thrusters    = t
+
+  --}

@@ -11751,6 +11751,9 @@ var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
 		_elm_lang$core$Set$toList(model.keysDown));
 };
 
+var _user$project$Types$setSector = function (f) {
+	return _elm_lang$core$Basics$floor(f / 600);
+};
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
 var _user$project$Types$o2box = F3(
 	function (_p1, _p0, va) {
@@ -11852,17 +11855,25 @@ var _user$project$Types$Refresh = function (a) {
 var _user$project$Types$D = {ctor: 'D'};
 var _user$project$Types$C = {ctor: 'C'};
 var _user$project$Types$frege = function (t) {
+	var gy = 60000;
+	var y = (_elm_lang$core$Native_Utils.cmp(gy, 600) > 0) ? (gy - 600) : gy;
+	var gx = 45025;
+	var x = (_elm_lang$core$Native_Utils.cmp(gx, 600) > 0) ? (gx - 600) : gx;
 	return {
-		x: -50,
-		y: -50,
+		x: x,
+		y: y,
 		a: 0,
 		vx: 0,
-		vy: 150,
+		vy: -400,
 		va: 0,
-		sector: {ctor: '_Tuple2', _0: 0, _1: 0},
+		sector: {
+			ctor: '_Tuple2',
+			_0: _user$project$Types$setSector(gx),
+			_1: _user$project$Types$setSector(gy)
+		},
 		quadrant: _user$project$Types$C,
-		gx: 550,
-		gy: 550,
+		gx: gx,
+		gy: gy,
 		dir: 0,
 		fuel: 1410.1,
 		oxygen: 166,
@@ -11875,6 +11886,11 @@ var _user$project$Types$initModel = {
 	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init),
 	things: _elm_lang$core$Native_List.fromArray(
 		[
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 550},
+			{ctor: '_Tuple2', _0: 0, _1: 150},
+			30),
 			A3(
 			_user$project$Types$o2box,
 			{ctor: '_Tuple2', _0: 10000, _1: 60000},
@@ -12576,7 +12592,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 									_0: _user$project$MiniMap$p(s.gx),
 									_1: _user$project$MiniMap$p(s.gy)
 								},
-								A3(_user$project$MiniMap$image$, 3, 3, 'markers/blue')),
+								A3(_user$project$MiniMap$image$, 5, 5, 'markers/ring')),
 								A2(
 								_evancz$elm_graphics$Collage$move,
 								{
@@ -13117,7 +13133,7 @@ var _user$project$Main$update = F2(
 		if (_p1.ctor === 'Refresh') {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Main$refresh, m, _p1._0 / 10),
+				_0: A2(_user$project$Main$refresh, m, _p1._0 / 20),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
