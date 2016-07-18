@@ -40,12 +40,12 @@ refresh m dt =
       |>setThrust
   , things = 
       m.things
-      |>map (
-          thingPosition dt
-        >>thingGravity dt
-        )
+      |>map (refreshThing dt)
   }
 
+refreshThing : Float -> (Thing -> Thing)
+refreshThing dt =
+  thingPosition dt >> thingGravity dt
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg m =

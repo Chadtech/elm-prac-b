@@ -34,7 +34,7 @@ initModel =
   { ship   = frege thrusters
   , keys   = fst Keyboard.init
   , things = 
-    [ o2box (550, 575) (0, 150) 30
+    [ o2box (5550, 5575) (0, 150) 30
     , o2box (525, 557) (5, 150) -30
     , o2box (525, 557) (6, 150) 25
     , o2box (525, 557) (1, 151) 90
@@ -114,7 +114,7 @@ o2box (gx, gy) (vx, vy) va =
   , gx = gx
   , gy = gy
 
-  , sector   = (0, 0)
+  , sector = (gx' // 600, gy' // 600)
 
   , sprite = 
     { w    = 20

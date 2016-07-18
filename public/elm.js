@@ -11771,7 +11771,7 @@ var _user$project$Types$o2box = F3(
 			va: va,
 			gx: _p4,
 			gy: _p5,
-			sector: {ctor: '_Tuple2', _0: 0, _1: 0},
+			sector: {ctor: '_Tuple2', _0: (gx$ / 600) | 0, _1: (gy$ / 600) | 0},
 			sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
 		};
 	});
@@ -11877,7 +11877,7 @@ var _user$project$Types$initModel = {
 		[
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 550, _1: 575},
+			{ctor: '_Tuple2', _0: 5550, _1: 5575},
 			{ctor: '_Tuple2', _0: 0, _1: 150},
 			30),
 			A3(
@@ -12815,57 +12815,34 @@ var _user$project$ShipPosition$moduloAngle = function (_p6) {
 	return _user$project$ShipPosition$moduloCClockwise(
 		_user$project$ShipPosition$moduloClockwise(_p6));
 };
-var _user$project$ShipPosition$moduloNeg = function (n) {
-	moduloNeg:
-	while (true) {
-		if (_elm_lang$core$Native_Utils.cmp(n, -300) < 0) {
-			var _v4 = n + 600;
-			n = _v4;
-			continue moduloNeg;
-		} else {
-			return n;
-		}
-	}
-};
-var _user$project$ShipPosition$moduloPos = function (n) {
-	moduloPos:
-	while (true) {
-		if (_elm_lang$core$Native_Utils.cmp(n, 300) > 0) {
-			var _v5 = n - 600;
-			n = _v5;
-			continue moduloPos;
-		} else {
-			return n;
-		}
-	}
-};
-var _user$project$ShipPosition$modulo = function (_p7) {
-	return _user$project$ShipPosition$moduloNeg(
-		_user$project$ShipPosition$moduloPos(_p7));
+var _user$project$ShipPosition$modulo = function (f) {
+	var f$ = _elm_lang$core$Basics$round(f);
+	var m = _elm_lang$core$Basics$toFloat(
+		A2(_elm_lang$core$Basics_ops['%'], f$, 600)) + (f - _elm_lang$core$Basics$toFloat(f$));
+	return (_elm_lang$core$Native_Utils.cmp(m, 300) > 0) ? (m - 600) : m;
 };
 var _user$project$ShipPosition$shipPosition = F2(
 	function (dt, s) {
-		var _p8 = s.sector;
-		var sx = _p8._0;
-		var sy = _p8._1;
-		var a$ = s.a + (dt * s.va);
-		var x$ = s.x + (dt * s.vx);
-		var xm = _user$project$ShipPosition$modulo(x$);
+		var _p7 = s.sector;
+		var sx = _p7._0;
+		var sy = _p7._1;
+		var vx$ = dt * s.vx;
+		var gxm = _user$project$ShipPosition$modulo(s.gx + vx$);
 		var dsx = _user$project$ShipPosition$axisCrosses(
-			{ctor: '_Tuple2', _0: s.x, _1: x$});
-		var y$ = s.y + (dt * s.vy);
-		var ym = _user$project$ShipPosition$modulo(y$);
+			{ctor: '_Tuple2', _0: s.x, _1: s.x + vx$});
+		var vy$ = dt * s.vy;
+		var gym = _user$project$ShipPosition$modulo(s.gy + vy$);
 		var dsy = _user$project$ShipPosition$axisCrosses(
-			{ctor: '_Tuple2', _0: s.y, _1: y$});
+			{ctor: '_Tuple2', _0: s.y, _1: s.y + vy$});
 		return _elm_lang$core$Native_Utils.update(
 			s,
 			{
-				x: xm,
-				y: ym,
-				a: _user$project$ShipPosition$moduloAngle(a$),
+				x: gxm,
+				y: gym,
+				a: _user$project$ShipPosition$moduloAngle(s.a + (dt * s.va)),
 				sector: {ctor: '_Tuple2', _0: sx + dsx, _1: sy + dsy},
 				quadrant: _user$project$ShipPosition$setQuadrant(
-					{ctor: '_Tuple2', _0: xm, _1: ym}),
+					{ctor: '_Tuple2', _0: gxm, _1: gym}),
 				gx: s.gx + (dt * s.vx),
 				gy: s.gy + (dt * s.vy),
 				dir: A2(_elm_lang$core$Basics$atan2, s.vx, s.vy)
@@ -13100,6 +13077,14 @@ var _user$project$Thrust$setThrust = function (s) {
 		});
 };
 
+var _user$project$Main$refreshThing = function (dt) {
+	return function (_p0) {
+		return A2(
+			_user$project$Gravity$thingGravity,
+			dt,
+			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
+	};
+};
 var _user$project$Main$refresh = F2(
 	function (m, dt) {
 		return _elm_lang$core$Native_Utils.update(
@@ -13112,12 +13097,7 @@ var _user$project$Main$refresh = F2(
 						A2(_user$project$Gravity$shipGravity, dt, m.ship))),
 				things: A2(
 					_elm_lang$core$List$map,
-					function (_p0) {
-						return A2(
-							_user$project$Gravity$thingGravity,
-							dt,
-							A2(_user$project$ThingPosition$thingPosition, dt, _p0));
-					},
+					_user$project$Main$refreshThing(dt),
 					m.things)
 			});
 	});

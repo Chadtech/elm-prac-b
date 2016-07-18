@@ -4,18 +4,13 @@ import Types exposing (..)
 import Debug exposing (log)
 
 
-moduloPos : Float -> Float
-moduloPos n =
-  if n > 300 then moduloPos (n - 600)
-  else n
-
-moduloNeg : Float -> Float
-moduloNeg n =
-  if n < -300 then moduloNeg (n + 600)
-  else n
-
 modulo : Float -> Float
-modulo = moduloPos >> moduloNeg
+modulo f =
+  let 
+    f' = round f 
+    m = (toFloat (f' % 600)) + (f - (toFloat f'))
+  in
+  if m > 300 then m - 600 else m
 
 moduloClockwise : Float -> Float
 moduloClockwise a =
@@ -49,23 +44,28 @@ setQuadrant (x, y) =
 shipPosition : Float -> Ship -> Ship
 shipPosition dt s =
   let 
-    y' = s.y + (dt * s.vy)
-    x' = s.x + (dt * s.vx)
-    a' = s.a + (dt * s.va)
+    vy' = dt * s.vy
+    vx' = dt * s.vx
 
-    ym = modulo y'
-    xm = modulo x'
+    gym = modulo (s.gy + vy')
+    gxm = modulo (s.gx + vx')
 
     (sx, sy) = s.sector
-    dsy      = axisCrosses (s.y, y')
-    dsx      = axisCrosses (s.x, x')
+    
+    dsy = 
+      axisCrosses
+      (s.y, s.y + vy')
+    
+    dsx = 
+      axisCrosses
+      (s.x, s.x + vx')
   in
   { s
-  | x        = xm
-  , y        = ym
-  , a        = moduloAngle a'
+  | x        = gxm
+  , y        = gym
+  , a        = moduloAngle (s.a + (dt * s.va))
   , sector   = (sx + dsx, sy + dsy)
-  , quadrant = setQuadrant (xm, ym)
+  , quadrant = setQuadrant (gxm, gym)
   , gx       = s.gx + (dt * s.vx)
   , gy       = s.gy + (dt * s.vy)
   , dir      = atan2 s.vx s.vy
