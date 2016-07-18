@@ -52,7 +52,8 @@ update msg m =
   case msg of 
 
     Refresh dt ->
-      (refresh m (dt / 120), Cmd.none)
+      (refresh m (dt / 10), Cmd.none)      
+      --(refresh m (dt / 120), Cmd.none)
 
     HandleKeys keyMsg ->
       let

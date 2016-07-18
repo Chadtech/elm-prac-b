@@ -21,8 +21,8 @@ miniMap m =
       |>alpha 0.1
       |>rotate (degrees 0)
       |>move (-50, 0)
-    , "ship/ship"
-      |>image' 2 2
+    , "markers/blue"
+      |>image' 4 4
       |>move (p s.gx, p s.gy)
     , "markers/yellow"
       |>image' 5 5

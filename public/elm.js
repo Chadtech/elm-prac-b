@@ -11877,43 +11877,53 @@ var _user$project$Types$initModel = {
 		[
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 5550, _1: 5575},
+			{ctor: '_Tuple2', _0: 10000, _1: 60000},
 			{ctor: '_Tuple2', _0: 0, _1: 150},
 			30),
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: 5, _1: 150},
+			{ctor: '_Tuple2', _0: 60000, _1: 10000},
+			{ctor: '_Tuple2', _0: 140, _1: -10},
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: 290},
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 45000, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: -400},
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 57, _1: 250},
 			-30),
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: 6, _1: 150},
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 61, _1: 250},
 			25),
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: 1, _1: 151},
-			90),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: -4, _1: 148},
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: -44, _1: 248},
 			55),
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: 5, _1: 151},
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 50, _1: 251},
 			-87),
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: 3, _1: 150},
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 33, _1: 250},
 			-3),
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 557},
-			{ctor: '_Tuple2', _0: 10, _1: 150},
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 100, _1: 250},
 			11)
 		])
 };
@@ -12566,7 +12576,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 									_0: _user$project$MiniMap$p(s.gx),
 									_1: _user$project$MiniMap$p(s.gy)
 								},
-								A3(_user$project$MiniMap$image$, 2, 2, 'ship/ship')),
+								A3(_user$project$MiniMap$image$, 3, 3, 'markers/blue')),
 								A2(
 								_evancz$elm_graphics$Collage$move,
 								{
@@ -13107,7 +13117,7 @@ var _user$project$Main$update = F2(
 		if (_p1.ctor === 'Refresh') {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Main$refresh, m, _p1._0 / 120),
+				_0: A2(_user$project$Main$refresh, m, _p1._0 / 10),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
