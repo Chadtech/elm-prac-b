@@ -12312,29 +12312,44 @@ var _user$project$GameView$gameView = function (m) {
 				])));
 };
 
+var _user$project$Gravity$gravity = F2(
+	function (dt, _p0) {
+		var _p1 = _p0;
+		var _p3 = _p1._1;
+		var _p2 = _p1._0;
+		var angle = A2(_elm_lang$core$Basics$atan2, _p2 - 60000, _p3 - 60000);
+		var dist = _elm_lang$core$Basics$sqrt(
+			Math.pow(_p2 - 60000, 2) + Math.pow(_p3 - 60000, 2));
+		var g = dt * Math.pow(50000 / dist, 2);
+		return {
+			ctor: '_Tuple2',
+			_0: g * _elm_lang$core$Basics$sin(angle),
+			_1: g * _elm_lang$core$Basics$cos(angle)
+		};
+	});
 var _user$project$Gravity$thingGravity = F2(
 	function (dt, t) {
-		var angle = A2(_elm_lang$core$Basics$atan2, t.gx - 60000, t.gy - 60000);
-		var dist = _elm_lang$core$Basics$sqrt(
-			Math.pow(t.gx - 60000, 2) + Math.pow(t.gy - 60000, 2));
-		var g = Math.pow(50000 / dist, 2);
-		var vx$ = (g * dt) * _elm_lang$core$Basics$sin(angle);
-		var vy$ = (g * dt) * _elm_lang$core$Basics$cos(angle);
+		var _p4 = A2(
+			_user$project$Gravity$gravity,
+			dt,
+			{ctor: '_Tuple2', _0: t.gx, _1: t.gy});
+		var gvx = _p4._0;
+		var gvy = _p4._1;
 		return _elm_lang$core$Native_Utils.update(
 			t,
-			{vx: t.vx - vx$, vy: t.vy - vy$});
+			{vx: t.vx - gvx, vy: t.vy - gvy});
 	});
 var _user$project$Gravity$shipGravity = F2(
 	function (dt, s) {
-		var angle = A2(_elm_lang$core$Basics$atan2, s.gx - 60000, s.gy - 60000);
-		var dist = _elm_lang$core$Basics$sqrt(
-			Math.pow(s.gx - 60000, 2) + Math.pow(s.gy - 60000, 2));
-		var g = Math.pow(50000 / dist, 2);
-		var vx$ = (g * dt) * _elm_lang$core$Basics$sin(angle);
-		var vy$ = (g * dt) * _elm_lang$core$Basics$cos(angle);
+		var _p5 = A2(
+			_user$project$Gravity$gravity,
+			dt,
+			{ctor: '_Tuple2', _0: s.gx, _1: s.gy});
+		var gvx = _p5._0;
+		var gvy = _p5._1;
 		return _elm_lang$core$Native_Utils.update(
 			s,
-			{vx: s.vx - vx$, vy: s.vy - vy$});
+			{vx: s.vx - gvx, vy: s.vy - gvy});
 	});
 
 var _user$project$KeyDiagram$keyDiagram = _evancz$elm_graphics$Element$toHtml(
