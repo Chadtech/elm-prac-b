@@ -11751,6 +11751,294 @@ var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
 		_elm_lang$core$Set$toList(model.keysDown));
 };
 
+var _user$project$Collision$cross2D = F2(
+	function (_p1, _p0) {
+		var _p2 = _p1;
+		var _p3 = _p0;
+		return (_p2._0 * _p3._1) - (_p2._1 * _p3._0);
+	});
+var _user$project$Collision$from = F2(
+	function (_p5, _p4) {
+		var _p6 = _p5;
+		var _p7 = _p4;
+		return {ctor: '_Tuple2', _0: _p7._0 - _p6._0, _1: _p7._1 - _p6._1};
+	});
+var _user$project$Collision$neg = function (_p8) {
+	var _p9 = _p8;
+	return {ctor: '_Tuple2', _0: 0 - _p9._0, _1: 0 - _p9._1};
+};
+var _user$project$Collision$mul = F2(
+	function (n, _p10) {
+		var _p11 = _p10;
+		return {ctor: '_Tuple2', _0: n * _p11._0, _1: n * _p11._1};
+	});
+var _user$project$Collision$add = F2(
+	function (_p13, _p12) {
+		var _p14 = _p13;
+		var _p15 = _p12;
+		return {ctor: '_Tuple2', _0: _p15._0 + _p14._0, _1: _p15._1 + _p14._1};
+	});
+var _user$project$Collision$sub = F2(
+	function (_p17, _p16) {
+		var _p18 = _p17;
+		var _p19 = _p16;
+		return {ctor: '_Tuple2', _0: _p19._0 - _p18._0, _1: _p19._1 - _p18._1};
+	});
+var _user$project$Collision$calcMinkSupport = F3(
+	function (_p21, _p20, d) {
+		var _p22 = _p21;
+		var _p23 = _p20;
+		var p2 = A2(_p23._1, _p23._0, d);
+		var p1 = A2(
+			_p22._1,
+			_p22._0,
+			_user$project$Collision$neg(d));
+		return A2(_user$project$Collision$sub, p1, p2);
+	});
+var _user$project$Collision$dot = F2(
+	function (_p25, _p24) {
+		var _p26 = _p25;
+		var _p27 = _p24;
+		return (_p26._0 * _p27._0) + (_p26._1 * _p27._1);
+	});
+var _user$project$Collision$trip = F3(
+	function (a, b, c) {
+		var cab = A2(
+			_user$project$Collision$mul,
+			A2(_user$project$Collision$dot, a, b),
+			c);
+		var bac = A2(
+			_user$project$Collision$mul,
+			A2(_user$project$Collision$dot, a, c),
+			b);
+		return A2(_user$project$Collision$sub, cab, bac);
+	});
+var _user$project$Collision$perp = F2(
+	function (a, b) {
+		return A3(_user$project$Collision$trip, a, b, a);
+	});
+var _user$project$Collision$getDirectionVector = F2(
+	function (_p29, _p28) {
+		var _p30 = _p29;
+		var _p33 = _p30._1;
+		var _p32 = _p30._0;
+		var _p31 = _p28;
+		var d = A3(
+			_user$project$Collision$trip,
+			{ctor: '_Tuple2', _0: _p32, _1: _p33},
+			{ctor: '_Tuple2', _0: _p31._0, _1: _p31._1},
+			{ctor: '_Tuple2', _0: _p32, _1: _p33});
+		var collinear = _elm_lang$core$Native_Utils.eq(
+			d,
+			{ctor: '_Tuple2', _0: 0, _1: 0});
+		return collinear ? {ctor: '_Tuple2', _0: _p33, _1: 0 - _p32} : d;
+	});
+var _user$project$Collision$isSameDirection = F2(
+	function (a, b) {
+		return _elm_lang$core$Native_Utils.cmp(
+			A2(_user$project$Collision$dot, a, b),
+			0) > 0;
+	});
+var _user$project$Collision$handle0Simplex = F2(
+	function (a, b) {
+		var a0 = _user$project$Collision$neg(a);
+		var ab = A2(_user$project$Collision$from, a, b);
+		var _p34 = A2(_user$project$Collision$isSameDirection, ab, a0) ? {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_List.fromArray(
+				[a, b]),
+			_1: A2(_user$project$Collision$perp, ab, a0)
+		} : {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_List.fromArray(
+				[a]),
+			_1: a0
+		};
+		var newSim = _p34._0;
+		var newDir = _p34._1;
+		return {
+			ctor: '_Tuple2',
+			_0: false,
+			_1: {ctor: '_Tuple2', _0: newSim, _1: newDir}
+		};
+	});
+var _user$project$Collision$handle1Simplex = F3(
+	function (a, b, c) {
+		var ac = A2(_user$project$Collision$from, a, c);
+		var ab = A2(_user$project$Collision$from, a, b);
+		var abp = A2(
+			_user$project$Collision$perp,
+			ab,
+			_user$project$Collision$neg(ac));
+		var acp = A2(
+			_user$project$Collision$perp,
+			ac,
+			_user$project$Collision$neg(ab));
+		var a0 = _user$project$Collision$neg(a);
+		return A2(_user$project$Collision$isSameDirection, abp, a0) ? (A2(_user$project$Collision$isSameDirection, ab, a0) ? {
+			ctor: '_Tuple2',
+			_0: false,
+			_1: {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_List.fromArray(
+					[a, b]),
+				_1: abp
+			}
+		} : {
+			ctor: '_Tuple2',
+			_0: false,
+			_1: {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_List.fromArray(
+					[a]),
+				_1: a0
+			}
+		}) : (A2(_user$project$Collision$isSameDirection, acp, a0) ? (A2(_user$project$Collision$isSameDirection, ac, a0) ? {
+			ctor: '_Tuple2',
+			_0: false,
+			_1: {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_List.fromArray(
+					[a, c]),
+				_1: acp
+			}
+		} : {
+			ctor: '_Tuple2',
+			_0: false,
+			_1: {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_List.fromArray(
+					[a]),
+				_1: a0
+			}
+		}) : {
+			ctor: '_Tuple2',
+			_0: true,
+			_1: {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_List.fromArray(
+					[b, c]),
+				_1: a0
+			}
+		});
+	});
+var _user$project$Collision$enclosesOrigin = F2(
+	function (a, sim) {
+		var _p35 = sim;
+		_v16_2:
+		do {
+			if (_p35.ctor === '::') {
+				if (_p35._1.ctor === '[]') {
+					return A2(_user$project$Collision$handle0Simplex, a, _p35._0);
+				} else {
+					if (_p35._1._1.ctor === '[]') {
+						return A3(_user$project$Collision$handle1Simplex, a, _p35._0, _p35._1._0);
+					} else {
+						break _v16_2;
+					}
+				}
+			} else {
+				break _v16_2;
+			}
+		} while(false);
+		return {
+			ctor: '_Tuple2',
+			_0: false,
+			_1: {
+				ctor: '_Tuple2',
+				_0: sim,
+				_1: {ctor: '_Tuple2', _0: 0, _1: 0}
+			}
+		};
+	});
+var _user$project$Collision$doSimplex = F5(
+	function (limit, depth, minkA, minkB, _p36) {
+		doSimplex:
+		while (true) {
+			var _p37 = _p36;
+			var _p40 = _p37._0;
+			var _p39 = _p37._1;
+			var a = A3(_user$project$Collision$calcMinkSupport, minkA, minkB, _p39);
+			var notPastOrig = _elm_lang$core$Native_Utils.cmp(
+				A2(_user$project$Collision$dot, a, _p39),
+				0) < 0;
+			var _p38 = A2(_user$project$Collision$enclosesOrigin, a, _p40);
+			var intersects = _p38._0;
+			var newSim = _p38._1._0;
+			var newDir = _p38._1._1;
+			if (notPastOrig) {
+				return {
+					ctor: '_Tuple2',
+					_0: false,
+					_1: {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_List.fromArray(
+							[]),
+						_1: {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Basics$toFloat(depth),
+							_1: _elm_lang$core$Basics$toFloat(depth)
+						}
+					}
+				};
+			} else {
+				if (intersects) {
+					return {
+						ctor: '_Tuple2',
+						_0: true,
+						_1: {ctor: '_Tuple2', _0: _p40, _1: a}
+					};
+				} else {
+					if (_elm_lang$core$Native_Utils.cmp(depth, limit) > 0) {
+						return {
+							ctor: '_Tuple2',
+							_0: false,
+							_1: {ctor: '_Tuple2', _0: newSim, _1: newDir}
+						};
+					} else {
+						var _v18 = limit,
+							_v19 = depth + 1,
+							_v20 = minkA,
+							_v21 = minkB,
+							_v22 = {ctor: '_Tuple2', _0: newSim, _1: newDir};
+						limit = _v18;
+						depth = _v19;
+						minkA = _v20;
+						minkB = _v21;
+						_p36 = _v22;
+						continue doSimplex;
+					}
+				}
+			}
+		}
+	});
+var _user$project$Collision$collision = F3(
+	function (limit, minkA, minkB) {
+		var d1 = {ctor: '_Tuple2', _0: 1.0, _1: 0.0};
+		var d2 = _user$project$Collision$neg(d1);
+		var b = A3(_user$project$Collision$calcMinkSupport, minkA, minkB, d2);
+		var c = A3(_user$project$Collision$calcMinkSupport, minkA, minkB, d1);
+		var cb = A2(_user$project$Collision$from, c, b);
+		var c0 = _user$project$Collision$neg(c);
+		var d = A2(_user$project$Collision$getDirectionVector, cb, c0);
+		var _p41 = A5(
+			_user$project$Collision$doSimplex,
+			limit,
+			0,
+			minkA,
+			minkB,
+			{
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_List.fromArray(
+					[b, c]),
+				_1: d
+			});
+		var intersects = _p41._0;
+		var sim = _p41._1._0;
+		var newD = _p41._1._1;
+		return intersects;
+	});
+
 var _user$project$Types$setSector = function (f) {
 	return _elm_lang$core$Basics$floor(f / 600);
 };
@@ -13133,7 +13421,7 @@ var _user$project$Main$update = F2(
 		if (_p1.ctor === 'Refresh') {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Main$refresh, m, _p1._0 / 20),
+				_0: A2(_user$project$Main$refresh, m, _p1._0 / 120),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
@@ -13178,6 +13466,8 @@ var _user$project$Main$main = {
 };
 
 var Elm = {};
+Elm['Collision'] = Elm['Collision'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Collision'], 'Collision', typeof _user$project$Collision$main === 'undefined' ? null : _user$project$Collision$main);
 Elm['Components'] = Elm['Components'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Components'], 'Components', typeof _user$project$Components$main === 'undefined' ? null : _user$project$Components$main);
 Elm['DrawShip'] = Elm['DrawShip'] || {};

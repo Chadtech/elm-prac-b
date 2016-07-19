@@ -211,9 +211,7 @@ frege t =
   , vy           = -400
   , va           = 0
 
-  --, sector = (0,0)
-  , sector = (setSector gx, setSector gy)
-  --, sector       = (setSector (round (modulo gx)), setSector (round (modulo gy))) 
+  , sector       = (setSector gx, setSector gy)
   , quadrant     = C
 
   , gx           = gx
