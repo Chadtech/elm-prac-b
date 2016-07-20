@@ -1,8 +1,4 @@
-module Collision exposing 
-  ( collision
-  , Mink
-  , Pt
-  )
+module Collision exposing (collision, Mink, Pt)
 
 {-| this module provides an implementation of the
 Gilbert-Johnson-Keerthi (GJK) collision detection algorith for

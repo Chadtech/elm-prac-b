@@ -13399,8 +13399,66 @@ var _user$project$Main$refreshThing = function (dt) {
 			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
 	};
 };
+var _user$project$Main$dot = F2(
+	function (_p2, _p1) {
+		var _p3 = _p2;
+		var _p4 = _p1;
+		return (_p3._0 * _p4._0) + (_p3._1 * _p4._1);
+	});
+var _user$project$Main$polySupport = F2(
+	function (list, d) {
+		var dotList = A2(
+			_elm_lang$core$List$map,
+			_user$project$Main$dot(d),
+			list);
+		var decorated = A3(
+			_elm_lang$core$List$map2,
+			F2(
+				function (v0, v1) {
+					return {ctor: '_Tuple2', _0: v0, _1: v1};
+				}),
+			dotList,
+			list);
+		var _p5 = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{
+				ctor: '_Tuple2',
+				_0: 0,
+				_1: {ctor: '_Tuple2', _0: 0, _1: 0}
+			},
+			_elm_lang$core$List$maximum(decorated));
+		var m = _p5._0;
+		var p = _p5._1;
+		return p;
+	});
 var _user$project$Main$refresh = F2(
 	function (m, dt) {
+		var ya = A2(
+			_elm_lang$core$Debug$log,
+			'collision',
+			A3(
+				_user$project$Collision$collision,
+				10,
+				{
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 0, _1: 0},
+							{ctor: '_Tuple2', _0: 4, _1: 0},
+							{ctor: '_Tuple2', _0: 2, _1: 1}
+						]),
+					_1: _user$project$Main$polySupport
+				},
+				{
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_List.fromArray(
+						[
+							{ctor: '_Tuple2', _0: 0, _1: 4},
+							{ctor: '_Tuple2', _0: 4, _1: 4},
+							{ctor: '_Tuple2', _0: 2, _1: 3}
+						]),
+					_1: _user$project$Main$polySupport
+				}));
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{
@@ -13417,18 +13475,18 @@ var _user$project$Main$refresh = F2(
 	});
 var _user$project$Main$update = F2(
 	function (msg, m) {
-		var _p1 = msg;
-		if (_p1.ctor === 'Refresh') {
+		var _p6 = msg;
+		if (_p6.ctor === 'Refresh') {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Main$refresh, m, _p1._0 / 120),
+				_0: A2(_user$project$Main$refresh, m, _p6._0 / 120),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
 			var ship = m.ship;
-			var _p2 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p1._0, m.keys);
-			var keys$ = _p2._0;
-			var kCmd = _p2._1;
+			var _p7 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p6._0, m.keys);
+			var keys$ = _p7._0;
+			var kCmd = _p7._1;
 			return A2(
 				F2(
 					function (v0, v1) {
