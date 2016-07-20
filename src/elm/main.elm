@@ -14,6 +14,7 @@ import ThrusterState    exposing (setThrusters)
 import Thrust           exposing (setThrust)
 import List             exposing (map)
 import Gravity          exposing (shipGravity, thingGravity)
+import CollisionHandle  exposing (collisionCheck)
 
 main =
   App.program
@@ -33,6 +34,11 @@ subscriptions model =
 
 refresh : Model -> Float -> Model
 refresh m dt =
+  let
+    --ya =
+    --  log "YA" <|
+    --  List.filter (collisionCheck m.ship) m.things
+  in
   { m 
   | ship = 
       m.ship
@@ -52,23 +58,33 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg m =
   case msg of 
 
+    SetThings t ->
+      ({ m | things = t }, Cmd.none)
+
     Refresh dt ->
-      --(refresh m (dt / 20), Cmd.none)      
       (refresh m (dt / 120), Cmd.none)
 
     HandleKeys keyMsg ->
       let
-        (keys', kCmd) = 
+        (keys, kCmd) = 
           Keyboard.update keyMsg m.keys
-        ship = m.ship
       in
-        (,)
-          { m 
-          | keys = keys'
-          , ship = 
-            { ship 
-            | thrusters = setThrusters keys' 
-            }
-          } 
-          (Cmd.map HandleKeys kCmd)
+        (handleKeys m keys, Cmd.map HandleKeys kCmd)
+
+handleKeys : Model -> Keyboard.Model -> Model
+handleKeys m keys =
+  let s = m.ship in
+  { m
+  | keys = keys
+  , ship = 
+    { s 
+    | thrusters = setThrusters keys
+    }
+  }
+
+
+
+
+
+
 

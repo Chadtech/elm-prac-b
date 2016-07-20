@@ -8,6 +8,7 @@ import Debug exposing (log)
 type Msg 
   = Refresh Time
   | HandleKeys Keyboard.Msg
+  | SetThings (List Thing)
 
 type Quadrant 
   = A
@@ -39,6 +40,7 @@ initModel =
     , o2box (60000, 10000) (140, -10) 30
     , o2box (30000, 60000) (0, 290) 30
     , o2box (45000, 60000) (0, -400) 30
+    --, o2box (45050, 60000) (0, -400) 30
 
     , o2box (30000, 60000) (57, 250) -30
     , o2box (30000, 60000) (61, 250) 25
@@ -66,6 +68,8 @@ type alias Thing =
   , gy     : Float
 
   , sector : (Int, Int)
+
+  , dimensions : (Int, Int)
 
   , sprite : Sprite
   }
@@ -120,6 +124,8 @@ o2box (gx, gy) (vx, vy) va =
 
   , sector = (gx' // 600, gy' // 600)
 
+  , dimensions = (20, 20)
+
   , sprite = 
     { w    = 20
     , h    = 20
@@ -144,6 +150,9 @@ type alias Ship =
   , y           : Float
   , a           : Float
 
+  --, local       : (Float, Float)
+  --, global      : (Float, Float)
+
   , vx          : Float
   , vy          : Float
   , va          : Float
@@ -156,6 +165,8 @@ type alias Ship =
 
   , sector      : (Int, Int)
   , quadrant    : Quadrant
+
+  , dimensions : (Int, Int)
 
   , fuel        : Float
   , oxygen      : Float
@@ -207,6 +218,9 @@ frege t =
   , y            = y
   , a            = 0
 
+  --, local        = (x, y)
+  --, global       = (gx, gy)
+
   , vx           = 0
   , vy           = -400
   , va           = 0
@@ -218,6 +232,8 @@ frege t =
   , gy           = gy
 
   , dir          = 0
+
+  , dimensions   = (34, 29)
 
   , fuel         = 1410.1
   , oxygen       = 166
