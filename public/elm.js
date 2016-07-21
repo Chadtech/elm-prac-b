@@ -12185,59 +12185,9 @@ var _user$project$Types$initModel = {
 		[
 			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 550},
-			{ctor: '_Tuple2', _0: 0, _1: 150},
-			30),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 10000, _1: 60000},
-			{ctor: '_Tuple2', _0: 0, _1: 150},
-			30),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 60000, _1: 10000},
-			{ctor: '_Tuple2', _0: 140, _1: -10},
-			30),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: 0, _1: 290},
-			30),
-			A3(
-			_user$project$Types$o2box,
 			{ctor: '_Tuple2', _0: 45000, _1: 60000},
 			{ctor: '_Tuple2', _0: 0, _1: -400},
-			30),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: 57, _1: 250},
-			-30),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: 61, _1: 250},
-			25),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: -44, _1: 248},
-			55),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: 50, _1: 251},
-			-87),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: 33, _1: 250},
-			-3),
-			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: 100, _1: 250},
-			11)
+			30)
 		])
 };
 var _user$project$Types$B = {ctor: 'B'};
@@ -12248,85 +12198,54 @@ var _user$project$CollisionHandle$rotatePoint = F2(
 		var _p1 = _p0;
 		return {ctor: '_Tuple2', _0: _p1._0, _1: _p1._1 + a$};
 	});
-var _user$project$CollisionHandle$travel$ = F2(
-	function (a, dest) {
-		return function (_p2) {
+var _user$project$CollisionHandle$rotatePoints = function (a$) {
+	return _elm_lang$core$List$map(
+		function (_p2) {
 			return _elm_lang$core$Basics$fromPolar(
 				A2(
 					_user$project$CollisionHandle$rotatePoint,
-					a,
+					a$,
 					_elm_lang$core$Basics$toPolar(_p2)));
-		};
-	});
+		});
+};
+var _user$project$CollisionHandle$shipsPolygon = function (s) {
+	var _p3 = s.dimensions;
+	var w$ = _p3._0;
+	var h$ = _p3._1;
+	var w = _elm_lang$core$Basics$toFloat(w$);
+	var h = _elm_lang$core$Basics$toFloat(h$);
+	return A2(
+		_user$project$CollisionHandle$rotatePoints,
+		s.a + s.va,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: w / 2, _1: h / 2},
+				{ctor: '_Tuple2', _0: w / 2, _1: (0 - h) / 2},
+				{ctor: '_Tuple2', _0: (0 - w) / 2, _1: (0 - h) / 2},
+				{ctor: '_Tuple2', _0: (0 - w) / 2, _1: h / 2}
+			]));
+};
 var _user$project$CollisionHandle$place = F2(
-	function (_p4, _p3) {
-		var _p5 = _p4;
-		var _p6 = _p3;
-		return {ctor: '_Tuple2', _0: _p6._0 + _p5._0, _1: _p6._1 + _p5._1};
+	function (_p5, _p4) {
+		var _p6 = _p5;
+		var _p7 = _p4;
+		return {ctor: '_Tuple2', _0: _p7._0 + _p6._0, _1: _p7._1 + _p6._1};
 	});
-var _user$project$CollisionHandle$toPolygon$ = F4(
-	function (angle, center, destination, points) {
-		return A2(
-			_elm_lang$core$List$map,
-			_user$project$CollisionHandle$place(center),
-			A2(
-				_elm_lang$core$List$map,
-				A2(_user$project$CollisionHandle$travel$, angle, destination),
-				points));
-	});
-var _user$project$CollisionHandle$thingsTravel = function (t) {
-	var _p7 = t.dimensions;
-	var w$ = _p7._0;
-	var h$ = _p7._1;
-	var w = _elm_lang$core$Basics$toFloat(w$);
-	var h = _elm_lang$core$Basics$toFloat(h$);
-	return A4(
-		_user$project$CollisionHandle$toPolygon$,
-		t.a,
-		{ctor: '_Tuple2', _0: t.gx, _1: t.gy},
-		{ctor: '_Tuple2', _0: t.vx, _1: t.vy},
-		_elm_lang$core$Native_List.fromArray(
-			[
-				{ctor: '_Tuple2', _0: w / 2, _1: h / 2},
-				{ctor: '_Tuple2', _0: w / 2, _1: (0 - h) / 2},
-				{ctor: '_Tuple2', _0: (0 - w) / 2, _1: (0 - h) / 2},
-				{ctor: '_Tuple2', _0: (0 - w) / 2, _1: h / 2}
-			]));
-};
-var _user$project$CollisionHandle$shipsTravel = function (s) {
-	var _p8 = s.dimensions;
-	var w$ = _p8._0;
-	var h$ = _p8._1;
-	var w = _elm_lang$core$Basics$toFloat(w$);
-	var h = _elm_lang$core$Basics$toFloat(h$);
-	return A4(
-		_user$project$CollisionHandle$toPolygon$,
-		s.a,
-		{ctor: '_Tuple2', _0: s.gx, _1: s.gy},
-		{ctor: '_Tuple2', _0: s.vx, _1: s.vy},
-		_elm_lang$core$Native_List.fromArray(
-			[
-				{ctor: '_Tuple2', _0: w / 2, _1: h / 2},
-				{ctor: '_Tuple2', _0: w / 2, _1: (0 - h) / 2},
-				{ctor: '_Tuple2', _0: (0 - w) / 2, _1: (0 - h) / 2},
-				{ctor: '_Tuple2', _0: (0 - w) / 2, _1: h / 2}
-			]));
-};
 var _user$project$CollisionHandle$smear = F2(
-	function (_p10, _p9) {
-		var _p11 = _p10;
-		var _p12 = _p9;
-		var _p14 = _p12._1;
-		var _p13 = _p12._0;
+	function (_p9, _p8) {
+		var _p10 = _p9;
+		var _p11 = _p8;
+		var _p13 = _p11._1;
+		var _p12 = _p11._0;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				{ctor: '_Tuple2', _0: _p13, _1: _p14},
-				{ctor: '_Tuple2', _0: _p13 + _p11._0, _1: _p14 + _p11._1}
+				{ctor: '_Tuple2', _0: _p12, _1: _p13},
+				{ctor: '_Tuple2', _0: _p12 + _p10._0, _1: _p13 + _p10._1}
 			]);
 	});
 var _user$project$CollisionHandle$travel = F2(
 	function (a, dest) {
-		return function (_p15) {
+		return function (_p14) {
 			return A2(
 				_user$project$CollisionHandle$smear,
 				dest,
@@ -12334,7 +12253,7 @@ var _user$project$CollisionHandle$travel = F2(
 					A2(
 						_user$project$CollisionHandle$rotatePoint,
 						a,
-						_elm_lang$core$Basics$toPolar(_p15))));
+						_elm_lang$core$Basics$toPolar(_p14))));
 		};
 	});
 var _user$project$CollisionHandle$toPolygon = F4(
@@ -12348,11 +12267,33 @@ var _user$project$CollisionHandle$toPolygon = F4(
 					A2(_user$project$CollisionHandle$travel, angle, destination),
 					points)));
 	});
+var _user$project$CollisionHandle$thingsPolygon = F3(
+	function (_p16, _p15, t) {
+		var _p17 = _p16;
+		var _p18 = _p15;
+		var _p19 = t.dimensions;
+		var w$ = _p19._0;
+		var h$ = _p19._1;
+		var w = _elm_lang$core$Basics$toFloat(w$);
+		var h = _elm_lang$core$Basics$toFloat(h$);
+		return A4(
+			_user$project$CollisionHandle$toPolygon,
+			t.a + t.va,
+			{ctor: '_Tuple2', _0: (t.gx - _p18._0) + t.vx, _1: (t.gy - _p18._1) + t.vy},
+			{ctor: '_Tuple2', _0: t.vx - _p17._0, _1: t.vy - _p17._1},
+			_elm_lang$core$Native_List.fromArray(
+				[
+					{ctor: '_Tuple2', _0: w / 2, _1: h / 2},
+					{ctor: '_Tuple2', _0: w / 2, _1: (0 - h) / 2},
+					{ctor: '_Tuple2', _0: (0 - w) / 2, _1: (0 - h) / 2},
+					{ctor: '_Tuple2', _0: (0 - w) / 2, _1: h / 2}
+				]));
+	});
 var _user$project$CollisionHandle$dot = F2(
-	function (_p17, _p16) {
-		var _p18 = _p17;
-		var _p19 = _p16;
-		return (_p18._0 * _p19._0) + (_p18._1 * _p19._1);
+	function (_p21, _p20) {
+		var _p22 = _p21;
+		var _p23 = _p20;
+		return (_p22._0 * _p23._0) + (_p22._1 * _p23._1);
 	});
 var _user$project$CollisionHandle$polySupport = F2(
 	function (list, d) {
@@ -12368,7 +12309,7 @@ var _user$project$CollisionHandle$polySupport = F2(
 				}),
 			dotList,
 			list);
-		var _p20 = A2(
+		var _p24 = A2(
 			_elm_lang$core$Maybe$withDefault,
 			{
 				ctor: '_Tuple2',
@@ -12376,23 +12317,24 @@ var _user$project$CollisionHandle$polySupport = F2(
 				_1: {ctor: '_Tuple2', _0: 0, _1: 0}
 			},
 			_elm_lang$core$List$maximum(decorated));
-		var m = _p20._0;
-		var p = _p20._1;
+		var m = _p24._0;
+		var p = _p24._1;
 		return p;
 	});
 var _user$project$CollisionHandle$collisionCheck = F2(
 	function (s, t) {
+		var thingsPolygon$ = A3(
+			_user$project$CollisionHandle$thingsPolygon,
+			{ctor: '_Tuple2', _0: s.vx, _1: s.vy},
+			{ctor: '_Tuple2', _0: s.gx + s.vx, _1: s.gy + s.vy},
+			t);
 		return A3(
 			_user$project$Collision$collision,
 			10,
+			{ctor: '_Tuple2', _0: thingsPolygon$, _1: _user$project$CollisionHandle$polySupport},
 			{
 				ctor: '_Tuple2',
-				_0: _user$project$CollisionHandle$thingsTravel(t),
-				_1: _user$project$CollisionHandle$polySupport
-			},
-			{
-				ctor: '_Tuple2',
-				_0: _user$project$CollisionHandle$shipsTravel(s),
+				_0: _user$project$CollisionHandle$shipsPolygon(s),
 				_1: _user$project$CollisionHandle$polySupport
 			});
 	});
@@ -13578,13 +13520,6 @@ var _user$project$Main$refreshThing = function (dt) {
 };
 var _user$project$Main$refresh = F2(
 	function (m, dt) {
-		var ya = A2(
-			_elm_lang$core$Debug$log,
-			'YA',
-			A2(
-				_elm_lang$core$List$filter,
-				_user$project$CollisionHandle$collisionCheck(m.ship),
-				m.things));
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{

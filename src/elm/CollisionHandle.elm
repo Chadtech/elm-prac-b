@@ -3,6 +3,7 @@ module CollisionHandle exposing (collisionCheck)
 import Collision        exposing (..)
 import Types            exposing (..)
 import List             exposing (map, concat)
+import Debug            exposing (log)
 
 
 dot : Pt -> Pt -> Float
@@ -16,7 +17,7 @@ polySupport list d =
     (m, p) = 
       Maybe.withDefault
       (0,(0,0))
-      (List.maximum decorated)-- maximum now returns a Maybe b
+      (List.maximum decorated)
   in
     p
 
@@ -28,21 +29,12 @@ place : Pt -> Pt -> Pt
 place (gx, gy) (x, y) =
   (x + gx, y + gy)
 
-rotatePoint : Float -> (Float, Float) -> (Float, Float)
-rotatePoint a' (r, a) = (r, a + a')
-
 travel : Float -> Pt -> (Pt -> List Pt)
 travel a dest =
   toPolar
   >>rotatePoint a
   >>fromPolar
   >>smear dest
-
-travel' : Float -> Pt -> (Pt -> Pt)
-travel' a dest =
-  toPolar
-  >>rotatePoint a
-  >>fromPolar
 
 toPolygon : Float -> Pt -> Pt -> List Pt -> List Pt
 toPolygon angle center destination points =
@@ -51,55 +43,53 @@ toPolygon angle center destination points =
   |>concat
   |>map (place center)
 
-toPolygon' : Float -> Pt -> Pt -> List Pt -> List Pt
-toPolygon' angle center destination points =
-  points
-  |>map (travel' angle destination) 
-  |>map (place center)
-
-thingsTravel : Thing -> List Pt
-thingsTravel t =
+thingsPolygon : Pt -> Pt -> Thing -> List Pt
+thingsPolygon (svx, svy) (sgx, sgy) t =
   let 
     (w', h') = t.dimensions 
     w = toFloat w'
     h = toFloat h'
   in
-  toPolygon'
-  t.a
-  (t.gx, t.gy)
-  (t.vx, t.vy)
+  toPolygon
+  (t.a + t.va)
+  (t.gx - sgx + t.vx, t.gy - sgy + t.vy)
+  (t.vx - svx, t.vy - svy)
   [ (w/2, h/2)
   , (w/2, -h/2)
   , (-w/2, -h/2)
   , (-w/2, h/2)
   ]
 
-shipsTravel : Ship -> List Pt
-shipsTravel s =
+shipsPolygon : Ship -> List Pt
+shipsPolygon s =
   let 
     (w', h') = s.dimensions 
     w = toFloat w'
     h = toFloat h'
   in
-  toPolygon'
-  s.a
-  (s.gx, s.gy)
-  (s.vx, s.vy)
+  rotatePoints (s.a + s.va)
   [ (w/2, h/2)
   , (w/2, -h/2)
   , (-w/2, -h/2)
   , (-w/2, h/2)
   ]
 
+rotatePoint : Float -> (Float, Float) -> (Float, Float)
+rotatePoint a' (r, a) = (r, a + a')
+
+rotatePoints : Float -> List Pt -> List (Float, Float)
+rotatePoints a' =
+  map (toPolar >> rotatePoint a' >> fromPolar)
 
 collisionCheck : Ship -> Thing -> Bool
 collisionCheck s t = 
+  let
+    thingsPolygon' = 
+      thingsPolygon
+      (s.vx, s.vy)
+      (s.gx + s.vx, s.gy + s.vy)
+      t
+  in
   collision 10
-  ((thingsTravel t), polySupport)
-  ((shipsTravel s), polySupport)
-
-    --ya = 
-    --  log "collision" 
-    --  <|collision 10
-    --    ([(0,0),(4,0),(2,1)], polySupport)
-    --    ([(0,4),(4,4),(2,3)], polySupport)
+  (thingsPolygon', polySupport)
+  (shipsPolygon s, polySupport)

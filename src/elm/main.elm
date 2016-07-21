@@ -34,11 +34,11 @@ subscriptions model =
 
 refresh : Model -> Float -> Model
 refresh m dt =
-  let
-    --ya =
-    --  log "YA" <|
-    --  List.filter (collisionCheck m.ship) m.things
-  in
+  --let
+  --  ya =
+  --    log "YA" <|
+  --    List.filter (collisionCheck m.ship) m.things
+  --in
   { m 
   | ship = 
       m.ship
