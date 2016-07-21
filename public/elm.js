@@ -12043,6 +12043,11 @@ var _user$project$Types$setSector = function (f) {
 	return _elm_lang$core$Basics$floor(f / 600);
 };
 var _user$project$Types$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
+var _user$project$Types$giveOxygen = function (s) {
+	return _elm_lang$core$Native_Utils.update(
+		s,
+		{oxygen: s.oxygen + 500});
+};
 var _user$project$Types$o2box = F3(
 	function (_p1, _p0, va) {
 		var _p2 = _p1;
@@ -12064,6 +12069,7 @@ var _user$project$Types$o2box = F3(
 			gy: _p5,
 			sector: {ctor: '_Tuple2', _0: (gx$ / 600) | 0, _1: (gy$ / 600) | 0},
 			dimensions: {ctor: '_Tuple2', _0: 20, _1: 20},
+			onCollision: _user$project$Types$giveOxygen,
 			sprite: {w: 20, h: 20, src: 'stuff/oxygen-tank'}
 		};
 	});
@@ -12086,7 +12092,9 @@ var _user$project$Types$Thing = function (a) {
 								return function (i) {
 									return function (j) {
 										return function (k) {
-											return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, sector: i, dimensions: j, sprite: k};
+											return function (l) {
+												return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, sector: i, dimensions: j, onCollision: k, sprite: l};
+											};
 										};
 									};
 								};
@@ -12139,8 +12147,8 @@ var _user$project$Types$Ship = function (a) {
 		};
 	};
 };
-var _user$project$Types$SetThings = function (a) {
-	return {ctor: 'SetThings', _0: a};
+var _user$project$Types$CheckForCollisions = function (a) {
+	return {ctor: 'CheckForCollisions', _0: a};
 };
 var _user$project$Types$HandleKeys = function (a) {
 	return {ctor: 'HandleKeys', _0: a};
@@ -12153,7 +12161,7 @@ var _user$project$Types$C = {ctor: 'C'};
 var _user$project$Types$frege = function (t) {
 	var gy = 60000;
 	var y = (_elm_lang$core$Native_Utils.cmp(gy, 600) > 0) ? (gy - 600) : gy;
-	var gx = 45025;
+	var gx = 44900;
 	var x = (_elm_lang$core$Native_Utils.cmp(gx, 600) > 0) ? (gx - 600) : gx;
 	return {
 		x: x,
@@ -12193,25 +12201,42 @@ var _user$project$Types$initModel = {
 var _user$project$Types$B = {ctor: 'B'};
 var _user$project$Types$A = {ctor: 'A'};
 
+var _user$project$CollisionHandle$justThings = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0;
+};
+var _user$project$CollisionHandle$appendIfNotCollided = F2(
+	function (_p2, things) {
+		var _p3 = _p2;
+		return _p3._0 ? things : A2(
+			_elm_lang$core$List$append,
+			things,
+			_elm_lang$core$Native_List.fromArray(
+				[_p3._1]));
+	});
+var _user$project$CollisionHandle$collisionAction = F2(
+	function (t, s) {
+		return t.onCollision(s);
+	});
 var _user$project$CollisionHandle$rotatePoint = F2(
-	function (a$, _p0) {
-		var _p1 = _p0;
-		return {ctor: '_Tuple2', _0: _p1._0, _1: _p1._1 + a$};
+	function (a$, _p4) {
+		var _p5 = _p4;
+		return {ctor: '_Tuple2', _0: _p5._0, _1: _p5._1 + a$};
 	});
 var _user$project$CollisionHandle$rotatePoints = function (a$) {
 	return _elm_lang$core$List$map(
-		function (_p2) {
+		function (_p6) {
 			return _elm_lang$core$Basics$fromPolar(
 				A2(
 					_user$project$CollisionHandle$rotatePoint,
 					a$,
-					_elm_lang$core$Basics$toPolar(_p2)));
+					_elm_lang$core$Basics$toPolar(_p6)));
 		});
 };
 var _user$project$CollisionHandle$shipsPolygon = function (s) {
-	var _p3 = s.dimensions;
-	var w$ = _p3._0;
-	var h$ = _p3._1;
+	var _p7 = s.dimensions;
+	var w$ = _p7._0;
+	var h$ = _p7._1;
 	var w = _elm_lang$core$Basics$toFloat(w$);
 	var h = _elm_lang$core$Basics$toFloat(h$);
 	return A2(
@@ -12226,26 +12251,26 @@ var _user$project$CollisionHandle$shipsPolygon = function (s) {
 			]));
 };
 var _user$project$CollisionHandle$place = F2(
-	function (_p5, _p4) {
-		var _p6 = _p5;
-		var _p7 = _p4;
-		return {ctor: '_Tuple2', _0: _p7._0 + _p6._0, _1: _p7._1 + _p6._1};
-	});
-var _user$project$CollisionHandle$smear = F2(
 	function (_p9, _p8) {
 		var _p10 = _p9;
 		var _p11 = _p8;
-		var _p13 = _p11._1;
-		var _p12 = _p11._0;
+		return {ctor: '_Tuple2', _0: _p11._0 + _p10._0, _1: _p11._1 + _p10._1};
+	});
+var _user$project$CollisionHandle$smear = F2(
+	function (_p13, _p12) {
+		var _p14 = _p13;
+		var _p15 = _p12;
+		var _p17 = _p15._1;
+		var _p16 = _p15._0;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				{ctor: '_Tuple2', _0: _p12, _1: _p13},
-				{ctor: '_Tuple2', _0: _p12 + _p10._0, _1: _p13 + _p10._1}
+				{ctor: '_Tuple2', _0: _p16, _1: _p17},
+				{ctor: '_Tuple2', _0: _p16 + _p14._0, _1: _p17 + _p14._1}
 			]);
 	});
 var _user$project$CollisionHandle$travel = F2(
 	function (a, dest) {
-		return function (_p14) {
+		return function (_p18) {
 			return A2(
 				_user$project$CollisionHandle$smear,
 				dest,
@@ -12253,7 +12278,7 @@ var _user$project$CollisionHandle$travel = F2(
 					A2(
 						_user$project$CollisionHandle$rotatePoint,
 						a,
-						_elm_lang$core$Basics$toPolar(_p14))));
+						_elm_lang$core$Basics$toPolar(_p18))));
 		};
 	});
 var _user$project$CollisionHandle$toPolygon = F4(
@@ -12267,20 +12292,22 @@ var _user$project$CollisionHandle$toPolygon = F4(
 					A2(_user$project$CollisionHandle$travel, angle, destination),
 					points)));
 	});
-var _user$project$CollisionHandle$thingsPolygon = F3(
-	function (_p16, _p15, t) {
-		var _p17 = _p16;
-		var _p18 = _p15;
-		var _p19 = t.dimensions;
-		var w$ = _p19._0;
-		var h$ = _p19._1;
+var _user$project$CollisionHandle$thingsPolygon = F4(
+	function (dt, _p20, _p19, t) {
+		var _p21 = _p20;
+		var _p25 = _p21._1;
+		var _p24 = _p21._0;
+		var _p22 = _p19;
+		var _p23 = t.dimensions;
+		var w$ = _p23._0;
+		var h$ = _p23._1;
 		var w = _elm_lang$core$Basics$toFloat(w$);
 		var h = _elm_lang$core$Basics$toFloat(h$);
 		return A4(
 			_user$project$CollisionHandle$toPolygon,
 			t.a + t.va,
-			{ctor: '_Tuple2', _0: (t.gx - _p18._0) + t.vx, _1: (t.gy - _p18._1) + t.vy},
-			{ctor: '_Tuple2', _0: t.vx - _p17._0, _1: t.vy - _p17._1},
+			{ctor: '_Tuple2', _0: ((t.gx - _p22._0) + (t.vx * dt)) - _p24, _1: ((t.gy - _p22._1) + (t.vy * dt)) - _p25},
+			{ctor: '_Tuple2', _0: (dt * t.vx) - _p24, _1: (dt * t.vy) - _p25},
 			_elm_lang$core$Native_List.fromArray(
 				[
 					{ctor: '_Tuple2', _0: w / 2, _1: h / 2},
@@ -12290,10 +12317,10 @@ var _user$project$CollisionHandle$thingsPolygon = F3(
 				]));
 	});
 var _user$project$CollisionHandle$dot = F2(
-	function (_p21, _p20) {
-		var _p22 = _p21;
-		var _p23 = _p20;
-		return (_p22._0 * _p23._0) + (_p22._1 * _p23._1);
+	function (_p27, _p26) {
+		var _p28 = _p27;
+		var _p29 = _p26;
+		return (_p28._0 * _p29._0) + (_p28._1 * _p29._1);
 	});
 var _user$project$CollisionHandle$polySupport = F2(
 	function (list, d) {
@@ -12309,7 +12336,7 @@ var _user$project$CollisionHandle$polySupport = F2(
 				}),
 			dotList,
 			list);
-		var _p24 = A2(
+		var _p30 = A2(
 			_elm_lang$core$Maybe$withDefault,
 			{
 				ctor: '_Tuple2',
@@ -12317,26 +12344,61 @@ var _user$project$CollisionHandle$polySupport = F2(
 				_1: {ctor: '_Tuple2', _0: 0, _1: 0}
 			},
 			_elm_lang$core$List$maximum(decorated));
-		var m = _p24._0;
-		var p = _p24._1;
+		var m = _p30._0;
+		var p = _p30._1;
 		return p;
 	});
-var _user$project$CollisionHandle$collisionCheck = F2(
-	function (s, t) {
-		var thingsPolygon$ = A3(
+var _user$project$CollisionHandle$collisions = F3(
+	function (dt, s, t) {
+		var thingsPolygon$ = A4(
 			_user$project$CollisionHandle$thingsPolygon,
-			{ctor: '_Tuple2', _0: s.vx, _1: s.vy},
-			{ctor: '_Tuple2', _0: s.gx + s.vx, _1: s.gy + s.vy},
+			dt,
+			{ctor: '_Tuple2', _0: s.vx * dt, _1: s.vy * dt},
+			{ctor: '_Tuple2', _0: s.gx, _1: s.gy},
 			t);
-		return A3(
-			_user$project$Collision$collision,
-			10,
-			{ctor: '_Tuple2', _0: thingsPolygon$, _1: _user$project$CollisionHandle$polySupport},
+		return {
+			ctor: '_Tuple2',
+			_0: A3(
+				_user$project$Collision$collision,
+				10,
+				{ctor: '_Tuple2', _0: thingsPolygon$, _1: _user$project$CollisionHandle$polySupport},
+				{
+					ctor: '_Tuple2',
+					_0: _user$project$CollisionHandle$shipsPolygon(s),
+					_1: _user$project$CollisionHandle$polySupport
+				}),
+			_1: t
+		};
+	});
+var _user$project$CollisionHandle$collisionsHandle = F2(
+	function (dt, model) {
+		var collisionCheck = A2(
+			_elm_lang$core$List$map,
+			A2(_user$project$CollisionHandle$collisions, dt, model.ship),
+			model.things);
+		var collidedThings = A2(_elm_lang$core$List$filter, _user$project$CollisionHandle$justThings, collisionCheck);
+		return (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$List$length(collidedThings),
+			0) > 0) ? _elm_lang$core$Native_Utils.update(
+			model,
 			{
-				ctor: '_Tuple2',
-				_0: _user$project$CollisionHandle$shipsPolygon(s),
-				_1: _user$project$CollisionHandle$polySupport
-			});
+				ship: A3(
+					_elm_lang$core$List$foldr,
+					_user$project$CollisionHandle$collisionAction,
+					model.ship,
+					A2(
+						_elm_lang$core$List$map,
+						function (t) {
+							return _elm_lang$core$Basics$snd(t);
+						},
+						collidedThings)),
+				things: A3(
+					_elm_lang$core$List$foldr,
+					_user$project$CollisionHandle$appendIfNotCollided,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					collisionCheck)
+			}) : model;
 	});
 
 var _user$project$Components$point = function (s) {
@@ -13538,12 +13600,10 @@ var _user$project$Main$update = F2(
 	function (msg, m) {
 		var _p1 = msg;
 		switch (_p1.ctor) {
-			case 'SetThings':
+			case 'CheckForCollisions':
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						m,
-						{things: _p1._0}),
+					_0: A2(_user$project$CollisionHandle$collisionsHandle, _p1._0 / 120, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Refresh':
@@ -13568,7 +13628,8 @@ var _user$project$Main$subscriptions = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(_elm_lang$core$Platform_Sub$map, _user$project$Types$HandleKeys, _ohanhi$keyboard_extra$Keyboard_Extra$subscriptions),
-				_elm_lang$animation_frame$AnimationFrame$diffs(_user$project$Types$Refresh)
+				_elm_lang$animation_frame$AnimationFrame$diffs(_user$project$Types$Refresh),
+				_elm_lang$animation_frame$AnimationFrame$diffs(_user$project$Types$CheckForCollisions)
 			]));
 };
 var _user$project$Main$main = {

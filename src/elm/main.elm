@@ -14,7 +14,7 @@ import ThrusterState    exposing (setThrusters)
 import Thrust           exposing (setThrust)
 import List             exposing (map)
 import Gravity          exposing (shipGravity, thingGravity)
-import CollisionHandle  exposing (collisionCheck)
+import CollisionHandle  exposing (collisionsHandle)
 
 main =
   App.program
@@ -29,6 +29,7 @@ subscriptions model =
   Sub.batch
     [ Sub.map HandleKeys Keyboard.subscriptions
     , diffs Refresh
+    , diffs CheckForCollisions
     ]
 
 
@@ -58,8 +59,8 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg m =
   case msg of 
 
-    SetThings t ->
-      ({ m | things = t }, Cmd.none)
+    CheckForCollisions dt ->
+      (collisionsHandle (dt / 120) m, Cmd.none)
 
     Refresh dt ->
       (refresh m (dt / 120), Cmd.none)

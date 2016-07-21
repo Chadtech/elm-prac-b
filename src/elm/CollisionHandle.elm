@@ -1,8 +1,8 @@
-module CollisionHandle exposing (collisionCheck)
+module CollisionHandle exposing (collisionsHandle)
 
 import Collision        exposing (..)
 import Types            exposing (..)
-import List             exposing (map, concat)
+import List             exposing (map, concat, filter, length, foldr, append)
 import Debug            exposing (log)
 
 
@@ -43,8 +43,8 @@ toPolygon angle center destination points =
   |>concat
   |>map (place center)
 
-thingsPolygon : Pt -> Pt -> Thing -> List Pt
-thingsPolygon (svx, svy) (sgx, sgy) t =
+thingsPolygon : Float -> Pt -> Pt -> Thing -> List Pt
+thingsPolygon dt (svx, svy) (sgx, sgy) t =
   let 
     (w', h') = t.dimensions 
     w = toFloat w'
@@ -52,8 +52,8 @@ thingsPolygon (svx, svy) (sgx, sgy) t =
   in
   toPolygon
   (t.a + t.va)
-  (t.gx - sgx + t.vx, t.gy - sgy + t.vy)
-  (t.vx - svx, t.vy - svy)
+  (t.gx - sgx + (t.vx * dt) - svx, t.gy - sgy + (t.vy * dt) - svy)
+  ((dt * t.vx) - svx, (dt * t.vy) - svy)
   [ (w/2, h/2)
   , (w/2, -h/2)
   , (-w/2, -h/2)
@@ -81,15 +81,68 @@ rotatePoints : Float -> List Pt -> List (Float, Float)
 rotatePoints a' =
   map (toPolar >> rotatePoint a' >> fromPolar)
 
-collisionCheck : Ship -> Thing -> Bool
-collisionCheck s t = 
+collisions : Float -> Ship -> Thing -> (Bool, Thing)
+collisions dt s t = 
   let
     thingsPolygon' = 
       thingsPolygon
-      (s.vx, s.vy)
-      (s.gx + s.vx, s.gy + s.vy)
+      dt
+      (s.vx * dt, s.vy * dt)
+      (s.gx, s.gy)
       t
   in
-  collision 10
-  (thingsPolygon', polySupport)
-  (shipsPolygon s, polySupport)
+  (collision 10
+    (thingsPolygon', polySupport)
+    (shipsPolygon s, polySupport)
+  , t)
+
+
+collisionAction : Thing -> Ship -> Ship
+collisionAction t s = t.onCollision s
+
+appendIfNotCollided : (Bool, Thing) -> List Thing -> List Thing
+appendIfNotCollided (b, t) things =
+  if b then things
+  else append things [t]
+
+justThings : (Bool, Thing) -> Bool
+justThings (b, t) = b
+
+collisionsHandle : Float -> Model -> Model
+collisionsHandle dt model =
+  let
+    collisionCheck = 
+      map
+      (collisions dt model.ship)
+      model.things 
+
+    collidedThings = 
+      filter 
+      justThings
+      collisionCheck
+
+  in
+  if (length collidedThings) > 0 then 
+    { model
+    | ship = 
+        foldr
+          collisionAction
+          model.ship
+          (map (\t -> snd t) collidedThings)
+    , things =
+        foldr
+        appendIfNotCollided
+        []
+        collisionCheck
+    }
+  else model
+
+
+
+
+
+
+
+
+
+

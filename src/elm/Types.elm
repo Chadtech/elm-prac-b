@@ -8,7 +8,7 @@ import Debug exposing (log)
 type Msg 
   = Refresh Time
   | HandleKeys Keyboard.Msg
-  | SetThings (List Thing)
+  | CheckForCollisions Time
 
 type Quadrant 
   = A
@@ -72,6 +72,8 @@ type alias Thing =
 
   , dimensions : (Int, Int)
 
+  , onCollision : Ship -> Ship
+
   , sprite : Sprite
   }
 
@@ -80,28 +82,6 @@ type alias Sprite =
   , h   : Int
   , src : String
   }
-
---o2Box : Thing
---o2Box =
---  { x = 550
---  , y = 575
---  , a = 0
-
---  , vx = 0
---  , vy = 150
---  , va = 1
-
---  , gx = 0
---  , gy = 0
-
---  , sector   = (0, 0)
-
---  , sprite = 
---    { w    = 20
---    , h    = 20
---    , src  = "stuff/oxygen-tank"
---    }
---  }
 
 angleGen : Generator Float
 angleGen = float -30 30
@@ -127,12 +107,18 @@ o2box (gx, gy) (vx, vy) va =
 
   , dimensions = (20, 20)
 
+  , onCollision = giveOxygen
+
   , sprite = 
     { w    = 20
     , h    = 20
     , src  = "stuff/oxygen-tank"
     }
   }
+
+giveOxygen : Ship -> Ship
+giveOxygen s =
+  { s | oxygen = s.oxygen + 500 }
 
 
 type alias Thrusters =
@@ -203,7 +189,8 @@ setSector f =
 frege : Thrusters -> Ship
 frege t = 
   let
-    gx = 45025
+    --gx = 45100
+    gx = 44900
     gy = 60000
 
     x =
