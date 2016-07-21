@@ -5,15 +5,14 @@ import Keyboard.Extra as K
 import Types exposing (Ship, Model, Thrusters)
 import Debug exposing (log)
 
-set : K.Key -> K.Model -> Int
-set k m = 
-  (\b -> if b then 1 else 0)
-  <|isPressed k m
+set : K.Model -> K.Key -> Int
+set m k = 
+  if isPressed k m then 1 
+  else 0
 
 setThrusters : K.Model -> Thrusters
 setThrusters keys =
-  let set' = \k -> set k keys
-  in
+  let set' = set keys in
   { leftFront  = set' K.CharC
   , leftSide   = set' K.CharS
   , leftBack   = set' K.CharE

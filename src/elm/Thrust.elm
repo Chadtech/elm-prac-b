@@ -6,13 +6,12 @@ import Debug exposing (log)
 
 setThrust : Ship -> Ship
 setThrust s =
-  let t = s.thrusters
-  in
+  let t = s.thrusters in
   { s
-  | vy = s.vy + (thrustY (s.a, t))
-  , vx = s.vx + (thrustX (s.a, t))
-  , va = s.va + ((thrustA t))
- }
+  | vy = s.vy + (thrustY s.a t)
+  , vx = s.vx + (thrustX s.a t)
+  , va = s.va + (thrustA t)
+  }
 
 weakPower : Float
 weakPower = 0.128
@@ -37,8 +36,8 @@ c = cos << degrees
 s : Float -> Float
 s = sin << degrees
 
-thrustY : (Float, Thrusters) -> Float
-thrustY (a, t) =
+thrustY : Float -> Thrusters -> Float
+thrustY a t =
   getThrust t.boost
   [  mainPower * (c a) * toFloat t.main
   ,  (wp (c a) t.leftBack)  
@@ -49,8 +48,8 @@ thrustY (a, t) =
   ,  (wp (s a) t.rightSide)  
   ]
 
-thrustX : (Float, Thrusters) -> Float
-thrustX (a, t) =
+thrustX : Float -> Thrusters -> Float
+thrustX a t =
   getThrust t.boost
   [ -mainPower * (s a) * toFloat t.main
   , -(wp (s a) t.leftBack)

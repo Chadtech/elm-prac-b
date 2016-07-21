@@ -12193,9 +12193,64 @@ var _user$project$Types$initModel = {
 		[
 			A3(
 			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 525, _1: 550},
+			{ctor: '_Tuple2', _0: 0, _1: 150},
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 10000, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: 150},
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 60000, _1: 10000},
+			{ctor: '_Tuple2', _0: 140, _1: -10},
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: 290},
+			30),
+			A3(
+			_user$project$Types$o2box,
 			{ctor: '_Tuple2', _0: 45000, _1: 60000},
 			{ctor: '_Tuple2', _0: 0, _1: -400},
-			30)
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 45050, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: -400},
+			30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 57, _1: 250},
+			-30),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 61, _1: 250},
+			25),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: -44, _1: 248},
+			55),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 50, _1: 251},
+			-87),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 33, _1: 250},
+			-3),
+			A3(
+			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 100, _1: 250},
+			11)
 		])
 };
 var _user$project$Types$B = {ctor: 'B'};
@@ -13411,16 +13466,11 @@ var _user$project$ThingPosition$thingPosition = F2(
 	});
 
 var _user$project$ThrusterState$set = F2(
-	function (k, m) {
-		return function (b) {
-			return b ? 1 : 0;
-		}(
-			A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, k, m));
+	function (m, k) {
+		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, k, m) ? 1 : 0;
 	});
 var _user$project$ThrusterState$setThrusters = function (keys) {
-	var set$ = function (k) {
-		return A2(_user$project$ThrusterState$set, k, keys);
-	};
+	var set$ = _user$project$ThrusterState$set(keys);
 	return {
 		leftFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharC),
 		leftSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharS),
@@ -13473,87 +13523,81 @@ var _user$project$Thrust$wp = F2(
 	function (f, i) {
 		return (_user$project$Thrust$weakPower * f) * _elm_lang$core$Basics$toFloat(i);
 	});
-var _user$project$Thrust$thrustY = function (_p2) {
-	var _p3 = _p2;
-	var _p5 = _p3._1;
-	var _p4 = _p3._0;
-	return A2(
-		_user$project$Thrust$getThrust,
-		_p5.boost,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				(_user$project$Thrust$mainPower * _user$project$Thrust$c(_p4)) * _elm_lang$core$Basics$toFloat(_p5.main),
-				A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p4),
-				_p5.leftBack),
-				0 - A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p4),
-				_p5.leftFront),
-				A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p4),
-				_p5.rightBack),
-				0 - A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p4),
-				_p5.rightFront),
-				0 - A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p4),
-				_p5.leftSide),
-				A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p4),
-				_p5.rightSide)
-			]));
-};
-var _user$project$Thrust$thrustX = function (_p6) {
-	var _p7 = _p6;
-	var _p9 = _p7._1;
-	var _p8 = _p7._0;
-	return A2(
-		_user$project$Thrust$getThrust,
-		_p9.boost,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				((0 - _user$project$Thrust$mainPower) * _user$project$Thrust$s(_p8)) * _elm_lang$core$Basics$toFloat(_p9.main),
-				0 - A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p8),
-				_p9.leftBack),
-				A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p8),
-				_p9.leftFront),
-				0 - A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p8),
-				_p9.rightBack),
-				A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$s(_p8),
-				_p9.rightFront),
-				0 - A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p8),
-				_p9.leftSide),
-				A2(
-				_user$project$Thrust$wp,
-				_user$project$Thrust$c(_p8),
-				_p9.rightSide)
-			]));
-};
+var _user$project$Thrust$thrustY = F2(
+	function (a, t) {
+		return A2(
+			_user$project$Thrust$getThrust,
+			t.boost,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					(_user$project$Thrust$mainPower * _user$project$Thrust$c(a)) * _elm_lang$core$Basics$toFloat(t.main),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.leftBack),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.leftFront),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.rightBack),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.rightFront),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.leftSide),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.rightSide)
+				]));
+	});
+var _user$project$Thrust$thrustX = F2(
+	function (a, t) {
+		return A2(
+			_user$project$Thrust$getThrust,
+			t.boost,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					((0 - _user$project$Thrust$mainPower) * _user$project$Thrust$s(a)) * _elm_lang$core$Basics$toFloat(t.main),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.leftBack),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.leftFront),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.rightBack),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.rightFront),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.leftSide),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.rightSide)
+				]));
+	});
 var _user$project$Thrust$setThrust = function (s) {
 	var t = s.thrusters;
 	return _elm_lang$core$Native_Utils.update(
 		s,
 		{
-			vy: s.vy + _user$project$Thrust$thrustY(
-				{ctor: '_Tuple2', _0: s.a, _1: t}),
-			vx: s.vx + _user$project$Thrust$thrustX(
-				{ctor: '_Tuple2', _0: s.a, _1: t}),
+			vy: s.vy + A2(_user$project$Thrust$thrustY, s.a, t),
+			vx: s.vx + A2(_user$project$Thrust$thrustX, s.a, t),
 			va: s.va + _user$project$Thrust$thrustA(t)
 		});
 };
@@ -13580,16 +13624,55 @@ var _user$project$Main$refreshThing = function (dt) {
 			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
 	};
 };
+var _user$project$Main$consumeFuel = F2(
+	function (dt, s) {
+		var t = s.thrusters;
+		var rate = t.boost ? 7 : 1;
+		var consumption = _elm_lang$core$List$product(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					rate,
+					dt,
+					_elm_lang$core$Basics$toFloat(
+					_elm_lang$core$List$sum(
+						_elm_lang$core$Native_List.fromArray(
+							[t.leftFront, t.leftSide, t.leftBack, t.rightFront, t.rightSide, t.rightBack, t.main * 5])))
+				]));
+		return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+			s,
+			{fuel: s.fuel - consumption}) : _elm_lang$core$Native_Utils.update(
+			s,
+			{
+				fuel: 0,
+				thrusters: {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false}
+			});
+	});
+var _user$project$Main$consumeAir = F2(
+	function (dt, s) {
+		return (_elm_lang$core$Native_Utils.cmp(s.oxygen, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+			s,
+			{oxygen: s.oxygen - (dt / 100)}) : _elm_lang$core$Native_Utils.update(
+			s,
+			{oxygen: 0});
+	});
 var _user$project$Main$refresh = F2(
-	function (m, dt) {
+	function (dt, m) {
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{
-				ship: _user$project$Thrust$setThrust(
+				ship: A2(
+					_user$project$ShipPosition$shipPosition,
+					dt,
 					A2(
-						_user$project$ShipPosition$shipPosition,
+						_user$project$Gravity$shipGravity,
 						dt,
-						A2(_user$project$Gravity$shipGravity, dt, m.ship))),
+						A2(
+							_user$project$Main$consumeAir,
+							dt,
+							A2(
+								_user$project$Main$consumeFuel,
+								dt,
+								_user$project$Thrust$setThrust(m.ship))))),
 				things: A2(
 					_elm_lang$core$List$map,
 					_user$project$Main$refreshThing(dt),
@@ -13609,7 +13692,7 @@ var _user$project$Main$update = F2(
 			case 'Refresh':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$refresh, m, _p1._0 / 120),
+					_0: A2(_user$project$Main$refresh, _p1._0 / 120, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:

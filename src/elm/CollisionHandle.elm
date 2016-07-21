@@ -113,13 +113,13 @@ collisionsHandle dt model =
   let
     collisionCheck = 
       map
-      (collisions dt model.ship)
-      model.things 
+        (collisions dt model.ship)
+        model.things 
 
     collidedThings = 
       filter 
-      justThings
-      collisionCheck
+        justThings
+        collisionCheck
 
   in
   if (length collidedThings) > 0 then 
@@ -131,9 +131,9 @@ collisionsHandle dt model =
           (map (\t -> snd t) collidedThings)
     , things =
         foldr
-        appendIfNotCollided
-        []
-        collisionCheck
+          appendIfNotCollided
+          []
+          collisionCheck
     }
   else model
 

@@ -12,7 +12,7 @@ import ThingPosition    exposing (thingPosition)
 import Keyboard.Extra   as Keyboard
 import ThrusterState    exposing (setThrusters)
 import Thrust           exposing (setThrust)
-import List             exposing (map)
+import List             exposing (map, sum, product)
 import Gravity          exposing (shipGravity, thingGravity)
 import CollisionHandle  exposing (collisionsHandle)
 
@@ -32,20 +32,64 @@ subscriptions model =
     , diffs CheckForCollisions
     ]
 
+consumeAir : Float -> Ship -> Ship
+consumeAir dt s =
+  if s.oxygen > 0 then
+    { s | oxygen = s.oxygen - (dt / 100) }
+  else 
+    { s | oxygen = 0 }
 
-refresh : Model -> Float -> Model
-refresh m dt =
-  --let
-  --  ya =
-  --    log "YA" <|
-  --    List.filter (collisionCheck m.ship) m.things
-  --in
+consumeFuel : Float -> Ship -> Ship
+consumeFuel dt s =
+  let
+    t = s.thrusters
+    rate = 
+      if t.boost then 7
+      else 1
+    consumption =
+      product 
+      [ rate
+      , dt
+      , toFloat
+        <|sum 
+          [ t.leftFront
+          , t.leftSide
+          , t.leftBack
+          , t.rightFront
+          , t.rightSide
+          , t.rightBack
+          , t.main * 5
+          ]
+      ]
+  in
+  if s.fuel > 0 then
+    { s | fuel = s.fuel - consumption }
+   else
+    { s 
+    | fuel = 0
+    , thrusters = 
+      { leftFront  = 0
+      , leftSide   = 0
+      , leftBack   = 0
+      , main       = 0
+      , rightFront = 0
+      , rightSide  = 0
+      , rightBack  = 0
+      , boost      = False
+      }
+    }
+
+
+refresh : Float -> Model -> Model
+refresh dt m =
   { m 
   | ship = 
       m.ship
+      |>setThrust
+      |>consumeFuel dt
+      |>consumeAir dt
       |>shipGravity dt
       |>shipPosition dt
-      |>setThrust
   , things = 
       m.things
       |>map (refreshThing dt)
@@ -63,7 +107,7 @@ update msg m =
       (collisionsHandle (dt / 120) m, Cmd.none)
 
     Refresh dt ->
-      (refresh m (dt / 120), Cmd.none)
+      (refresh (dt / 120) m, Cmd.none)
 
     HandleKeys keyMsg ->
       let
