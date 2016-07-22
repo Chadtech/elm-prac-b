@@ -96,7 +96,6 @@ collisions dt s t =
     (shipsPolygon s, polySupport)
   , t)
 
-
 collisionAction : Thing -> Ship -> Ship
 collisionAction t s = t.onCollision s
 
@@ -120,7 +119,6 @@ collisionsHandle dt model =
       filter 
         justThings
         collisionCheck
-
   in
   if (length collidedThings) > 0 then 
     { model

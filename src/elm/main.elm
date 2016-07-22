@@ -16,6 +16,7 @@ import Thrust           exposing (setThrust)
 import List             exposing (map)
 import Gravity          exposing (shipGravity, thingGravity)
 import CollisionHandle  exposing (collisionsHandle)
+import SetWeight        exposing (setWeight)
 
 main =
   App.program
@@ -33,20 +34,22 @@ subscriptions model =
     , diffs CheckForCollisions
     ]
 
-
 refresh : Float -> Model -> Model
 refresh dt m =
   { m 
-  | ship = 
-      m.ship
-      |>setThrust
-      |>consumption dt
-      |>shipGravity dt
-      |>shipPosition dt
+  | ship = refreshShip dt m.ship
   , things = 
       m.things
       |>map (refreshThing dt)
   }
+
+refreshShip : Float -> (Ship -> Ship)
+refreshShip dt =
+  consumption dt
+  >>setWeight
+  >>setThrust
+  >>shipGravity dt
+  >>shipPosition dt
 
 refreshThing : Float -> (Thing -> Thing)
 refreshThing dt =

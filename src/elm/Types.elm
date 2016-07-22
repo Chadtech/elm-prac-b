@@ -36,19 +36,21 @@ initModel =
   , keys   = fst Keyboard.init
   , things = 
     --[ o2box (45000, 60000) (0, -400) 30 ]
-    [ o2box (525, 550) (0, 150) 30
-    , o2box (10000, 60000) (0, 150) 30
-    , o2box (60000, 10000) (140, -10) 30
+    [ fuelTank (10000, 60000) (0, -150) 30
+    , o2box (10000, 60000) (1, -148) 30
+    , fuelTank (60000, 10000) (140, -10) 30
     , o2box (30000, 60000) (0, 290) 30
-    , o2box (45000, 60000) (0, -400) 30
+    , fuelTank (44800, 60000) (0, -400) 30
     , o2box (45050, 60000) (0, -400) 30
 
-    , o2box (30000, 60000) (57, 250) -30
-    , o2box (30000, 60000) (61, 250) 25
-    , o2box (30000, 60000)(-44, 248) 55
-    , o2box (30000, 60000) (50, 251) -87
+    , fuelTank (30000, 55000) (50, -250) -60
+    , o2box (30000, 55000) (57, -250) -30
+    , o2box (30000, 60000) (57, -250) -30
+    , fuelTank (30000, 60000) (61, 250) 25
+    , o2box (30000, 60000) (-44, -248) 55
+    , fuelTank (30000, 60000) (50, 251) -87
     , o2box (30000, 60000) (33, 250)  -3
-    , o2box (30000, 60000) (100, 250) 11
+    , fuelTank (30000, 60000) (100, 250) 11
     ]
   }
 
@@ -115,6 +117,40 @@ o2box (gx, gy) (vx, vy) va =
     , src  = "stuff/oxygen-tank"
     }
   }
+
+fuelTank : (Float, Float) -> (Float, Float) -> Float -> Thing
+fuelTank (gx, gy) (vx, vy) va =
+  let
+    gx' = round gx
+    gy' = round gy
+  in
+  { x = (toFloat (gx' % 600)) + gx - (toFloat gx')
+  , y = (toFloat (gy' % 600)) + gy - (toFloat gy')
+  , a = 0
+
+  , vx = vx
+  , vy = vy
+  , va = va
+
+  , gx = gx
+  , gy = gy
+
+  , sector = (gx' // 600, gy' // 600)
+
+  , dimensions = (20, 30)
+
+  , onCollision = giveFuel
+
+  , sprite = 
+    { w    = 20
+    , h    = 30
+    , src  = "stuff/fuel-tank"
+    }
+  }
+
+giveFuel : Ship -> Ship
+giveFuel s =
+  { s | fuel = s.fuel + 1000 }
 
 giveOxygen : Ship -> Ship
 giveOxygen s =
@@ -215,8 +251,10 @@ frege t =
 
   , dimensions   = (34, 29)
 
-  , fuel         = 1410.1
-  , oxygen       = 166
+  , fuel         = 1005.1
+  , oxygen       = 63
+  --, fuel         = 1410.1
+  --, oxygen       = 166
   , weight       = 852
 
   , thrusters    = t

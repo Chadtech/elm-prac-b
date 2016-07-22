@@ -36,7 +36,8 @@ miniMap m =
 drawThing : Thing -> Form
 drawThing t =
   t.sprite.src
-  |>image' 2 2
+  |>image' (t.sprite.w // 10) (t.sprite.h // 10)
+  |>rotate (degrees t.a)
   |>move (p t.gx, p t.gy)
 
 -- position in map 

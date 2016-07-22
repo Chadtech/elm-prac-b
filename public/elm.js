@@ -12048,7 +12048,12 @@ var _user$project$Types$giveOxygen = function (s) {
 		s,
 		{oxygen: s.oxygen + 500});
 };
-var _user$project$Types$o2box = F3(
+var _user$project$Types$giveFuel = function (s) {
+	return _elm_lang$core$Native_Utils.update(
+		s,
+		{fuel: s.fuel + 1000});
+};
+var _user$project$Types$fuelTank = F3(
 	function (_p1, _p0, va) {
 		var _p2 = _p1;
 		var _p5 = _p2._1;
@@ -12067,6 +12072,31 @@ var _user$project$Types$o2box = F3(
 			va: va,
 			gx: _p4,
 			gy: _p5,
+			sector: {ctor: '_Tuple2', _0: (gx$ / 600) | 0, _1: (gy$ / 600) | 0},
+			dimensions: {ctor: '_Tuple2', _0: 20, _1: 30},
+			onCollision: _user$project$Types$giveFuel,
+			sprite: {w: 20, h: 30, src: 'stuff/fuel-tank'}
+		};
+	});
+var _user$project$Types$o2box = F3(
+	function (_p7, _p6, va) {
+		var _p8 = _p7;
+		var _p11 = _p8._1;
+		var _p10 = _p8._0;
+		var _p9 = _p6;
+		var gy$ = _elm_lang$core$Basics$round(_p11);
+		var gx$ = _elm_lang$core$Basics$round(_p10);
+		return {
+			x: (_elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics_ops['%'], gx$, 600)) + _p10) - _elm_lang$core$Basics$toFloat(gx$),
+			y: (_elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics_ops['%'], gy$, 600)) + _p11) - _elm_lang$core$Basics$toFloat(gy$),
+			a: 0,
+			vx: _p9._0,
+			vy: _p9._1,
+			va: va,
+			gx: _p10,
+			gy: _p11,
 			sector: {ctor: '_Tuple2', _0: (gx$ / 600) | 0, _1: (gy$ / 600) | 0},
 			dimensions: {ctor: '_Tuple2', _0: 20, _1: 20},
 			onCollision: _user$project$Types$giveOxygen,
@@ -12180,8 +12210,8 @@ var _user$project$Types$frege = function (t) {
 		gy: gy,
 		dir: 0,
 		dimensions: {ctor: '_Tuple2', _0: 34, _1: 29},
-		fuel: 1410.1,
-		oxygen: 166,
+		fuel: 1005.1,
+		oxygen: 63,
 		weight: 852,
 		thrusters: t
 	};
@@ -12192,17 +12222,17 @@ var _user$project$Types$initModel = {
 	things: _elm_lang$core$Native_List.fromArray(
 		[
 			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 525, _1: 550},
-			{ctor: '_Tuple2', _0: 0, _1: 150},
+			_user$project$Types$fuelTank,
+			{ctor: '_Tuple2', _0: 10000, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: -150},
 			30),
 			A3(
 			_user$project$Types$o2box,
 			{ctor: '_Tuple2', _0: 10000, _1: 60000},
-			{ctor: '_Tuple2', _0: 0, _1: 150},
+			{ctor: '_Tuple2', _0: 1, _1: -148},
 			30),
 			A3(
-			_user$project$Types$o2box,
+			_user$project$Types$fuelTank,
 			{ctor: '_Tuple2', _0: 60000, _1: 10000},
 			{ctor: '_Tuple2', _0: 140, _1: -10},
 			30),
@@ -12212,8 +12242,8 @@ var _user$project$Types$initModel = {
 			{ctor: '_Tuple2', _0: 0, _1: 290},
 			30),
 			A3(
-			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 45000, _1: 60000},
+			_user$project$Types$fuelTank,
+			{ctor: '_Tuple2', _0: 44800, _1: 60000},
 			{ctor: '_Tuple2', _0: 0, _1: -400},
 			30),
 			A3(
@@ -12222,22 +12252,32 @@ var _user$project$Types$initModel = {
 			{ctor: '_Tuple2', _0: 0, _1: -400},
 			30),
 			A3(
+			_user$project$Types$fuelTank,
+			{ctor: '_Tuple2', _0: 30000, _1: 55000},
+			{ctor: '_Tuple2', _0: 50, _1: -250},
+			-60),
+			A3(
 			_user$project$Types$o2box,
-			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: 57, _1: 250},
+			{ctor: '_Tuple2', _0: 30000, _1: 55000},
+			{ctor: '_Tuple2', _0: 57, _1: -250},
 			-30),
 			A3(
 			_user$project$Types$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 57, _1: -250},
+			-30),
+			A3(
+			_user$project$Types$fuelTank,
 			{ctor: '_Tuple2', _0: 30000, _1: 60000},
 			{ctor: '_Tuple2', _0: 61, _1: 250},
 			25),
 			A3(
 			_user$project$Types$o2box,
 			{ctor: '_Tuple2', _0: 30000, _1: 60000},
-			{ctor: '_Tuple2', _0: -44, _1: 248},
+			{ctor: '_Tuple2', _0: -44, _1: -248},
 			55),
 			A3(
-			_user$project$Types$o2box,
+			_user$project$Types$fuelTank,
 			{ctor: '_Tuple2', _0: 30000, _1: 60000},
 			{ctor: '_Tuple2', _0: 50, _1: 251},
 			-87),
@@ -12247,7 +12287,7 @@ var _user$project$Types$initModel = {
 			{ctor: '_Tuple2', _0: 33, _1: 250},
 			-3),
 			A3(
-			_user$project$Types$o2box,
+			_user$project$Types$fuelTank,
 			{ctor: '_Tuple2', _0: 30000, _1: 60000},
 			{ctor: '_Tuple2', _0: 100, _1: 250},
 			11)
@@ -12476,7 +12516,7 @@ var _user$project$Consumption$consumeFuel = F2(
 		var consumption = _elm_lang$core$List$product(
 			_elm_lang$core$Native_List.fromArray(
 				[
-					1.0e-2,
+					0.1,
 					rate,
 					dt,
 					_elm_lang$core$Basics$toFloat(
@@ -13108,7 +13148,10 @@ var _user$project$MiniMap$drawThing = function (t) {
 			_0: _user$project$MiniMap$p(t.gx),
 			_1: _user$project$MiniMap$p(t.gy)
 		},
-		A3(_user$project$MiniMap$image$, 2, 2, t.sprite.src));
+		A2(
+			_evancz$elm_graphics$Collage$rotate,
+			_elm_lang$core$Basics$degrees(t.a),
+			A3(_user$project$MiniMap$image$, (t.sprite.w / 10) | 0, (t.sprite.h / 10) | 0, t.sprite.src)));
 };
 var _user$project$MiniMap$miniMap = function (m) {
 	var s = m.ship;
@@ -13429,6 +13472,9 @@ var _user$project$ShipPosition$shipPosition = F2(
 			});
 	});
 
+var _user$project$ThingPosition$getSector = function (f) {
+	return _elm_lang$core$Basics$floor(f / 600);
+};
 var _user$project$ThingPosition$moduloCClockwise = function (a) {
 	moduloCClockwise:
 	while (true) {
@@ -13481,20 +13527,21 @@ var _user$project$ThingPosition$moduloTop = function (n) {
 		}
 	}
 };
-var _user$project$ThingPosition$modulo = function (_p1) {
-	return _user$project$ThingPosition$moduloBottom(
-		_user$project$ThingPosition$moduloTop(_p1));
+var _user$project$ThingPosition$modulo = function (f) {
+	var f$ = _elm_lang$core$Basics$round(f);
+	return _elm_lang$core$Basics$toFloat(
+		A2(_elm_lang$core$Basics_ops['%'], f$, 600)) + (f - _elm_lang$core$Basics$toFloat(f$));
 };
 var _user$project$ThingPosition$thingPosition = F2(
 	function (dt, t) {
-		var _p2 = t.sector;
-		var tx = _p2._0;
-		var ty = _p2._1;
+		var _p1 = t.sector;
+		var tx = _p1._0;
+		var ty = _p1._1;
 		var a$ = t.a + (dt * t.va);
-		var x$ = t.x + (dt * t.vx);
+		var x$ = t.gx + (dt * t.vx);
 		var xm = _user$project$ThingPosition$modulo(x$);
 		var dtx = (_elm_lang$core$Basics$round(x$ - xm) / 600) | 0;
-		var y$ = t.y + (dt * t.vy);
+		var y$ = t.gy + (dt * t.vy);
 		var ym = _user$project$ThingPosition$modulo(y$);
 		var dty = (_elm_lang$core$Basics$round(y$ - ym) / 600) | 0;
 		return _elm_lang$core$Native_Utils.update(
@@ -13503,7 +13550,11 @@ var _user$project$ThingPosition$thingPosition = F2(
 				x: xm,
 				y: ym,
 				a: _user$project$ThingPosition$moduloAngle(a$),
-				sector: {ctor: '_Tuple2', _0: tx + dtx, _1: ty + dty},
+				sector: {
+					ctor: '_Tuple2',
+					_0: _user$project$ThingPosition$getSector(x$),
+					_1: _user$project$ThingPosition$getSector(y$)
+				},
 				gx: t.gx + (dt * t.vx),
 				gy: t.gy + (dt * t.vy)
 			});
@@ -13536,15 +13587,8 @@ var _user$project$Thrust$c = function (_p1) {
 		_elm_lang$core$Basics$degrees(_p1));
 };
 var _user$project$Thrust$getThrust = F2(
-	function (b, l) {
-		return (b ? 5 : 1) * A3(
-			_elm_lang$core$List$foldr,
-			F2(
-				function (x, y) {
-					return x + y;
-				}),
-			0,
-			l);
+	function (b, list) {
+		return (b ? 5 : 1) * _elm_lang$core$List$sum(list);
 	});
 var _user$project$Thrust$weakPower = 0.128;
 var _user$project$Thrust$mainPower = _user$project$Thrust$weakPower * 7;
@@ -13636,16 +13680,23 @@ var _user$project$Thrust$thrustX = F2(
 				]));
 	});
 var _user$project$Thrust$setThrust = function (s) {
+	var weightFactor = s.weight / 526;
 	var t = s.thrusters;
 	return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
 		s,
 		{
-			vy: s.vy + A2(_user$project$Thrust$thrustY, s.a, t),
-			vx: s.vx + A2(_user$project$Thrust$thrustX, s.a, t),
-			va: s.va + _user$project$Thrust$thrustA(t)
+			vy: s.vy + (A2(_user$project$Thrust$thrustY, s.a, t) / weightFactor),
+			vx: s.vx + (A2(_user$project$Thrust$thrustX, s.a, t) / weightFactor),
+			va: s.va + (_user$project$Thrust$thrustA(t) / weightFactor)
 		}) : _elm_lang$core$Native_Utils.update(
 		s,
 		{vy: s.vy, vx: s.vx, va: s.va});
+};
+
+var _user$project$SetWeight$setWeight = function (s) {
+	return _elm_lang$core$Native_Utils.update(
+		s,
+		{weight: ((s.fuel / 1.7) + (s.oxygen * 3)) + 263});
 };
 
 var _user$project$Main$handleKeys = F2(
@@ -13670,21 +13721,25 @@ var _user$project$Main$refreshThing = function (dt) {
 			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
 	};
 };
+var _user$project$Main$refreshShip = function (dt) {
+	return function (_p1) {
+		return A2(
+			_user$project$ShipPosition$shipPosition,
+			dt,
+			A2(
+				_user$project$Gravity$shipGravity,
+				dt,
+				_user$project$Thrust$setThrust(
+					_user$project$SetWeight$setWeight(
+						A2(_user$project$Consumption$consumption, dt, _p1)))));
+	};
+};
 var _user$project$Main$refresh = F2(
 	function (dt, m) {
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{
-				ship: A2(
-					_user$project$ShipPosition$shipPosition,
-					dt,
-					A2(
-						_user$project$Gravity$shipGravity,
-						dt,
-						A2(
-							_user$project$Consumption$consumption,
-							dt,
-							_user$project$Thrust$setThrust(m.ship)))),
+				ship: A2(_user$project$Main$refreshShip, dt, m.ship),
 				things: A2(
 					_elm_lang$core$List$map,
 					_user$project$Main$refreshThing(dt),
@@ -13693,24 +13748,24 @@ var _user$project$Main$refresh = F2(
 	});
 var _user$project$Main$update = F2(
 	function (msg, m) {
-		var _p1 = msg;
-		switch (_p1.ctor) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
 			case 'CheckForCollisions':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$CollisionHandle$collisionsHandle, _p1._0 / 120, m),
+					_0: A2(_user$project$CollisionHandle$collisionsHandle, _p2._0 / 120, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Refresh':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$refresh, _p1._0 / 120, m),
+					_0: A2(_user$project$Main$refresh, _p2._0 / 120, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
-				var _p2 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p1._0, m.keys);
-				var keys = _p2._0;
-				var kCmd = _p2._1;
+				var _p3 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p2._0, m.keys);
+				var keys = _p3._0;
+				var kCmd = _p3._1;
 				return {
 					ctor: '_Tuple2',
 					_0: A2(_user$project$Main$handleKeys, m, keys),
@@ -13768,6 +13823,8 @@ Elm['ReadOut'] = Elm['ReadOut'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ReadOut'], 'ReadOut', typeof _user$project$ReadOut$main === 'undefined' ? null : _user$project$ReadOut$main);
 Elm['RightHud'] = Elm['RightHud'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['RightHud'], 'RightHud', typeof _user$project$RightHud$main === 'undefined' ? null : _user$project$RightHud$main);
+Elm['SetWeight'] = Elm['SetWeight'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['SetWeight'], 'SetWeight', typeof _user$project$SetWeight$main === 'undefined' ? null : _user$project$SetWeight$main);
 Elm['ShipPosition'] = Elm['ShipPosition'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ShipPosition'], 'ShipPosition', typeof _user$project$ShipPosition$main === 'undefined' ? null : _user$project$ShipPosition$main);
 Elm['ThingPosition'] = Elm['ThingPosition'] || {};
