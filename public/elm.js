@@ -12104,9 +12104,9 @@ var _user$project$Types$o2box = F3(
 		};
 	});
 var _user$project$Types$angleGen = A2(_elm_lang$core$Random$float, -30, 30);
-var _user$project$Types$Model = F3(
-	function (a, b, c) {
-		return {ship: a, keys: b, things: c};
+var _user$project$Types$Model = F5(
+	function (a, b, c, d, e) {
+		return {ship: a, keys: b, things: c, paused: d, pWasPressed: e};
 	});
 var _user$project$Types$World = function (a) {
 	return {things: a};
@@ -12177,6 +12177,7 @@ var _user$project$Types$Ship = function (a) {
 		};
 	};
 };
+var _user$project$Types$Pause = {ctor: 'Pause'};
 var _user$project$Types$CheckForCollisions = function (a) {
 	return {ctor: 'CheckForCollisions', _0: a};
 };
@@ -12291,7 +12292,9 @@ var _user$project$Types$initModel = {
 			{ctor: '_Tuple2', _0: 30000, _1: 60000},
 			{ctor: '_Tuple2', _0: 100, _1: 250},
 			11)
-		])
+		]),
+	paused: false,
+	pWasPressed: false
 };
 var _user$project$Types$B = {ctor: 'B'};
 var _user$project$Types$A = {ctor: 'A'};
@@ -13503,30 +13506,6 @@ var _user$project$ThingPosition$moduloAngle = function (_p0) {
 	return _user$project$ThingPosition$moduloCClockwise(
 		_user$project$ThingPosition$moduloClockwise(_p0));
 };
-var _user$project$ThingPosition$moduloBottom = function (n) {
-	moduloBottom:
-	while (true) {
-		if (_elm_lang$core$Native_Utils.cmp(0, n) > 0) {
-			var _v2 = n + 600;
-			n = _v2;
-			continue moduloBottom;
-		} else {
-			return n;
-		}
-	}
-};
-var _user$project$ThingPosition$moduloTop = function (n) {
-	moduloTop:
-	while (true) {
-		if (_elm_lang$core$Native_Utils.cmp(n, 600) > 0) {
-			var _v3 = n - 600;
-			n = _v3;
-			continue moduloTop;
-		} else {
-			return n;
-		}
-	}
-};
 var _user$project$ThingPosition$modulo = function (f) {
 	var f$ = _elm_lang$core$Basics$round(f);
 	return _elm_lang$core$Basics$toFloat(
@@ -13534,16 +13513,11 @@ var _user$project$ThingPosition$modulo = function (f) {
 };
 var _user$project$ThingPosition$thingPosition = F2(
 	function (dt, t) {
-		var _p1 = t.sector;
-		var tx = _p1._0;
-		var ty = _p1._1;
 		var a$ = t.a + (dt * t.va);
 		var x$ = t.gx + (dt * t.vx);
 		var xm = _user$project$ThingPosition$modulo(x$);
-		var dtx = (_elm_lang$core$Basics$round(x$ - xm) / 600) | 0;
 		var y$ = t.gy + (dt * t.vy);
 		var ym = _user$project$ThingPosition$modulo(y$);
-		var dty = (_elm_lang$core$Basics$round(y$ - ym) / 600) | 0;
 		return _elm_lang$core$Native_Utils.update(
 			t,
 			{
@@ -13710,7 +13684,8 @@ var _user$project$Main$handleKeys = F2(
 					s,
 					{
 						thrusters: _user$project$ThrusterState$setThrusters(keys)
-					})
+					}),
+				paused: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$CharP, keys) ? _elm_lang$core$Basics$not(m.paused) : m.paused
 			});
 	});
 var _user$project$Main$refreshThing = function (dt) {
@@ -13757,12 +13732,12 @@ var _user$project$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Refresh':
-				return {
+				return m.paused ? {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none} : {
 					ctor: '_Tuple2',
 					_0: A2(_user$project$Main$refresh, _p2._0 / 120, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'HandleKeys':
 				var _p3 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p2._0, m.keys);
 				var keys = _p3._0;
 				var kCmd = _p3._1;
@@ -13770,6 +13745,16 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: A2(_user$project$Main$handleKeys, m, keys),
 					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Types$HandleKeys, kCmd)
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						m,
+						{
+							paused: _elm_lang$core$Basics$not(m.paused)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
 	});

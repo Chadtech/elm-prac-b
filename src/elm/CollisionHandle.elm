@@ -1,9 +1,10 @@
 module CollisionHandle exposing (collisionsHandle)
 
-import Collision        exposing (..)
-import Types            exposing (..)
-import List             exposing (map, concat, filter, length, foldr, append)
-import Debug            exposing (log)
+import Collision exposing (..)
+import Types     exposing (..)
+import Time      exposing (Time)
+import List      exposing (map, concat, filter, length, foldr, append)
+import Debug     exposing (log)
 
 
 dot : Pt -> Pt -> Float
@@ -107,7 +108,7 @@ appendIfNotCollided (b, t) things =
 justThings : (Bool, Thing) -> Bool
 justThings (b, t) = b
 
-collisionsHandle : Float -> Model -> Model
+collisionsHandle : Time -> Model -> Model
 collisionsHandle dt model =
   let
     collisionCheck = 

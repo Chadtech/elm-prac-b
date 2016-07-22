@@ -9,12 +9,17 @@ type Msg
   = Refresh Time
   | HandleKeys Keyboard.Msg
   | CheckForCollisions Time
+  | Pause
 
 type Quadrant 
   = A
   | B
   | C
   | D
+
+type alias Angle = Float
+
+type alias Coordinate = (Float, Float)
 
 --      |
 --   A  |  B
@@ -28,6 +33,8 @@ type alias Model =
   { ship   : Ship
   , keys   : Keyboard.Model
   , things : List Thing
+  , paused : Bool
+  , pWasPressed : Bool
   }
 
 initModel : Model
@@ -52,6 +59,8 @@ initModel =
     , o2box (30000, 60000) (33, 250)  -3
     , fuelTank (30000, 60000) (100, 250) 11
     ]
+  , paused = False
+  , pWasPressed = False
   }
 
 type alias World = 

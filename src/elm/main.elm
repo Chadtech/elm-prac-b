@@ -34,7 +34,7 @@ subscriptions model =
     , diffs CheckForCollisions
     ]
 
-refresh : Float -> Model -> Model
+refresh : Time -> Model -> Model
 refresh dt m =
   { m 
   | ship = refreshShip dt m.ship
@@ -43,7 +43,7 @@ refresh dt m =
       |>map (refreshThing dt)
   }
 
-refreshShip : Float -> (Ship -> Ship)
+refreshShip : Time -> (Ship -> Ship)
 refreshShip dt =
   consumption dt
   >>setWeight
@@ -51,7 +51,7 @@ refreshShip dt =
   >>shipGravity dt
   >>shipPosition dt
 
-refreshThing : Float -> (Thing -> Thing)
+refreshThing : Time -> (Thing -> Thing)
 refreshThing dt =
   thingPosition dt >> thingGravity dt
 
@@ -63,7 +63,10 @@ update msg m =
       (collisionsHandle (dt / 120) m, Cmd.none)
 
     Refresh dt ->
-      (refresh (dt / 120) m, Cmd.none)
+      if m.paused then
+        (m, Cmd.none)
+      else
+        (refresh (dt / 120) m, Cmd.none)
 
     HandleKeys keyMsg ->
       let
@@ -71,6 +74,9 @@ update msg m =
           Keyboard.update keyMsg m.keys
       in
         (handleKeys m keys, Cmd.map HandleKeys kCmd)
+
+    Pause ->
+      ({ m | paused = not m.paused }, Cmd.none)
 
 handleKeys : Model -> Keyboard.Model -> Model
 handleKeys m keys =
@@ -81,7 +87,12 @@ handleKeys m keys =
     { s 
     | thrusters = setThrusters keys
     }
-  }
+  , paused = 
+      if Keyboard.isPressed Keyboard.CharP keys then
+        not m.paused
+      else
+        m.paused
+   }
 
 
 

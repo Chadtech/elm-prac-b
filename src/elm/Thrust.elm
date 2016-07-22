@@ -46,7 +46,7 @@ c = cos << degrees
 s : Float -> Float
 s = sin << degrees
 
-thrustY : Float -> Thrusters -> Float
+thrustY : Angle -> Thrusters -> Float
 thrustY a t =
   getThrust t.boost
   [  mainPower * (c a) * toFloat t.main
@@ -58,7 +58,7 @@ thrustY a t =
   ,  (wp (s a) t.rightSide)  
   ]
 
-thrustX : Float -> Thrusters -> Float
+thrustX : Angle -> Thrusters -> Float
 thrustX a t =
   getThrust t.boost
   [ -mainPower * (s a) * toFloat t.main
