@@ -13362,6 +13362,23 @@ var _user$project$VelocityGauge$velocityGauge = function (s) {
 			]));
 };
 
+var _user$project$View$pausedNotice = function (paused) {
+	return paused ? A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('paused-notice')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Components$point('PAUSED')
+			])) : A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
 var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -13397,7 +13414,8 @@ var _user$project$View$view = function (model) {
 							[
 								_user$project$GameView$gameView(model),
 								_user$project$NavMarkers$navMarkers(model),
-								_user$project$VelocityGauge$velocityGauge(model.ship)
+								_user$project$VelocityGauge$velocityGauge(model.ship),
+								_user$project$View$pausedNotice(model.paused)
 							])),
 						_user$project$RightHud$rightHud(model)
 					]))

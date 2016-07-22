@@ -119,6 +119,25 @@ body
   border-style      solid
   border-width      2px
   border-color      pointColor
+  
+.paused-notice
+  padding 11px
+  z-index 5
+  position fixed
+  top 200px
+  right 514px
+  width 66px
+  height 17px
+  background-color  actualBlack
+  border-style      solid
+  border-width      2px
+  animation-duration 800ms 
+  animation-name blink 
+  animation-iteration-count infinite
+  animation-direction alternate 
+  -webkit-animation blink 800ms infinite
+  -webkit-animation-timing-function steps(2,end)
+
 
 .nav-markers
   z-index 5
@@ -127,5 +146,17 @@ body
   top 0
   width 630px
   height 630px
+  
+@keyframes blink 
+  from 
+    border-color      pointColor
+  to 
+    border-color      critical
+  
+@-webkit-keyframes blink 
+  from 
+    border-color      pointColor
+  to 
+    border-color      critical
   
   

@@ -100,6 +100,24 @@ body {
   border-width: 2px;
   border-color: #b0a69a;
 }
+.paused-notice {
+  padding: 11px;
+  z-index: 5;
+  position: fixed;
+  top: 200px;
+  right: 514px;
+  width: 66px;
+  height: 17px;
+  background-color: #000;
+  border-style: solid;
+  border-width: 2px;
+  animation-duration: 800ms;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  -webkit-animation: blink 800ms infinite;
+  -webkit-animation-timing-function: steps(2, end);
+}
 .nav-markers {
   z-index: 5;
   overflow: visible;
@@ -107,4 +125,44 @@ body {
   top: 0;
   width: 630px;
   height: 630px;
+}
+@-webkit-keyframes blink {
+  from {
+    border-color: #b0a69a;
+  }
+  to {
+    border-color: #f21d23;
+  }
+}
+@-moz-keyframes blink {
+  from {
+    border-color: #b0a69a;
+  }
+  to {
+    border-color: #f21d23;
+  }
+}
+@-webkit-keyframes blink {
+  from {
+    border-color: #b0a69a;
+  }
+  to {
+    border-color: #f21d23;
+  }
+}
+@-o-keyframes blink {
+  from {
+    border-color: #b0a69a;
+  }
+  to {
+    border-color: #f21d23;
+  }
+}
+@keyframes blink {
+  from {
+    border-color: #b0a69a;
+  }
+  to {
+    border-color: #f21d23;
+  }
 }
