@@ -27,6 +27,7 @@ column list =
 
 content : Ship -> (List String, List String)
 content s =
+  let (x,y) = s.global in
   unzip
   [ "--------"  . "--------"
   , "STATUS"    . "NOMINAL"
@@ -36,8 +37,8 @@ content s =
   , "dir"       . (angleFormat (s.dir / pi * 200))
   , "position"  . "--------"
   , ": angle"   . (angleFormat (-s.a / 0.9))
-  , ": x"       . nf 8 s.gx
-  , ": y"       . nf 8 s.gy
+  , ": x"       . nf 8 x
+  , ": y"       . nf 8 y
   , "--------"  . "--------"
   , "FUEL"      . ((nf 6 (oneDecimal s.fuel))   ++ "l")
   , "OXYGEN"    . ((nf 6 (oneDecimal s.oxygen)) ++ "l")

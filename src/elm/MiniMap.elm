@@ -12,7 +12,7 @@ import Pather           exposing (root)
 
 miniMap : Model -> Html Msg
 miniMap m =
-  let s = m.ship in
+  let (x, y) = m.ship.global in
   div
   [ class "mini-map-container" ]
   [ append
@@ -23,7 +23,7 @@ miniMap m =
       |>move (-50, 0)
     , "markers/ring"
       |>image' 5 5
-      |>move (p s.gx, p s.gy)
+      |>move (p x, p y)
     , "markers/yellow"
       |>image' 5 5
       |>move (p 60000, p 60000)

@@ -52,9 +52,8 @@ northMarker =
 
 thingMarkers : Model -> List Form
 thingMarkers m =
-  let s = m.ship in
   m.things
-  |>filter (nearEnough (s.gx, s.gy))
+  |>filter (nearEnough m.ship.global)
   |>map (drawThing m.ship)
 
 drawThing : Ship -> Thing -> Form
@@ -65,8 +64,9 @@ drawThing s t =
     rv  = sqrt ((rvx^2) + (rvy^2))
     dir = atan2 rvx rvy
 
-    dx   = s.gx - t.gx
-    dy   = s.gy - t.gy
+    (gx, gy) = s.global
+    dx   = gx - t.gx
+    dy   = gy - t.gy
 
     pos  = atan2 dx dy
     x    = (sin pos) * -r
@@ -83,7 +83,7 @@ drawThing s t =
   |>move (x, y)
   |>rotate (pi - dir)
 
-nearEnough : (Float, Float) -> Thing -> Bool
+nearEnough : Coordinate -> Thing -> Bool
 nearEnough (sgx,sgy) t =
   let
     dx   = sgx - t.gx

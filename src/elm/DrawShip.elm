@@ -34,7 +34,7 @@ drawShip enoughFuel t =
 image' : Int -> Int -> String -> Form
 image' w h src = image w h src |> toForm
 
-drawThruster : (Int, Int) -> (Float, Float) -> String -> Form
+drawThruster : Dimensions -> Coordinate -> String -> Form
 drawThruster (w, h) p str =
   move p <| image' w h str
 

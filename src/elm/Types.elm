@@ -17,9 +17,12 @@ type Quadrant
   | C
   | D
 
-type alias Angle = Float
-
+type alias Angle      = Float
 type alias Coordinate = (Float, Float)
+type alias Sector     = (Int, Int)
+type alias Dimensions = (Int, Int)
+type alias Time       = Float
+type alias Things     = List Thing
 
 --      |
 --   A  |  B
@@ -32,7 +35,7 @@ type alias Coordinate = (Float, Float)
 type alias Model =
   { ship   : Ship
   , keys   : Keyboard.Model
-  , things : List Thing
+  , things : Things
   , paused : Bool
   , pWasPressed : Bool
   }
@@ -178,27 +181,25 @@ type alias Thrusters =
   }
 
 type alias Ship =
-  { x           : Float
-  , y           : Float
-  , a           : Float
+  { a           : Float
 
-  --, local       : (Float, Float)
-  --, global      : (Float, Float)
+  , local       : Coordinate
+  , global      : Coordinate
 
   , vx          : Float
   , vy          : Float
   , va          : Float
 
   -- the g is for 'global'.
-  , gx          : Float
-  , gy          : Float
+  --, gx          : Float
+  --, gy          : Float
 
   , dir         : Float
 
-  , sector      : (Int, Int)
+  , sector      : Sector
   , quadrant    : Quadrant
 
-  , dimensions : (Int, Int)
+  , dimensions  : Dimensions
 
   , fuel        : Float
   , oxygen      : Float
@@ -239,12 +240,12 @@ frege t =
       else gy
 
   in
-  { x            = x
-  , y            = y
-  , a            = 0
-
-  --, local        = (x, y)
-  --, global       = (gx, gy)
+  --{ x            = x
+  --, y            = y
+  --, a            = 0
+  { a            = 0
+  , local        = (x, y)
+  , global       = (gx, gy)
 
   , vx           = 0
   , vy           = -400
@@ -253,8 +254,8 @@ frege t =
   , sector       = (setSector gx, setSector gy)
   , quadrant     = C
 
-  , gx           = gx
-  , gy           = gy
+  --, gx           = gx
+  --, gy           = gy
 
   , dir          = 0
 

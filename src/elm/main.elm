@@ -4,7 +4,7 @@ import Html.App         as App
 import Types            exposing (..)
 import Ports            exposing (..)
 import View             exposing (view)
-import Time             exposing (..)
+--import Time             exposing ()
 import Debug            exposing (log)
 import AnimationFrame   exposing (..)
 import ShipPosition     exposing (shipPosition)
@@ -17,6 +17,8 @@ import List             exposing (map)
 import Gravity          exposing (shipGravity, thingGravity)
 import CollisionHandle  exposing (collisionsHandle)
 import SetWeight        exposing (setWeight)
+
+
 
 main =
   App.program
@@ -63,8 +65,7 @@ update msg m =
       (collisionsHandle (dt / 120) m, Cmd.none)
 
     Refresh dt ->
-      if m.paused then
-        (m, Cmd.none)
+      if m.paused then (m, Cmd.none)
       else
         (refresh (dt / 120) m, Cmd.none)
 

@@ -2,18 +2,18 @@ module Gravity exposing (shipGravity, thingGravity)
 
 import Types            exposing (..)
 
-shipGravity : Float -> Ship -> Ship
+shipGravity : Time -> Ship -> Ship
 shipGravity dt s =
   let 
     (gvx, gvy) =
-      gravity dt (s.gx, s.gy)
+      gravity dt s.global
   in
   { s
   | vx = s.vx - gvx
   , vy = s.vy - gvy
   }
 
-thingGravity : Float -> Thing -> Thing
+thingGravity : Time -> Thing -> Thing
 thingGravity dt t =
   let 
     (gvx, gvy) = 
@@ -24,7 +24,7 @@ thingGravity dt t =
   , vy = t.vy - gvy
   }
 
-gravity : Float -> (Float, Float) -> (Float, Float)
+gravity : Time -> Coordinate -> Coordinate
 gravity dt (x,y) =
   let
     dist  = sqrt ((x - 60000)^2 + (y - 60000)^2)

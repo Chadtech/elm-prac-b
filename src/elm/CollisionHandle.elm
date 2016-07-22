@@ -2,7 +2,6 @@ module CollisionHandle exposing (collisionsHandle)
 
 import Collision exposing (..)
 import Types     exposing (..)
-import Time      exposing (Time)
 import List      exposing (map, concat, filter, length, foldr, append)
 import Debug     exposing (log)
 
@@ -75,10 +74,10 @@ shipsPolygon s =
   , (-w/2, h/2)
   ]
 
-rotatePoint : Float -> (Float, Float) -> (Float, Float)
+rotatePoint : Angle -> (Float, Angle) -> (Float, Angle)
 rotatePoint a' (r, a) = (r, a + a')
 
-rotatePoints : Float -> List Pt -> List (Float, Float)
+rotatePoints : Angle -> List Pt -> List Coordinate
 rotatePoints a' =
   map (toPolar >> rotatePoint a' >> fromPolar)
 
@@ -89,7 +88,7 @@ collisions dt s t =
       thingsPolygon
       dt
       (s.vx * dt, s.vy * dt)
-      (s.gx, s.gy)
+      s.global
       t
   in
   (collision 10
@@ -100,7 +99,7 @@ collisions dt s t =
 collisionAction : Thing -> Ship -> Ship
 collisionAction t s = t.onCollision s
 
-appendIfNotCollided : (Bool, Thing) -> List Thing -> List Thing
+appendIfNotCollided : (Bool, Thing) -> Things -> Things
 appendIfNotCollided (b, t) things =
   if b then things
   else append things [t]

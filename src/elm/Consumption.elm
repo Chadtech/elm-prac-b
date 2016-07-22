@@ -3,18 +3,18 @@ module Consumption exposing (consumption)
 import List  exposing (sum, product)
 import Types exposing (..)
 
-consumption : Float -> (Ship -> Ship)
+consumption : Time -> (Ship -> Ship)
 consumption dt = 
   consumeAir dt >> consumeFuel dt
 
-consumeAir : Float -> Ship -> Ship
+consumeAir : Time -> Ship -> Ship
 consumeAir dt s =
   if s.oxygen > 0 then
     { s | oxygen = s.oxygen - (dt / 100) }
   else 
     { s | oxygen = 0 }
 
-consumeFuel : Float -> Ship -> Ship
+consumeFuel : Time -> Ship -> Ship
 consumeFuel dt s =
   let
     t = s.thrusters

@@ -2,26 +2,25 @@ module ThingPosition exposing (thingPosition)
 
 import Types exposing (..)
 import Debug exposing (log)
-import Time  exposing (Time)
 
 modulo : Float -> Float
 modulo f =
   let f' = round f in
   (toFloat (f' % 600)) + (f - (toFloat f'))
 
-moduloClockwise : Angle -> Float
+moduloClockwise : Angle -> Angle
 moduloClockwise a =
   if a > 180 then
     moduloClockwise (a - 360)
   else a
 
-moduloCClockwise : Angle -> Float
+moduloCClockwise : Angle -> Angle
 moduloCClockwise a =
   if a < -180 then
     moduloCClockwise (a + 360)
   else a
 
-moduloAngle : Float -> Float
+moduloAngle : Angle -> Angle
 moduloAngle =
   moduloClockwise >> moduloCClockwise
 

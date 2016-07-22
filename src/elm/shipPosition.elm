@@ -3,7 +3,6 @@ module ShipPosition exposing (shipPosition)
 import Types exposing (..)
 import Debug exposing (log)
 
-
 modulo : Float -> Float
 modulo f =
   let 
@@ -12,19 +11,19 @@ modulo f =
   in
   if m > 300 then m - 600 else m
 
-moduloClockwise : Float -> Float
+moduloClockwise : Angle -> Angle
 moduloClockwise a =
   if a > 180 then
     moduloClockwise (a - 360)
   else a
 
-moduloCClockwise : Float -> Float
+moduloCClockwise : Angle -> Angle
 moduloCClockwise a =
   if a < -180 then
     moduloCClockwise (a + 360)
   else a
 
-moduloAngle : Float -> Float
+moduloAngle : Angle -> Angle
 moduloAngle =
   moduloClockwise >> moduloCClockwise
 
@@ -34,40 +33,47 @@ axisCrosses (p, f) =
     ((f // 600) + 1) * (abs f // f)
   else 0
 
-setQuadrant : (Float, Float) -> Quadrant
+setQuadrant : Coordinate -> Quadrant
 setQuadrant (x, y) =
   if x > 0 then
     if y > 0 then B else D
   else
     if y > 0 then A else C
 
-shipPosition : Float -> Ship -> Ship
+shipPosition : Time -> Ship -> Ship
 shipPosition dt s =
   let 
+    (gx, gy) = s.global
+    (lx, ly) = s.local
+
     vy' = dt * s.vy
     vx' = dt * s.vx
 
-    gym = modulo (s.gy + vy')
-    gxm = modulo (s.gx + vx')
+    gx' = gx + vx'
+    gy' = gy + vy'
+
+    gym = modulo gy'
+    gxm = modulo gx'
 
     (sx, sy) = s.sector
     
     dsy = 
       axisCrosses
-      (s.y, s.y + vy')
+      (ly, ly + vy')
     
     dsx = 
       axisCrosses
-      (s.x, s.x + vx')
+      (lx, lx + vx')
+
+    a' = 
+      moduloAngle (s.a + (dt * s.va))
   in
   { s
-  | x        = gxm
-  , y        = gym
-  , a        = moduloAngle (s.a + (dt * s.va))
+  | local    = (gxm, gym)
+  , global   = (gx', gy')
+  , a        = a'
   , sector   = (sx + dsx, sy + dsy)
   , quadrant = setQuadrant (gxm, gym)
-  , gx       = s.gx + (dt * s.vx)
-  , gy       = s.gy + (dt * s.vy)
   , dir      = atan2 s.vx s.vy
   } 
 

@@ -12158,11 +12158,7 @@ var _user$project$Types$Ship = function (a) {
 											return function (l) {
 												return function (m) {
 													return function (n) {
-														return function (o) {
-															return function (p) {
-																return {x: a, y: b, a: c, vx: d, vy: e, va: f, gx: g, gy: h, dir: i, sector: j, quadrant: k, dimensions: l, fuel: m, oxygen: n, weight: o, thrusters: p};
-															};
-														};
+														return {a: a, local: b, global: c, vx: d, vy: e, va: f, dir: g, sector: h, quadrant: i, dimensions: j, fuel: k, oxygen: l, weight: m, thrusters: n};
 													};
 												};
 											};
@@ -12195,9 +12191,9 @@ var _user$project$Types$frege = function (t) {
 	var gx = 44900;
 	var x = (_elm_lang$core$Native_Utils.cmp(gx, 600) > 0) ? (gx - 600) : gx;
 	return {
-		x: x,
-		y: y,
 		a: 0,
+		local: {ctor: '_Tuple2', _0: x, _1: y},
+		global: {ctor: '_Tuple2', _0: gx, _1: gy},
 		vx: 0,
 		vy: -400,
 		va: 0,
@@ -12207,8 +12203,6 @@ var _user$project$Types$frege = function (t) {
 			_1: _user$project$Types$setSector(gy)
 		},
 		quadrant: _user$project$Types$C,
-		gx: gx,
-		gy: gy,
 		dir: 0,
 		dimensions: {ctor: '_Tuple2', _0: 34, _1: 29},
 		fuel: 1005.1,
@@ -12452,7 +12446,7 @@ var _user$project$CollisionHandle$collisions = F3(
 			_user$project$CollisionHandle$thingsPolygon,
 			dt,
 			{ctor: '_Tuple2', _0: s.vx * dt, _1: s.vy * dt},
-			{ctor: '_Tuple2', _0: s.gx, _1: s.gy},
+			s.global,
 			t);
 		return {
 			ctor: '_Tuple2',
@@ -12831,8 +12825,11 @@ var _user$project$GameView$layerer = function (_p13) {
 };
 var _user$project$GameView$backdrop = F2(
 	function (s, area) {
-		var y$ = ((0 - s.gy) * 5.0e-3) + 275;
-		var x$ = ((0 - s.gx) * 5.0e-3) + 100;
+		var _p14 = s.global;
+		var x = _p14._0;
+		var y = _p14._1;
+		var x$ = ((0 - x) * 5.0e-3) + 100;
+		var y$ = ((0 - y) * 5.0e-3) + 275;
 		return _user$project$GameView$layerer(
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -12848,12 +12845,15 @@ var _user$project$GameView$backdrop = F2(
 	});
 var _user$project$GameView$positionArea = F2(
 	function (s, area$) {
+		var _p15 = s.local;
+		var x = _p15._0;
+		var y = _p15._1;
 		return _user$project$GameView$layerer(
 			_elm_lang$core$Native_List.fromArray(
 				[
 					A2(
 					_evancz$elm_graphics$Collage$move,
-					{ctor: '_Tuple2', _0: 0 - s.x, _1: 0 - s.y},
+					{ctor: '_Tuple2', _0: 0 - x, _1: 0 - y},
 					area$)
 				]));
 	});
@@ -12964,10 +12964,7 @@ var _user$project$Gravity$thingGravity = F2(
 	});
 var _user$project$Gravity$shipGravity = F2(
 	function (dt, s) {
-		var _p5 = A2(
-			_user$project$Gravity$gravity,
-			dt,
-			{ctor: '_Tuple2', _0: s.gx, _1: s.gy});
+		var _p5 = A2(_user$project$Gravity$gravity, dt, s.global);
 		var gvx = _p5._0;
 		var gvy = _p5._1;
 		return _elm_lang$core$Native_Utils.update(
@@ -13031,6 +13028,9 @@ _user$project$ReadOut_ops['.'] = F2(
 		return {ctor: '_Tuple2', _0: v0, _1: v1};
 	});
 var _user$project$ReadOut$content = function (s) {
+	var _p1 = s.global;
+	var x = _p1._0;
+	var y = _p1._1;
 	return _elm_lang$core$List$unzip(
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -13064,11 +13064,11 @@ var _user$project$ReadOut$content = function (s) {
 				A2(
 				_user$project$ReadOut_ops['.'],
 				': x',
-				A2(_user$project$ReadOut$nf, 8, s.gx)),
+				A2(_user$project$ReadOut$nf, 8, x)),
 				A2(
 				_user$project$ReadOut_ops['.'],
 				': y',
-				A2(_user$project$ReadOut$nf, 8, s.gy)),
+				A2(_user$project$ReadOut$nf, 8, y)),
 				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
 				A2(
 				_user$project$ReadOut_ops['.'],
@@ -13112,9 +13112,9 @@ var _user$project$ReadOut$column = function (list) {
 		list);
 };
 var _user$project$ReadOut$readOut = function (s) {
-	var _p1 = _user$project$ReadOut$content(s);
-	var keys = _p1._0;
-	var values = _p1._1;
+	var _p2 = _user$project$ReadOut$content(s);
+	var keys = _p2._0;
+	var values = _p2._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13157,7 +13157,9 @@ var _user$project$MiniMap$drawThing = function (t) {
 			A3(_user$project$MiniMap$image$, (t.sprite.w / 10) | 0, (t.sprite.h / 10) | 0, t.sprite.src)));
 };
 var _user$project$MiniMap$miniMap = function (m) {
-	var s = m.ship;
+	var _p0 = m.ship.global;
+	var x = _p0._0;
+	var y = _p0._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13189,8 +13191,8 @@ var _user$project$MiniMap$miniMap = function (m) {
 								_evancz$elm_graphics$Collage$move,
 								{
 									ctor: '_Tuple2',
-									_0: _user$project$MiniMap$p(s.gx),
-									_1: _user$project$MiniMap$p(s.gy)
+									_0: _user$project$MiniMap$p(x),
+									_1: _user$project$MiniMap$p(y)
 								},
 								A3(_user$project$MiniMap$image$, 5, 5, 'markers/ring')),
 								A2(
@@ -13244,8 +13246,11 @@ var _user$project$NavMarkers$nearEnough = F2(
 	});
 var _user$project$NavMarkers$drawThing = F2(
 	function (s, t) {
-		var dy = s.gy - t.gy;
-		var dx = s.gx - t.gx;
+		var _p2 = s.global;
+		var gx = _p2._0;
+		var gy = _p2._1;
+		var dx = gx - t.gx;
+		var dy = gy - t.gy;
 		var pos = A2(_elm_lang$core$Basics$atan2, dx, dy);
 		var x = _elm_lang$core$Basics$sin(pos) * (0 - _user$project$NavMarkers$r);
 		var y = _elm_lang$core$Basics$cos(pos) * (0 - _user$project$NavMarkers$r);
@@ -13265,14 +13270,12 @@ var _user$project$NavMarkers$drawThing = F2(
 					A2(_elm_lang$core$Basics_ops['++'], 'markers/thing-', markerType))));
 	});
 var _user$project$NavMarkers$thingMarkers = function (m) {
-	var s = m.ship;
 	return A2(
 		_elm_lang$core$List$map,
 		_user$project$NavMarkers$drawThing(m.ship),
 		A2(
 			_elm_lang$core$List$filter,
-			_user$project$NavMarkers$nearEnough(
-				{ctor: '_Tuple2', _0: s.gx, _1: s.gy}),
+			_user$project$NavMarkers$nearEnough(m.ship.global),
 			m.things));
 };
 var _user$project$NavMarkers$northMarker = A2(
@@ -13449,28 +13452,35 @@ var _user$project$ShipPosition$modulo = function (f) {
 };
 var _user$project$ShipPosition$shipPosition = F2(
 	function (dt, s) {
+		var a$ = _user$project$ShipPosition$moduloAngle(s.a + (dt * s.va));
 		var _p7 = s.sector;
 		var sx = _p7._0;
 		var sy = _p7._1;
 		var vx$ = dt * s.vx;
-		var gxm = _user$project$ShipPosition$modulo(s.gx + vx$);
-		var dsx = _user$project$ShipPosition$axisCrosses(
-			{ctor: '_Tuple2', _0: s.x, _1: s.x + vx$});
 		var vy$ = dt * s.vy;
-		var gym = _user$project$ShipPosition$modulo(s.gy + vy$);
+		var _p8 = s.local;
+		var lx = _p8._0;
+		var ly = _p8._1;
 		var dsy = _user$project$ShipPosition$axisCrosses(
-			{ctor: '_Tuple2', _0: s.y, _1: s.y + vy$});
+			{ctor: '_Tuple2', _0: ly, _1: ly + vy$});
+		var dsx = _user$project$ShipPosition$axisCrosses(
+			{ctor: '_Tuple2', _0: lx, _1: lx + vx$});
+		var _p9 = s.global;
+		var gx = _p9._0;
+		var gy = _p9._1;
+		var gx$ = gx + vx$;
+		var gxm = _user$project$ShipPosition$modulo(gx$);
+		var gy$ = gy + vy$;
+		var gym = _user$project$ShipPosition$modulo(gy$);
 		return _elm_lang$core$Native_Utils.update(
 			s,
 			{
-				x: gxm,
-				y: gym,
-				a: _user$project$ShipPosition$moduloAngle(s.a + (dt * s.va)),
+				local: {ctor: '_Tuple2', _0: gxm, _1: gym},
+				global: {ctor: '_Tuple2', _0: gx$, _1: gy$},
+				a: a$,
 				sector: {ctor: '_Tuple2', _0: sx + dsx, _1: sy + dsy},
 				quadrant: _user$project$ShipPosition$setQuadrant(
 					{ctor: '_Tuple2', _0: gxm, _1: gym}),
-				gx: s.gx + (dt * s.vx),
-				gy: s.gy + (dt * s.vy),
 				dir: A2(_elm_lang$core$Basics$atan2, s.vx, s.vy)
 			});
 	});
