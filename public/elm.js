@@ -12469,6 +12469,44 @@ var _user$project$Components$point = function (s) {
 			]));
 };
 
+var _user$project$Consumption$consumeFuel = F2(
+	function (dt, s) {
+		var t = s.thrusters;
+		var rate = t.boost ? 7 : 1;
+		var consumption = _elm_lang$core$List$product(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					1.0e-2,
+					rate,
+					dt,
+					_elm_lang$core$Basics$toFloat(
+					_elm_lang$core$List$sum(
+						_elm_lang$core$Native_List.fromArray(
+							[t.leftFront, t.leftSide, t.leftBack, t.rightFront, t.rightSide, t.rightBack, t.main * 5])))
+				]));
+		return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+			s,
+			{fuel: s.fuel - consumption}) : _elm_lang$core$Native_Utils.update(
+			s,
+			{fuel: 0});
+	});
+var _user$project$Consumption$consumeAir = F2(
+	function (dt, s) {
+		return (_elm_lang$core$Native_Utils.cmp(s.oxygen, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+			s,
+			{oxygen: s.oxygen - (dt / 100)}) : _elm_lang$core$Native_Utils.update(
+			s,
+			{oxygen: 0});
+	});
+var _user$project$Consumption$consumption = function (dt) {
+	return function (_p0) {
+		return A2(
+			_user$project$Consumption$consumeFuel,
+			dt,
+			A2(_user$project$Consumption$consumeAir, dt, _p0));
+	};
+};
+
 var _user$project$Pather$root$ = './';
 var _user$project$Pather$root = function (s) {
 	return A2(
@@ -12613,37 +12651,40 @@ var _user$project$DrawShip$rightSide = F2(
 				{ctor: '_Tuple2', _0: -25, _1: -1},
 				A2(_user$project$DrawShip$srcBlast, boost, 'blasts/strafe')));
 	});
-var _user$project$DrawShip$drawShip = function (t) {
-	var ship = _elm_lang$core$Native_List.fromArray(
-		[
-			A2(_user$project$DrawShip$mainThruster, t.main, t.boost),
-			A2(_user$project$DrawShip$leftFront, t.leftFront, t.boost),
-			A2(_user$project$DrawShip$leftBack, t.leftBack, t.boost),
-			A2(_user$project$DrawShip$leftSide, t.leftSide, t.boost),
-			A2(_user$project$DrawShip$rightFront, t.rightFront, t.boost),
-			A2(_user$project$DrawShip$rightBack, t.rightBack, t.boost),
-			A2(_user$project$DrawShip$rightSide, t.rightSide, t.boost),
-			_elm_lang$core$Native_List.fromArray(
+var _user$project$DrawShip$drawShip = F2(
+	function (enoughFuel, t) {
+		var shipSprite = _elm_lang$core$Native_List.fromArray(
 			[
 				A3(
 				_user$project$DrawShip$image$,
 				47,
 				47,
 				_user$project$Pather$root('ship/ship'))
-			])
-		]);
-	return _evancz$elm_graphics$Collage$toForm(
-		A3(
-			_evancz$elm_graphics$Collage$collage,
-			138,
-			138,
+			]);
+		var ship = enoughFuel ? _elm_lang$core$Native_List.fromArray(
+			[
+				A2(_user$project$DrawShip$mainThruster, t.main, t.boost),
+				A2(_user$project$DrawShip$leftFront, t.leftFront, t.boost),
+				A2(_user$project$DrawShip$leftBack, t.leftBack, t.boost),
+				A2(_user$project$DrawShip$leftSide, t.leftSide, t.boost),
+				A2(_user$project$DrawShip$rightFront, t.rightFront, t.boost),
+				A2(_user$project$DrawShip$rightBack, t.rightBack, t.boost),
+				A2(_user$project$DrawShip$rightSide, t.rightSide, t.boost),
+				shipSprite
+			]) : _elm_lang$core$Native_List.fromArray(
+			[shipSprite]);
+		return _evancz$elm_graphics$Collage$toForm(
 			A3(
-				_elm_lang$core$List$foldr,
-				_elm_lang$core$List$append,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				ship)));
-};
+				_evancz$elm_graphics$Collage$collage,
+				138,
+				138,
+				A3(
+					_elm_lang$core$List$foldr,
+					_elm_lang$core$List$append,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					ship)));
+	});
 
 var _user$project$GameView$image$ = F3(
 	function (w, h, src) {
@@ -12843,7 +12884,10 @@ var _user$project$GameView$gameView = function (m) {
 										_user$project$GameView$populateArea,
 										m,
 										_user$project$GameView$area(m))))),
-							_user$project$DrawShip$drawShip(m.ship.thrusters)
+							A2(
+							_user$project$DrawShip$drawShip,
+							_elm_lang$core$Native_Utils.cmp(m.ship.fuel, 0) > 0,
+							m.ship.thrusters)
 						]))
 				])));
 };
@@ -13593,13 +13637,15 @@ var _user$project$Thrust$thrustX = F2(
 	});
 var _user$project$Thrust$setThrust = function (s) {
 	var t = s.thrusters;
-	return _elm_lang$core$Native_Utils.update(
+	return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
 		s,
 		{
 			vy: s.vy + A2(_user$project$Thrust$thrustY, s.a, t),
 			vx: s.vx + A2(_user$project$Thrust$thrustX, s.a, t),
 			va: s.va + _user$project$Thrust$thrustA(t)
-		});
+		}) : _elm_lang$core$Native_Utils.update(
+		s,
+		{vy: s.vy, vx: s.vx, va: s.va});
 };
 
 var _user$project$Main$handleKeys = F2(
@@ -13624,37 +13670,6 @@ var _user$project$Main$refreshThing = function (dt) {
 			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
 	};
 };
-var _user$project$Main$consumeFuel = F2(
-	function (dt, s) {
-		var t = s.thrusters;
-		var rate = t.boost ? 7 : 1;
-		var consumption = _elm_lang$core$List$product(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					rate,
-					dt,
-					_elm_lang$core$Basics$toFloat(
-					_elm_lang$core$List$sum(
-						_elm_lang$core$Native_List.fromArray(
-							[t.leftFront, t.leftSide, t.leftBack, t.rightFront, t.rightSide, t.rightBack, t.main * 5])))
-				]));
-		return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
-			s,
-			{fuel: s.fuel - consumption}) : _elm_lang$core$Native_Utils.update(
-			s,
-			{
-				fuel: 0,
-				thrusters: {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false}
-			});
-	});
-var _user$project$Main$consumeAir = F2(
-	function (dt, s) {
-		return (_elm_lang$core$Native_Utils.cmp(s.oxygen, 0) > 0) ? _elm_lang$core$Native_Utils.update(
-			s,
-			{oxygen: s.oxygen - (dt / 100)}) : _elm_lang$core$Native_Utils.update(
-			s,
-			{oxygen: 0});
-	});
 var _user$project$Main$refresh = F2(
 	function (dt, m) {
 		return _elm_lang$core$Native_Utils.update(
@@ -13667,12 +13682,9 @@ var _user$project$Main$refresh = F2(
 						_user$project$Gravity$shipGravity,
 						dt,
 						A2(
-							_user$project$Main$consumeAir,
+							_user$project$Consumption$consumption,
 							dt,
-							A2(
-								_user$project$Main$consumeFuel,
-								dt,
-								_user$project$Thrust$setThrust(m.ship))))),
+							_user$project$Thrust$setThrust(m.ship)))),
 				things: A2(
 					_elm_lang$core$List$map,
 					_user$project$Main$refreshThing(dt),
@@ -13732,6 +13744,8 @@ Elm['CollisionHandle'] = Elm['CollisionHandle'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['CollisionHandle'], 'CollisionHandle', typeof _user$project$CollisionHandle$main === 'undefined' ? null : _user$project$CollisionHandle$main);
 Elm['Components'] = Elm['Components'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Components'], 'Components', typeof _user$project$Components$main === 'undefined' ? null : _user$project$Components$main);
+Elm['Consumption'] = Elm['Consumption'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Consumption'], 'Consumption', typeof _user$project$Consumption$main === 'undefined' ? null : _user$project$Consumption$main);
 Elm['DrawShip'] = Elm['DrawShip'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['DrawShip'], 'DrawShip', typeof _user$project$DrawShip$main === 'undefined' ? null : _user$project$DrawShip$main);
 Elm['GameView'] = Elm['GameView'] || {};

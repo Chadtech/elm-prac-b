@@ -7,19 +7,24 @@ import List             exposing (foldr, append)
 import Debug            exposing (log)
 import Pather           exposing (root)
 
-drawShip : Thrusters -> Form
-drawShip t =
+drawShip : Bool -> Thrusters -> Form
+drawShip enoughFuel t =
   let
+    shipSprite =
+      [ image' 47 47 (root "ship/ship") ]     
     ship =
-    [ mainThruster t.main       t.boost
-    , leftFront    t.leftFront  t.boost
-    , leftBack     t.leftBack   t.boost
-    , leftSide     t.leftSide   t.boost
-    , rightFront   t.rightFront t.boost
-    , rightBack    t.rightBack  t.boost
-    , rightSide    t.rightSide  t.boost
-    , [ image' 47 47 (root "ship/ship") ]
-    ]
+      if enoughFuel then
+      [ mainThruster t.main       t.boost
+      , leftFront    t.leftFront  t.boost
+      , leftBack     t.leftBack   t.boost
+      , leftSide     t.leftSide   t.boost
+      , rightFront   t.rightFront t.boost
+      , rightBack    t.rightBack  t.boost
+      , rightSide    t.rightSide  t.boost
+      , shipSprite
+      ]
+      else
+      [ shipSprite ]
   in
   ship
   |>foldr append []

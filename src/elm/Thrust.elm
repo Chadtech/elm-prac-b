@@ -7,11 +7,18 @@ import Debug exposing (log)
 setThrust : Ship -> Ship
 setThrust s =
   let t = s.thrusters in
-  { s
-  | vy = s.vy + (thrustY s.a t)
-  , vx = s.vx + (thrustX s.a t)
-  , va = s.va + (thrustA t)
-  }
+  if s.fuel > 0 then
+    { s
+    | vy = s.vy + (thrustY s.a t)
+    , vx = s.vx + (thrustX s.a t)
+    , va = s.va + (thrustA t)
+    }
+  else
+    { s
+    | vy = s.vy
+    , vx = s.vx
+    , va = s.va
+    } 
 
 weakPower : Float
 weakPower = 0.128

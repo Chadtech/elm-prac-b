@@ -20,7 +20,9 @@ gameView m =
       |>positionArea m.ship
       |>backdrop     m.ship
       |>rotateArea   m.ship
-    , drawShip       m.ship.thrusters 
+    , drawShip       
+        (m.ship.fuel > 0)
+        m.ship.thrusters
     ]
   ]|>toHtml
 
