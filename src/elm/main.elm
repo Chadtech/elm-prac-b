@@ -39,7 +39,9 @@ update msg m =
     Refresh dt ->
       if m.paused then (m, Cmd.none)
       else
-        (refresh (dt / 120) m, Cmd.none)
+        (refresh (dt / 240) m, Cmd.none)
+
+        --(refresh (dt / 120) m, Cmd.none)
 
     HandleKeys keyMsg ->
       let

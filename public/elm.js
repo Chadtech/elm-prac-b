@@ -12837,7 +12837,7 @@ var _user$project$Init$frege = function () {
 var _user$project$Init$giveOxygen = function (s) {
 	return _elm_lang$core$Native_Utils.update(
 		s,
-		{oxygen: s.oxygen + 500});
+		{oxygen: s.oxygen + 150});
 };
 var _user$project$Init$giveFuel = function (s) {
 	return _elm_lang$core$Native_Utils.update(
@@ -13827,7 +13827,7 @@ var _user$project$Main$update = F2(
 			case 'Refresh':
 				return m.paused ? {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none} : {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Refresh$refresh, _p0._0 / 120, m),
+					_0: A2(_user$project$Refresh$refresh, _p0._0 / 240, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'HandleKeys':

@@ -85,7 +85,7 @@ giveFuel s =
 
 giveOxygen : Ship -> Ship
 giveOxygen s =
-  { s | oxygen = s.oxygen + 500 }
+  { s | oxygen = s.oxygen + 150 }
 
 setSector : Float -> Int
 setSector f = (floor (f / 600))

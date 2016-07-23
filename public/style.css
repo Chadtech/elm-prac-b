@@ -1,6 +1,6 @@
 @font-face {
   font-family: HFNSS;
-  src: url("HFNSS.ttf");
+  src: url("https://cdn.rawgit.com/Chadtech-Online-1/Chadtech-Online-1.github.io/master/HFNSS.ttf");
 }
 ::-webkit-input-placeholder {
   color: #54574d;
@@ -28,6 +28,7 @@ body {
 .root {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 .main {
   margin: auto;
