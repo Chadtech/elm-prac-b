@@ -45,9 +45,12 @@ shipPosition dt s =
   let 
     (gx, gy) = s.global
     (lx, ly) = s.local
+    (vx, vy) = s.velocity
+    (sx, sy) = s.sector
+    (a, va)  = s.angle
 
-    vy' = dt * s.vy
-    vx' = dt * s.vx
+    vy' = dt * vy
+    vx' = dt * vx
 
     gx' = gx + vx'
     gy' = gy + vy'
@@ -55,7 +58,6 @@ shipPosition dt s =
     gym = modulo gy'
     gxm = modulo gx'
 
-    (sx, sy) = s.sector
     
     dsy = 
       axisCrosses
@@ -66,14 +68,14 @@ shipPosition dt s =
       (lx, lx + vx')
 
     a' = 
-      moduloAngle (s.a + (dt * s.va))
+      moduloAngle (a + (dt * va))
   in
   { s
   | local    = (gxm, gym)
   , global   = (gx', gy')
-  , a        = a'
+  , angle    = (a', va)
   , sector   = (sx + dsx, sy + dsy)
   , quadrant = setQuadrant (gxm, gym)
-  , dir      = atan2 s.vx s.vy
+  , dir      = atan2 vx vy
   } 
 

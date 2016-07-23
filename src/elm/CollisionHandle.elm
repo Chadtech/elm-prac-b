@@ -49,11 +49,16 @@ thingsPolygon dt (svx, svy) (sgx, sgy) t =
     (w', h') = t.dimensions 
     w = toFloat w'
     h = toFloat h'
+    (gx, gy) = t.global
+    (a, va) = t.angle
+    (vx, vy) = t.velocity
+    vx' = dt * vx
+    vy' = dt * vy
   in
   toPolygon
-  (t.a + t.va)
-  (t.gx - sgx + (t.vx * dt) - svx, t.gy - sgy + (t.vy * dt) - svy)
-  ((dt * t.vx) - svx, (dt * t.vy) - svy)
+  (a + va)
+  (gx - sgx + vx' - svx, gy - sgy + vy' - svy)
+  (vx' - svx, vy' - svy)
   [ (w/2, h/2)
   , (w/2, -h/2)
   , (-w/2, -h/2)
@@ -66,8 +71,9 @@ shipsPolygon s =
     (w', h') = s.dimensions 
     w = toFloat w'
     h = toFloat h'
+    (a, va) = s.angle
   in
-  rotatePoints (s.a + s.va)
+  rotatePoints (a + va)
   [ (w/2, h/2)
   , (w/2, -h/2)
   , (-w/2, -h/2)
@@ -84,10 +90,12 @@ rotatePoints a' =
 collisions : Float -> Ship -> Thing -> (Bool, Thing)
 collisions dt s t = 
   let
+    (svx, svy) = s.velocity
+
     thingsPolygon' = 
       thingsPolygon
       dt
-      (s.vx * dt, s.vy * dt)
+      (svx * dt, svy * dt)
       s.global
       t
   in

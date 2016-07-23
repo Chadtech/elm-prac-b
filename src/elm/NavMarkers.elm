@@ -22,11 +22,12 @@ navMarkers m =
       , directionMarker s.dir
       ]
       <|thingMarkers m
+    a = fst s.angle
   in
   markers
   |>collage 600 600
   |>toForm
-  |>rotate (degrees -s.a)
+  |>rotate (degrees -a)
   |>listify
   |>collage 600 600 
   |>container
@@ -59,14 +60,17 @@ thingMarkers m =
 drawThing : Ship -> Thing -> Form
 drawThing s t =
   let 
-    rvx = s.vx - t.vx
-    rvy = s.vy - t.vy
+    (svx, svy) = s.velocity
+    (tvx, tvy) = t.velocity
+    rvx = svx - tvx
+    rvy = svy - tvy
     rv  = sqrt ((rvx^2) + (rvy^2))
     dir = atan2 rvx rvy
 
-    (gx, gy) = s.global
-    dx   = gx - t.gx
-    dy   = gy - t.gy
+    (sgx, sgy) = s.global
+    (gx, gy)   = t.global
+    dx = sgx - gx
+    dy = sgy - gy
 
     pos  = atan2 dx dy
     x    = (sin pos) * -r
@@ -86,8 +90,9 @@ drawThing s t =
 nearEnough : Coordinate -> Thing -> Bool
 nearEnough (sgx,sgy) t =
   let
-    dx   = sgx - t.gx
-    dy   = sgy - t.gy
+    (gx, gy) = t.global
+    dx = sgx - gx
+    dy = sgy - gy
     dist = sqrt ((dx^2) + (dy^2))
   in 
   dist < 12000 && 300 < dist

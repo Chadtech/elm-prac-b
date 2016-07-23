@@ -51,7 +51,8 @@ positionArea s area' =
 
 rotateArea : Ship -> Form -> Form
 rotateArea s area' =
-  layerer [ rotate (degrees -s.a) area' ]
+  let a = fst s.angle in
+  layerer [ rotate (degrees -a) area' ]
 
 populateArea : Model-> Form -> Form
 populateArea m area =
@@ -71,13 +72,13 @@ populateArea m area =
 drawAt : (Coordinate, Thing) -> Form
 drawAt (p, t) =
   let
-    w      = t.sprite.w
-    h      = t.sprite.h
+    (w,h)  = t.sprite.dimensions
     sprite = t.sprite.src
+    a      = fst t.angle
   in
   image' w h sprite
   |>move p
-  |>rotate (degrees t.a)
+  |>rotate (degrees a)
 
 adjustPosition : (Quadrant, Sector) -> Thing -> (Coordinate, Thing) 
 adjustPosition (q,(sx,sy)) t = 
@@ -87,19 +88,21 @@ adjustPosition (q,(sx,sy)) t =
     sameX = tx - sx == 0
     sameY = ty - sy == 0
 
+    (x,y) = t.local
+
     x' =
       case q of
-        A -> if sameX then t.x - 600 else t.x
-        B -> if sameX then t.x else t.x - 600
-        C -> if sameX then t.x - 600 else t.x
-        D -> if sameX then t.x else t.x - 600
+        A -> if sameX then x - 600 else x
+        B -> if sameX then x else x - 600
+        C -> if sameX then x - 600 else x
+        D -> if sameX then x else x - 600
 
     y' = 
       case q of
-        A -> if sameY then t.y else t.y - 600
-        B -> if sameY then t.y else t.y - 600
-        C -> if sameY then t.y - 600 else t.y
-        D -> if sameY then t.y - 600 else t.y
+        A -> if sameY then y else y - 600
+        B -> if sameY then y else y - 600
+        C -> if sameY then y - 600 else y
+        D -> if sameY then y - 600 else y
 
   in ((x', y'), t)
 

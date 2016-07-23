@@ -4,7 +4,7 @@ import Html.App         as App
 import Types            exposing (..)
 import Ports            exposing (..)
 import View             exposing (view)
---import Time             exposing ()
+import Init             exposing (initModel)
 import Debug            exposing (log)
 import AnimationFrame   exposing (..)
 import ShipPosition     exposing (shipPosition)
@@ -17,7 +17,6 @@ import List             exposing (map)
 import Gravity          exposing (shipGravity, thingGravity)
 import CollisionHandle  exposing (collisionsHandle)
 import SetWeight        exposing (setWeight)
-
 
 
 main =

@@ -27,16 +27,20 @@ column list =
 
 content : Ship -> (List String, List String)
 content s =
-  let (x,y) = s.global in
+  let 
+    (x,y)    = s.global 
+    (a, va)  = s.angle
+    (vx, vy) = s.velocity
+  in
   unzip
   [ "--------"  . "--------"
   , "STATUS"    . "NOMINAL"
   , "--------"  . "--------"
-  , "ang vel "  . ((nf 4 (-s.va * (10/9))) ++ " rpm")
-  , "velocity"  . nf 8 ((sqrt ((s.vx^2) + (s.vy^2)))/10)
+  , "ang vel "  . ((nf 4 (-va * (10/9))) ++ " rpm")
+  , "velocity"  . nf 8 ((sqrt (vx^2 + vy^2))/10)
   , "dir"       . (angleFormat (s.dir / pi * 200))
   , "position"  . "--------"
-  , ": angle"   . (angleFormat (-s.a / 0.9))
+  , ": angle"   . (angleFormat (-a / 0.9))
   , ": x"       . nf 8 x
   , ": y"       . nf 8 y
   , "--------"  . "--------"

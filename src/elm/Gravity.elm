@@ -1,28 +1,24 @@
 module Gravity exposing (shipGravity, thingGravity)
 
-import Types            exposing (..)
+import Types exposing (..)
 
 shipGravity : Time -> Ship -> Ship
 shipGravity dt s =
   let 
+    (vx, vy)   = s.velocity
     (gvx, gvy) =
       gravity dt s.global
   in
-  { s
-  | vx = s.vx - gvx
-  , vy = s.vy - gvy
-  }
+  { s | velocity = (vx - gvx, vy - gvy) }
 
 thingGravity : Time -> Thing -> Thing
 thingGravity dt t =
   let 
     (gvx, gvy) = 
-      gravity dt (t.gx, t.gy) 
+      gravity dt t.global
+    (vx, vy) = t.velocity
   in
-  { t
-  | vx = t.vx - gvx
-  , vy = t.vy - gvy
-  }
+  { t | velocity = (vx - gvx, vy - gvy) }
 
 gravity : Time -> Coordinate -> Coordinate
 gravity dt (x,y) =

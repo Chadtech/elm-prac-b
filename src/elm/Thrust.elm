@@ -8,20 +8,21 @@ setThrust : Ship -> Ship
 setThrust s =
   let 
     t = s.thrusters 
+    (a, va)  = s.angle
+    (vx, vy) = s.velocity
     weightFactor = s.weight / 526
+
+    dvx = (thrustX a t) / weightFactor
+    dvy = (thrustY a t) / weightFactor
+    dva = (thrustA t) / weightFactor
+
   in
   if s.fuel > 0 then
   { s
-  | vy = s.vy + ((thrustY s.a t) / weightFactor)
-  , vx = s.vx + ((thrustX s.a t) / weightFactor) 
-  , va = s.va + ((thrustA t) / weightFactor) 
+  | velocity = (vx + dvx, vy + dvy)
+  , angle    = (a, va + dva)
   }
-  else
-  { s
-  | vy = s.vy
-  , vx = s.vx
-  , va = s.va
-  } 
+  else s
 
 weakPower : Float
 weakPower = 0.128

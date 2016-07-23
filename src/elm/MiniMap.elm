@@ -35,10 +35,15 @@ miniMap m =
 
 drawThing : Thing -> Form
 drawThing t =
+  let 
+    (x,y) = t.global 
+    (w,h) = t.sprite.dimensions
+    a = fst t.angle
+  in
   t.sprite.src
-  |>image' (t.sprite.w // 10) (t.sprite.h // 10)
-  |>rotate (degrees t.a)
-  |>move (p t.gx, p t.gy)
+  |>image' (w // 10) (h // 10)
+  |>rotate (degrees a)
+  |>move (p x, p y)
 
 -- position in map 
 p : Float -> Float

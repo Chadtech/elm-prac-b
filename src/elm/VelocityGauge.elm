@@ -15,7 +15,8 @@ import Debug exposing (log)
 velocityGauge : Ship -> Html Msg
 velocityGauge s =
   let
-    v = (sqrt ((s.vx^2) + (s.vy^2)))/10
+    (vx, vy) = s.velocity
+    v = (sqrt (vx^2 + vy^2))/10
     urgency = 
       if 15 > v then ""
       else

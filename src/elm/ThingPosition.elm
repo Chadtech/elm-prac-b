@@ -30,19 +30,22 @@ getSector f = floor (f / 600)
 thingPosition : Time -> Thing -> Thing
 thingPosition dt t =
   let
-    y' = t.gy + (dt * t.vy)
-    x' = t.gx + (dt * t.vx)
-    a' = t.a + (dt * t.va)
+    (x,y)    = t.global
+    (vx, vy) = t.velocity
+    (a, va)  = t.angle
+    vy'   = dt * vy
+    vx'   = dt * vx
+    y'    = y + vy'
+    x'    = x + vx'
+    a'    = a + (dt * va)
 
     ym = modulo y'
     xm = modulo x'
 
   in
   { t
-  | x = xm
-  , y = ym
-  , a = moduloAngle a'
+  | local  = (xm, ym)
+  , global = (x + vx', y + vy')
+  , angle  = (moduloAngle a', va)
   , sector = (getSector x', getSector y')
-  , gx     = t.gx + (dt * t.vx)
-  , gy     = t.gy + (dt * t.vy)
   }
