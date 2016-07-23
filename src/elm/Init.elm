@@ -6,7 +6,7 @@ import Keyboard.Extra   as Keyboard
 
 initModel : Model
 initModel = 
-  { ship   = frege thrusters
+  { ship   = frege
   , keys   = fst Keyboard.init
   , things = 
     --[ o2box (45000, 60000) (0, -400) 30 ]
@@ -87,23 +87,11 @@ giveOxygen : Ship -> Ship
 giveOxygen s =
   { s | oxygen = s.oxygen + 500 }
 
-thrusters : Thrusters
-thrusters = 
-  { leftFront  = 0
-  , leftSide   = 0
-  , leftBack   = 0
-  , main       = 0
-  , rightFront = 0
-  , rightSide  = 0
-  , rightBack  = 0
-  , boost      = False
-  }
-
 setSector : Float -> Int
 setSector f = (floor (f / 600))
 
-frege : Thrusters -> Ship
-frege t = 
+frege : Ship
+frege = 
   let
     gx = 44900
     gy = 60000
@@ -117,21 +105,30 @@ frege t =
       else gy
 
   in
-  { angle        = (0, 0)
-  , local        = (x, y)
-  , global       = (gx, gy)
-  , velocity     = (0, -400)
+  { angle      = (0, 0)
+  , local      = (x, y)
+  , global     = (gx, gy)
+  , velocity   = (0, -400)
 
-  , sector       = (setSector gx, setSector gy)
-  , quadrant     = C
+  , sector     = (setSector gx, setSector gy)
+  , quadrant   = C
 
-  , dir          = 0
+  , dir        = 0
 
-  , dimensions   = (34, 29)
+  , dimensions = (34, 29)
 
-  , fuel         = 1005.1
-  , oxygen       = 63
-  , weight       = 852
+  , fuel       = 1005.1
+  , oxygen     = 63
+  , weight     = 852
 
-  , thrusters    = t
+  , thrusters  =
+    { leftFront  = 0
+    , leftSide   = 0
+    , leftBack   = 0
+    , main       = 0
+    , rightFront = 0
+    , rightSide  = 0
+    , rightBack  = 0
+    , boost      = False
+    }
   }

@@ -20,6 +20,5 @@ setThrusters keys =
   , rightFront = set' K.CharN
   , rightSide  = set' K.CharK
   , rightBack  = set' K.CharU
-  , boost = 
-      isPressed K.Shift keys
+  , boost = isPressed K.Shift keys
   }

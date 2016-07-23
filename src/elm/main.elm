@@ -7,17 +7,11 @@ import View             exposing (view)
 import Init             exposing (initModel)
 import Debug            exposing (log)
 import AnimationFrame   exposing (..)
-import ShipPosition     exposing (shipPosition)
-import ThingPosition    exposing (thingPosition)
-import Consumption      exposing (consumption)
+import Keyboard.Extra   exposing (isPressed)
 import Keyboard.Extra   as Keyboard
 import ThrusterState    exposing (setThrusters)
-import Thrust           exposing (setThrust)
-import List             exposing (map)
-import Gravity          exposing (shipGravity, thingGravity)
 import CollisionHandle  exposing (collisionsHandle)
-import SetWeight        exposing (setWeight)
-
+import Refresh          exposing (refresh)
 
 main =
   App.program
@@ -34,27 +28,6 @@ subscriptions model =
     , diffs Refresh
     , diffs CheckForCollisions
     ]
-
-refresh : Time -> Model -> Model
-refresh dt m =
-  { m 
-  | ship = refreshShip dt m.ship
-  , things = 
-      m.things
-      |>map (refreshThing dt)
-  }
-
-refreshShip : Time -> (Ship -> Ship)
-refreshShip dt =
-  consumption dt
-  >>setWeight
-  >>setThrust
-  >>shipGravity dt
-  >>shipPosition dt
-
-refreshThing : Time -> (Thing -> Thing)
-refreshThing dt =
-  thingPosition dt >> thingGravity dt
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg m =
@@ -84,11 +57,9 @@ handleKeys m keys =
   { m
   | keys = keys
   , ship = 
-    { s 
-    | thrusters = setThrusters keys
-    }
+    { s | thrusters = setThrusters keys }
   , paused = 
-      if Keyboard.isPressed Keyboard.CharP keys then
+      if isPressed Keyboard.CharP keys then
         not m.paused
       else
         m.paused

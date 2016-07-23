@@ -12810,7 +12810,7 @@ var _user$project$Gravity$shipGravity = F2(
 var _user$project$Init$setSector = function (f) {
 	return _elm_lang$core$Basics$floor(f / 600);
 };
-var _user$project$Init$frege = function (t) {
+var _user$project$Init$frege = function () {
 	var gy = 60000;
 	var y = (_elm_lang$core$Native_Utils.cmp(gy, 600) > 0) ? (gy - 600) : gy;
 	var gx = 44900;
@@ -12831,10 +12831,9 @@ var _user$project$Init$frege = function (t) {
 		fuel: 1005.1,
 		oxygen: 63,
 		weight: 852,
-		thrusters: t
+		thrusters: {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false}
 	};
-};
-var _user$project$Init$thrusters = {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false};
+}();
 var _user$project$Init$giveOxygen = function (s) {
 	return _elm_lang$core$Native_Utils.update(
 		s,
@@ -12894,7 +12893,7 @@ var _user$project$Init$o2box = F3(
 		};
 	});
 var _user$project$Init$initModel = {
-	ship: _user$project$Init$frege(_user$project$Init$thrusters),
+	ship: _user$project$Init$frege,
 	keys: _elm_lang$core$Basics$fst(_ohanhi$keyboard_extra$Keyboard_Extra$init),
 	things: _elm_lang$core$Native_List.fromArray(
 		[
@@ -13451,6 +13450,151 @@ var _user$project$View$view = function (model) {
 			]));
 };
 
+var _user$project$ThrusterState$set = F2(
+	function (m, k) {
+		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, k, m) ? 1 : 0;
+	});
+var _user$project$ThrusterState$setThrusters = function (keys) {
+	var set$ = _user$project$ThrusterState$set(keys);
+	return {
+		leftFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharC),
+		leftSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharS),
+		leftBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharE),
+		main: set$(_ohanhi$keyboard_extra$Keyboard_Extra$Space),
+		rightFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharN),
+		rightSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharK),
+		rightBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharU),
+		boost: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$Shift, keys)
+	};
+};
+
+var _user$project$SetWeight$setWeight = function (s) {
+	return _elm_lang$core$Native_Utils.update(
+		s,
+		{weight: ((s.fuel / 1.7) + (s.oxygen * 3)) + 263});
+};
+
+var _user$project$Thrust$s = function (_p0) {
+	return _elm_lang$core$Basics$sin(
+		_elm_lang$core$Basics$degrees(_p0));
+};
+var _user$project$Thrust$c = function (_p1) {
+	return _elm_lang$core$Basics$cos(
+		_elm_lang$core$Basics$degrees(_p1));
+};
+var _user$project$Thrust$getThrust = F2(
+	function (b, list) {
+		return (b ? 5 : 1) * _elm_lang$core$List$sum(list);
+	});
+var _user$project$Thrust$weakPower = 0.128;
+var _user$project$Thrust$mainPower = _user$project$Thrust$weakPower * 7;
+var _user$project$Thrust$rotatePower = function (i) {
+	return (_elm_lang$core$Basics$toFloat(i) * _user$project$Thrust$weakPower) * 0.3;
+};
+var _user$project$Thrust$thrustA = function (t) {
+	return A2(
+		_user$project$Thrust$getThrust,
+		t.boost,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				0 - _user$project$Thrust$rotatePower(t.leftBack),
+				_user$project$Thrust$rotatePower(t.leftFront),
+				_user$project$Thrust$rotatePower(t.rightBack),
+				0 - _user$project$Thrust$rotatePower(t.rightFront)
+			]));
+};
+var _user$project$Thrust$wp = F2(
+	function (f, i) {
+		return (_user$project$Thrust$weakPower * f) * _elm_lang$core$Basics$toFloat(i);
+	});
+var _user$project$Thrust$thrustY = F2(
+	function (a, t) {
+		return A2(
+			_user$project$Thrust$getThrust,
+			t.boost,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					(_user$project$Thrust$mainPower * _user$project$Thrust$c(a)) * _elm_lang$core$Basics$toFloat(t.main),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.leftBack),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.leftFront),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.rightBack),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.rightFront),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.leftSide),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.rightSide)
+				]));
+	});
+var _user$project$Thrust$thrustX = F2(
+	function (a, t) {
+		return A2(
+			_user$project$Thrust$getThrust,
+			t.boost,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					((0 - _user$project$Thrust$mainPower) * _user$project$Thrust$s(a)) * _elm_lang$core$Basics$toFloat(t.main),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.leftBack),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.leftFront),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.rightBack),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$s(a),
+					t.rightFront),
+					0 - A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.leftSide),
+					A2(
+					_user$project$Thrust$wp,
+					_user$project$Thrust$c(a),
+					t.rightSide)
+				]));
+	});
+var _user$project$Thrust$setThrust = function (s) {
+	var weightFactor = s.weight / 526;
+	var _p2 = s.velocity;
+	var vx = _p2._0;
+	var vy = _p2._1;
+	var _p3 = s.angle;
+	var a = _p3._0;
+	var va = _p3._1;
+	var t = s.thrusters;
+	var dvx = A2(_user$project$Thrust$thrustX, a, t) / weightFactor;
+	var dvy = A2(_user$project$Thrust$thrustY, a, t) / weightFactor;
+	var dva = _user$project$Thrust$thrustA(t) / weightFactor;
+	return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+		s,
+		{
+			velocity: {ctor: '_Tuple2', _0: vx + dvx, _1: vy + dvy},
+			angle: {ctor: '_Tuple2', _0: a, _1: va + dva}
+		}) : s;
+};
+
 var _user$project$ShipPosition$setQuadrant = function (_p0) {
 	var _p1 = _p0;
 	var _p2 = _p1._1;
@@ -13610,150 +13754,39 @@ var _user$project$ThingPosition$thingPosition = F2(
 			});
 	});
 
-var _user$project$ThrusterState$set = F2(
-	function (m, k) {
-		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, k, m) ? 1 : 0;
-	});
-var _user$project$ThrusterState$setThrusters = function (keys) {
-	var set$ = _user$project$ThrusterState$set(keys);
-	return {
-		leftFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharC),
-		leftSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharS),
-		leftBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharE),
-		main: set$(_ohanhi$keyboard_extra$Keyboard_Extra$Space),
-		rightFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharN),
-		rightSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharK),
-		rightBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharU),
-		boost: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$Shift, keys)
+var _user$project$Refresh$refreshThing = function (dt) {
+	return function (_p0) {
+		return A2(
+			_user$project$Gravity$thingGravity,
+			dt,
+			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
 	};
 };
-
-var _user$project$Thrust$s = function (_p0) {
-	return _elm_lang$core$Basics$sin(
-		_elm_lang$core$Basics$degrees(_p0));
-};
-var _user$project$Thrust$c = function (_p1) {
-	return _elm_lang$core$Basics$cos(
-		_elm_lang$core$Basics$degrees(_p1));
-};
-var _user$project$Thrust$getThrust = F2(
-	function (b, list) {
-		return (b ? 5 : 1) * _elm_lang$core$List$sum(list);
-	});
-var _user$project$Thrust$weakPower = 0.128;
-var _user$project$Thrust$mainPower = _user$project$Thrust$weakPower * 7;
-var _user$project$Thrust$rotatePower = function (i) {
-	return (_elm_lang$core$Basics$toFloat(i) * _user$project$Thrust$weakPower) * 0.3;
-};
-var _user$project$Thrust$thrustA = function (t) {
-	return A2(
-		_user$project$Thrust$getThrust,
-		t.boost,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				0 - _user$project$Thrust$rotatePower(t.leftBack),
-				_user$project$Thrust$rotatePower(t.leftFront),
-				_user$project$Thrust$rotatePower(t.rightBack),
-				0 - _user$project$Thrust$rotatePower(t.rightFront)
-			]));
-};
-var _user$project$Thrust$wp = F2(
-	function (f, i) {
-		return (_user$project$Thrust$weakPower * f) * _elm_lang$core$Basics$toFloat(i);
-	});
-var _user$project$Thrust$thrustY = F2(
-	function (a, t) {
+var _user$project$Refresh$refreshShip = function (dt) {
+	return function (_p1) {
 		return A2(
-			_user$project$Thrust$getThrust,
-			t.boost,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					(_user$project$Thrust$mainPower * _user$project$Thrust$c(a)) * _elm_lang$core$Basics$toFloat(t.main),
-					A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$c(a),
-					t.leftBack),
-					0 - A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$c(a),
-					t.leftFront),
-					A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$c(a),
-					t.rightBack),
-					0 - A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$c(a),
-					t.rightFront),
-					0 - A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$s(a),
-					t.leftSide),
-					A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$s(a),
-					t.rightSide)
-				]));
-	});
-var _user$project$Thrust$thrustX = F2(
-	function (a, t) {
-		return A2(
-			_user$project$Thrust$getThrust,
-			t.boost,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					((0 - _user$project$Thrust$mainPower) * _user$project$Thrust$s(a)) * _elm_lang$core$Basics$toFloat(t.main),
-					0 - A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$s(a),
-					t.leftBack),
-					A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$s(a),
-					t.leftFront),
-					0 - A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$s(a),
-					t.rightBack),
-					A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$s(a),
-					t.rightFront),
-					0 - A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$c(a),
-					t.leftSide),
-					A2(
-					_user$project$Thrust$wp,
-					_user$project$Thrust$c(a),
-					t.rightSide)
-				]));
-	});
-var _user$project$Thrust$setThrust = function (s) {
-	var weightFactor = s.weight / 526;
-	var _p2 = s.velocity;
-	var vx = _p2._0;
-	var vy = _p2._1;
-	var _p3 = s.angle;
-	var a = _p3._0;
-	var va = _p3._1;
-	var t = s.thrusters;
-	var dvx = A2(_user$project$Thrust$thrustX, a, t) / weightFactor;
-	var dvy = A2(_user$project$Thrust$thrustY, a, t) / weightFactor;
-	var dva = _user$project$Thrust$thrustA(t) / weightFactor;
-	return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
-		s,
-		{
-			velocity: {ctor: '_Tuple2', _0: vx + dvx, _1: vy + dvy},
-			angle: {ctor: '_Tuple2', _0: a, _1: va + dva}
-		}) : s;
+			_user$project$ShipPosition$shipPosition,
+			dt,
+			A2(
+				_user$project$Gravity$shipGravity,
+				dt,
+				_user$project$Thrust$setThrust(
+					_user$project$SetWeight$setWeight(
+						A2(_user$project$Consumption$consumption, dt, _p1)))));
+	};
 };
-
-var _user$project$SetWeight$setWeight = function (s) {
-	return _elm_lang$core$Native_Utils.update(
-		s,
-		{weight: ((s.fuel / 1.7) + (s.oxygen * 3)) + 263});
-};
+var _user$project$Refresh$refresh = F2(
+	function (dt, m) {
+		return _elm_lang$core$Native_Utils.update(
+			m,
+			{
+				ship: A2(_user$project$Refresh$refreshShip, dt, m.ship),
+				things: A2(
+					_elm_lang$core$List$map,
+					_user$project$Refresh$refreshThing(dt),
+					m.things)
+			});
+	});
 
 var _user$project$Main$handleKeys = F2(
 	function (m, keys) {
@@ -13770,59 +13803,26 @@ var _user$project$Main$handleKeys = F2(
 				paused: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$CharP, keys) ? _elm_lang$core$Basics$not(m.paused) : m.paused
 			});
 	});
-var _user$project$Main$refreshThing = function (dt) {
-	return function (_p0) {
-		return A2(
-			_user$project$Gravity$thingGravity,
-			dt,
-			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
-	};
-};
-var _user$project$Main$refreshShip = function (dt) {
-	return function (_p1) {
-		return A2(
-			_user$project$ShipPosition$shipPosition,
-			dt,
-			A2(
-				_user$project$Gravity$shipGravity,
-				dt,
-				_user$project$Thrust$setThrust(
-					_user$project$SetWeight$setWeight(
-						A2(_user$project$Consumption$consumption, dt, _p1)))));
-	};
-};
-var _user$project$Main$refresh = F2(
-	function (dt, m) {
-		return _elm_lang$core$Native_Utils.update(
-			m,
-			{
-				ship: A2(_user$project$Main$refreshShip, dt, m.ship),
-				things: A2(
-					_elm_lang$core$List$map,
-					_user$project$Main$refreshThing(dt),
-					m.things)
-			});
-	});
 var _user$project$Main$update = F2(
 	function (msg, m) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
 			case 'CheckForCollisions':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$CollisionHandle$collisionsHandle, _p2._0 / 120, m),
+					_0: A2(_user$project$CollisionHandle$collisionsHandle, _p0._0 / 120, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Refresh':
 				return m.paused ? {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none} : {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$refresh, _p2._0 / 120, m),
+					_0: A2(_user$project$Refresh$refresh, _p0._0 / 120, m),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'HandleKeys':
-				var _p3 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p2._0, m.keys);
-				var keys = _p3._0;
-				var kCmd = _p3._1;
+				var _p1 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, m.keys);
+				var keys = _p1._0;
+				var kCmd = _p1._1;
 				return {
 					ctor: '_Tuple2',
 					_0: A2(_user$project$Main$handleKeys, m, keys),
@@ -13890,6 +13890,8 @@ Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['ReadOut'] = Elm['ReadOut'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ReadOut'], 'ReadOut', typeof _user$project$ReadOut$main === 'undefined' ? null : _user$project$ReadOut$main);
+Elm['Refresh'] = Elm['Refresh'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Refresh'], 'Refresh', typeof _user$project$Refresh$main === 'undefined' ? null : _user$project$Refresh$main);
 Elm['RightHud'] = Elm['RightHud'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['RightHud'], 'RightHud', typeof _user$project$RightHud$main === 'undefined' ? null : _user$project$RightHud$main);
 Elm['SetWeight'] = Elm['SetWeight'] || {};
