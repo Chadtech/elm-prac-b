@@ -61,7 +61,7 @@ fuelTank (gx, gy) (vx, vy) va =
     sy = (round gy) // 600
     x  = (toFloat (sx % 600)) + gx - (toFloat sx)
     y  = (toFloat (sy % 600)) + gy - (toFloat sy)
-    dimensions = (20, 20)
+    dimensions = (20, 30)
   in
   { angle    = (0, va)
   , velocity = (vx, vy)

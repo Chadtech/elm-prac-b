@@ -20,7 +20,8 @@ view model =
     [ class "main" ]
     [ div
       [ class "left-hud" ]
-      [ keyDiagram ]
+      [ keyDiagram
+      , div [ class "pause" ] [ point "P to pause"] ]
     , div 
       [ class "game-view" ] 
       [ gameView model

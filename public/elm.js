@@ -12850,7 +12850,7 @@ var _user$project$Init$fuelTank = F3(
 		var _p5 = _p2._1;
 		var _p4 = _p2._0;
 		var _p3 = _p0;
-		var dimensions = {ctor: '_Tuple2', _0: 20, _1: 20};
+		var dimensions = {ctor: '_Tuple2', _0: 20, _1: 30};
 		var sy = (_elm_lang$core$Basics$round(_p5) / 600) | 0;
 		var y = (_elm_lang$core$Basics$toFloat(
 			A2(_elm_lang$core$Basics_ops['%'], sy, 600)) + _p5) - _elm_lang$core$Basics$toFloat(sy);
@@ -13431,7 +13431,19 @@ var _user$project$View$view = function (model) {
 								_elm_lang$html$Html_Attributes$class('left-hud')
 							]),
 						_elm_lang$core$Native_List.fromArray(
-							[_user$project$KeyDiagram$keyDiagram])),
+							[
+								_user$project$KeyDiagram$keyDiagram,
+								A2(
+								_elm_lang$html$Html$div,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$class('pause')
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_user$project$Components$point('P to pause')
+									]))
+							])),
 						A2(
 						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(

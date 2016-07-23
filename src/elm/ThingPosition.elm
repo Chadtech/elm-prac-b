@@ -33,15 +33,14 @@ thingPosition dt t =
     (x,y)    = t.global
     (vx, vy) = t.velocity
     (a, va)  = t.angle
-    vy'   = dt * vy
-    vx'   = dt * vx
-    y'    = y + vy'
-    x'    = x + vx'
-    a'    = a + (dt * va)
+    vy'      = dt * vy
+    vx'      = dt * vx
+    y'       = y + vy'
+    x'       = x + vx'
+    a'       = a + (dt * va)
 
     ym = modulo y'
     xm = modulo x'
-
   in
   { t
   | local  = (xm, ym)
