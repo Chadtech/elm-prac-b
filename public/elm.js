@@ -13390,7 +13390,17 @@ var _user$project$VelocityGauge$velocityGauge = function (s) {
 			]));
 };
 
-var _user$project$View$pausedNotice = function (paused) {
+var _user$project$PauseView$pauseSign = A2(
+	_elm_lang$html$Html$div,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('pause')
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_user$project$Components$point('P to pause')
+		]));
+var _user$project$PauseView$pausedNotice = function (paused) {
 	return paused ? A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13401,12 +13411,13 @@ var _user$project$View$pausedNotice = function (paused) {
 			[
 				_user$project$Components$point('PAUSED')
 			])) : A2(
-		_elm_lang$html$Html$div,
+		_elm_lang$html$Html$span,
 		_elm_lang$core$Native_List.fromArray(
 			[]),
 		_elm_lang$core$Native_List.fromArray(
 			[]));
 };
+
 var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -13431,19 +13442,7 @@ var _user$project$View$view = function (model) {
 								_elm_lang$html$Html_Attributes$class('left-hud')
 							]),
 						_elm_lang$core$Native_List.fromArray(
-							[
-								_user$project$KeyDiagram$keyDiagram,
-								A2(
-								_elm_lang$html$Html$div,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html_Attributes$class('pause')
-									]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_user$project$Components$point('P to pause')
-									]))
-							])),
+							[_user$project$KeyDiagram$keyDiagram, _user$project$PauseView$pauseSign])),
 						A2(
 						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(
@@ -13455,7 +13454,7 @@ var _user$project$View$view = function (model) {
 								_user$project$GameView$gameView(model),
 								_user$project$NavMarkers$navMarkers(model),
 								_user$project$VelocityGauge$velocityGauge(model.ship),
-								_user$project$View$pausedNotice(model.paused)
+								_user$project$PauseView$pausedNotice(model.paused)
 							])),
 						_user$project$RightHud$rightHud(model)
 					]))
@@ -13898,6 +13897,8 @@ Elm['NavMarkers'] = Elm['NavMarkers'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['NavMarkers'], 'NavMarkers', typeof _user$project$NavMarkers$main === 'undefined' ? null : _user$project$NavMarkers$main);
 Elm['Pather'] = Elm['Pather'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Pather'], 'Pather', typeof _user$project$Pather$main === 'undefined' ? null : _user$project$Pather$main);
+Elm['PauseView'] = Elm['PauseView'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['PauseView'], 'PauseView', typeof _user$project$PauseView$main === 'undefined' ? null : _user$project$PauseView$main);
 Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['ReadOut'] = Elm['ReadOut'] || {};

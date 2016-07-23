@@ -9,7 +9,7 @@ import RightHud         exposing (rightHud)
 import NavMarkers       exposing (navMarkers)
 import VelocityGauge    exposing (velocityGauge)
 import KeyDiagram       exposing (keyDiagram)
-import Components       exposing (point)
+import PauseView        exposing (pausedNotice, pauseSign)
 
 
 view : Model -> Html Msg
@@ -21,7 +21,8 @@ view model =
     [ div
       [ class "left-hud" ]
       [ keyDiagram
-      , div [ class "pause" ] [ point "P to pause"] ]
+      , pauseSign
+      ]
     , div 
       [ class "game-view" ] 
       [ gameView model
@@ -33,12 +34,3 @@ view model =
     ]
   ]
 
-
-pausedNotice : Bool -> Html Msg
-pausedNotice paused =
-  if paused then
-    div
-    [ class "paused-notice" ]
-    [ point "PAUSED" ]
-  else
-    div [] []
