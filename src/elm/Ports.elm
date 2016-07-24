@@ -4,4 +4,4 @@ import Types exposing (..)
 
 port request : String -> Cmd msg
 
-port response : (Int -> msg) -> Sub msg
+port response : (Bool -> msg) -> Sub msg

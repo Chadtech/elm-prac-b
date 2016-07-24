@@ -9,6 +9,7 @@ body {
   background: #030907;
   padding: 0;
   margin: 0;
+  overflow: hidden;
 }
 .point {
   font-family: HFNSS;

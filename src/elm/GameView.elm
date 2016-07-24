@@ -10,6 +10,7 @@ import Types            exposing (..)
 import DrawShip         exposing (drawShip)
 import List             exposing (filter, map)
 import Pather           exposing (root)
+--import Debug expsing (log)
 
 gameView : Model -> Html Msg
 gameView m =
@@ -39,7 +40,7 @@ backdrop s area =
   layerer
   [ "stars/real-stars" 
     |>image' 320 250
-    |>alpha 0.1
+    |>alpha 0.2
     |>move (x', y')
   , area
   ]
@@ -113,6 +114,8 @@ nearEnough (q,(sx,sy)) t =
 
     dx = sx - tx
     dy = sy - ty
+
+    --ya = log "s and t sector" ((sx,sy), t.secto)
 
     ex = \i -> dx == 0 || dx == i
     ey = \i -> dy == 0 || dy == i

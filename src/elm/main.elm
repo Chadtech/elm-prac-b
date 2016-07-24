@@ -27,21 +27,23 @@ subscriptions model =
     [ Sub.map HandleKeys Keyboard.subscriptions
     , diffs Refresh
     , diffs CheckForCollisions
+    , response Pause
     ]
+
+rate : Time -> Time
+rate dt = dt / 240
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg m =
   case msg of 
 
     CheckForCollisions dt ->
-      (collisionsHandle (dt / 120) m, Cmd.none)
+      (collisionsHandle (rate dt) m, Cmd.none)
 
     Refresh dt ->
       if m.paused then (m, Cmd.none)
       else
-        (refresh (dt / 240) m, Cmd.none)
-
-        --(refresh (dt / 120) m, Cmd.none)
+        (refresh (rate dt) m, Cmd.none)
 
     HandleKeys keyMsg ->
       let
@@ -50,8 +52,8 @@ update msg m =
       in
         (handleKeys m keys, Cmd.map HandleKeys kCmd)
 
-    Pause ->
-      ({ m | paused = not m.paused }, Cmd.none)
+    Pause b ->
+      ({ m | paused = True }, Cmd.none)
 
 handleKeys : Model -> Keyboard.Model -> Model
 handleKeys m keys =

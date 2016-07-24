@@ -18,14 +18,14 @@ miniMap m =
   [ append
     [ "stars/real-stars"
       |>image' 80 63
-      |>alpha 0.1
+      |>alpha 0.2
       |>rotate (degrees 0)
       |>move (-50, 0)
     , "markers/ring"
       |>image' 5 5
       |>move (p x, p y)
-    , "markers/yellow"
-      |>image' 5 5
+    , "stars/planet"
+      |>image' 15 15
       |>move (p 60000, p 60000)
     ]
     (map drawThing m.things)

@@ -9,7 +9,7 @@ type Msg
   = Refresh Time
   | HandleKeys Keyboard.Msg
   | CheckForCollisions Time
-  | Pause
+  | Pause Bool
 
 type Quadrant 
   = A
