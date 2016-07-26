@@ -10,6 +10,7 @@ import NavMarkers       exposing (navMarkers)
 import VelocityGauge    exposing (velocityGauge)
 import KeyDiagram       exposing (keyDiagram)
 import PauseView        exposing (pausedNotice, pauseSign)
+import Components exposing (point)
 
 
 view : Model -> Html Msg
@@ -29,8 +30,18 @@ view model =
       , navMarkers model
       , velocityGauge model.ship
       , pausedNotice model.paused
+      , diedNotice model.died model.deathMsg
       ]
     , rightHud model
     ]
   ]
 
+diedNotice : Bool -> String -> Html Msg
+diedNotice died diedMsg =
+  if died then
+    div 
+    [ class "died-notice" ]
+    [ point diedMsg 
+    , point "Press Enter to restart"
+    ]
+  else span [] []

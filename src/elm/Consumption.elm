@@ -10,7 +10,7 @@ consumption dt =
 consumeAir : Time -> Ship -> Ship
 consumeAir dt s =
   if s.oxygen > 0 then
-    { s | oxygen = s.oxygen - (dt / 100) }
+    { s | oxygen = s.oxygen - (dt / 20) }
   else 
     { s | oxygen = 0 }
 

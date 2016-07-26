@@ -10,7 +10,7 @@ import Types            exposing (..)
 import DrawShip         exposing (drawShip)
 import List             exposing (filter, map)
 import Pather           exposing (root)
---import Debug expsing (log)
+import Debug exposing (log)
 
 gameView : Model -> Html Msg
 gameView m =
@@ -20,7 +20,9 @@ gameView m =
       |>populateArea m
       |>positionArea m.ship
       |>backdrop     m.ship
+      |>farOffStars  m.ship
       |>rotateArea   m.ship
+    , sky m.ship.global
     , drawShip       
         (m.ship.fuel > 0)
         m.ship.thrusters
@@ -30,6 +32,29 @@ gameView m =
 layerer : List Form -> Form
 layerer = toForm << collage 1200 1200
 
+modulo : Int -> Float -> Float
+modulo m f =
+  let f' = floor f in
+  (toFloat (f' % m)) + (f - (toFloat f'))
+
+farOffStars : Ship -> Form -> Form
+farOffStars s area =
+  let
+    (x,y) = log "GLOBAL" s.global
+    x' = modulo 600 (x / 30)
+    y' = modulo 600 (y / 30)
+    pos = log "POS" (300 - x', 300 - y')
+  in
+  layerer
+  [ layerer
+    [ smallStars (-300, 300)  -- A
+    , smallStars (300, 300)   -- B
+    , smallStars (300, -300)  -- C
+    , smallStars (-300, -300) -- D
+    ]|>move pos |> alpha 0.8 
+    , area
+  ]
+
 backdrop : Ship -> Form -> Form
 backdrop s area =
   let
@@ -38,7 +63,7 @@ backdrop s area =
     y' = (-y * 0.005) + 275
   in
   layerer
-  [ "stars/real-stars" 
+  [ "celestia/real-stars" 
     |>image' 320 250
     |>alpha 0.2
     |>move (x', y')
@@ -63,8 +88,8 @@ populateArea m area =
 
     ts = 
       m.things
-      |>filter (nearEnough (q, ss))
-      |>map (adjustPosition (q, ss))
+      |>filter (nearEnough m.ship.global)
+      |>map (adjustPosition m.ship.global m.ship.local)
       |>map drawAt
       |>layerer
 
@@ -81,51 +106,15 @@ drawAt (p, t) =
   |>move p
   |>rotate (degrees a)
 
-adjustPosition : (Quadrant, Sector) -> Thing -> (Coordinate, Thing) 
-adjustPosition (q,(sx,sy)) t = 
-  let
-    (tx, ty) = t.sector
+adjustPosition : Coordinate -> Coordinate -> Thing -> (Coordinate, Thing)
+adjustPosition (sgx, sgy) (slx, sly) t =
+  let (tgx, tgy) = t.global in
+  ((tgx  - sgx  + slx, tgy - sgy + sly), t)
 
-    sameX = tx - sx == 0
-    sameY = ty - sy == 0
-
-    (x,y) = t.local
-
-    x' =
-      case q of
-        A -> if sameX then x - 600 else x
-        B -> if sameX then x else x - 600
-        C -> if sameX then x - 600 else x
-        D -> if sameX then x else x - 600
-
-    y' = 
-      case q of
-        A -> if sameY then y else y - 600
-        B -> if sameY then y else y - 600
-        C -> if sameY then y - 600 else y
-        D -> if sameY then y - 600 else y
-
-  in ((x', y'), t)
-
-nearEnough : (Quadrant, Sector) -> Thing -> Bool
-nearEnough (q,(sx,sy)) t =
-  let
-    (tx, ty) = t.sector
-
-    dx = sx - tx
-    dy = sy - ty
-
-    --ya = log "s and t sector" ((sx,sy), t.secto)
-
-    ex = \i -> dx == 0 || dx == i
-    ey = \i -> dy == 0 || dy == i
-  in
-  case q of
-    A -> ex -1 && ey 1 
-    B -> ex 1  && ey 1  
-    C -> ex -1 && ey -1 
-    D -> ex 1  && ey -1 
-
+nearEnough : Coordinate -> Thing -> Bool
+nearEnough (sgx, sgy) t =
+  let (tgx, tgy) = t.global in
+  (sqrt ((sgx - tgx)^2 + (sgy - tgy)^2)) < 300
 
 area : Model -> Form
 area m = 
@@ -136,12 +125,33 @@ area m =
   , stars (-300, -300) -- D
   ]
 
+smallStars : Coordinate -> Form
+smallStars pos = 
+  "celestia/smaller-stars"
+  |>image' 601 601
+  |>move pos
+
 stars : Coordinate -> Form
 stars pos = 
-  "stars/stars-1"
+  "celestia/stars-1"
   |>image' 601 601
   |>move pos
 
 image' : Int -> Int -> String -> Form
 image' w h src = 
   root src |> image w h |> toForm
+
+sky : Coordinate -> Form
+sky (x,y) =
+  let 
+    transparency = 
+      let 
+        dist = 
+          sqrt ((x - 60000)^2 + (y - 60000)^2) 
+      in
+      if dist > 10000 then 0
+      else (10000 - dist) / 5000
+  in
+  "celestia/sky"
+  |>image' 601 601
+  |>alpha transparency

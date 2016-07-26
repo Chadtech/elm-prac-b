@@ -14,19 +14,3 @@ document.addEventListener "visibilitychange",
     if document.hidden
       app.ports.response.send false
   false
-
-
-# function handleVisibilityChange() {
-#   if (document.hidden) {
-#     pauseSimulation();
-#   } else  {
-#     startSimulation();
-#   }
-# }
-
-
-
-# document.addEventListener(
-#   "visibilitychange", 
-#   handleVisibilityChange, 
-#   false);

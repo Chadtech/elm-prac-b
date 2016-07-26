@@ -3,6 +3,7 @@ module Init exposing (..)
 import Types exposing (..)
 import Keyboard.Extra   as Keyboard
 import List exposing (map)
+import Debug exposing (log)
 
 
 initModel : Model
@@ -10,52 +11,42 @@ initModel =
   { ship   = frege
   , keys   = fst Keyboard.init
   , things = 
-    --map 
-    --  (\i -> o2box 
-    --          ( (i * 5) + 30000, 30000 +  (i * 5))
-    --          (i / 100, i / 4)
-    --          0
-    --  )
-    --  [ 900 .. 1000 ]
-    --[ o2box (45000, 60000) (0, -400) 30 ]
-
-    [ fuelTank (44800, 60000) (0, -400) 30
-    , o2box (45050, 60000) (0, -400) 30
+    [ fuelTank (10000, 60000) (0, -150) -35
+    , o2box (10000, 60000) (1, -148) 3
+    , fuelTank (60000, 10000) (140, -10) 30
+    , o2box (30000, 60000) (0, 290) 5
+    , fuelTank (44900, 59900) (0, -400) 60
+    , o2box (44900, 60100) (0, -400) 64
+    , fuelTank (44800, 60000) (0, -400) -34
+    , o2box (45050, 60000) (0, -400) -10
+    , fuelTank (30000, 55000) (50, -250) -60
+    , o2box (30000, 55000) (57, -250) -30
+    , o2box (30000, 60000) (57, -250) -30
+    , fuelTank (30000, 60000) (61, 250) 25
+    , o2box (30000, 60000) (-44, -248) 55
+    , fuelTank (30000, 60000) (50, 251) -87
+    , o2box (30000, 60000) (33, 250)  -3
+    , fuelTank (30000, 60000) (100, 250) 11
     ]
-
-    --[ fuelTank (10000, 60000) (0, -150) 30
-    --, o2box (10000, 60000) (1, -148) 30
-    --, fuelTank (60000, 10000) (140, -10) 30
-    --, o2box (30000, 60000) (0, 290) 30
-    --, fuelTank (44800, 60000) (0, -400) 30
-    --, o2box (45050, 60000) (0, -400) 30
-
-    --, fuelTank (30000, 55000) (50, -250) -60
-    --, o2box (30000, 55000) (57, -250) -30
-    --, o2box (30000, 60000) (57, -250) -30
-    --, fuelTank (30000, 60000) (61, 250) 25
-    --, o2box (30000, 60000) (-44, -248) 55
-    --, fuelTank (30000, 60000) (50, 251) -87
-    --, o2box (30000, 60000) (33, 250)  -3
-    --, fuelTank (30000, 60000) (100, 250) 11
-    --]
   , paused = False
+  , died   = False
+  , deathMsg = ""
   }
 
 o2box : (Float, Float) -> (Float, Float) -> Float -> Thing
 o2box (gx, gy) (vx, vy) va =
   let
-    sx = (round gx) // 600
-    sy = (round gy) // 600
-    x  = (toFloat (sx % 600)) + gx - (toFloat sx)
-    y  = (toFloat (sy % 600)) + gy - (toFloat sy)
+    gx' = floor gx
+    gy' = floor gy
+    lx  = (toFloat (gx' % 600))
+    ly  = (toFloat (gy' % 600))
     dimensions = (20, 20)
   in
   { angle    = (0, va)
   , velocity = (vx, vy)
-  , local    = (x,y)
+  , local    = (lx,ly)
   , global   = (gx, gy)
-  , sector   = (sx, sy)
+  , sector   = (gx' // 600, gy' // 600)
 
   , dimensions = dimensions
 
@@ -70,17 +61,17 @@ o2box (gx, gy) (vx, vy) va =
 fuelTank : (Float, Float) -> (Float, Float) -> Float -> Thing
 fuelTank (gx, gy) (vx, vy) va =
   let
-    sx = (round gx) // 600
-    sy = (round gy) // 600
-    x  = (toFloat (sx % 600)) + gx - (toFloat sx)
-    y  = (toFloat (sy % 600)) + gy - (toFloat sy)
+    gx' = floor gx
+    gy' = floor gy
+    lx  = (toFloat (gx' % 600))
+    ly  = (toFloat (gy' % 600))
     dimensions = (20, 30)
   in
   { angle    = (0, va)
   , velocity = (vx, vy)
-  , local    = (x,y)
+  , local    = (lx,ly)
   , global   = (gx, gy)
-  , sector   = (sx, sy)
+  , sector   = (gx' // 600, gy' // 600)
 
   , dimensions = dimensions
 
@@ -93,11 +84,11 @@ fuelTank (gx, gy) (vx, vy) va =
   }
 
 giveFuel : Ship -> Ship
-giveFuel s =
-  { s | fuel = s.fuel + 1000 }
+giveFuel s = 
+  { s | fuel = s.fuel + 762.2 }
 
 giveOxygen : Ship -> Ship
-giveOxygen s =
+giveOxygen s = 
   { s | oxygen = s.oxygen + 150 }
 
 setSector : Float -> Int
@@ -130,7 +121,7 @@ frege =
 
   , dimensions = (34, 29)
 
-  , fuel       = 1005.1
+  , fuel       = 505.1
   , oxygen     = 63
   , weight     = 852
 

@@ -7,10 +7,10 @@ import Debug exposing (log)
 setThrust : Ship -> Ship
 setThrust s =
   let 
-    t = s.thrusters 
-    (a, va)  = s.angle
-    (vx, vy) = s.velocity
-    weightFactor = s.weight / 526
+    t            = s.thrusters 
+    (a, va)      = s.angle
+    (vx, vy)     = s.velocity
+    weightFactor = s.weight / 1526
 
     dvx = (thrustX a t) / weightFactor
     dvy = (thrustY a t) / weightFactor
@@ -41,10 +41,10 @@ getThrust : Bool -> List Float -> Float
 getThrust b list =
   (if b then 5 else 1) * (sum list)
 
-c : Float -> Float
+c : Angle -> Angle
 c = cos << degrees
 
-s : Float -> Float
+s : Angle -> Angle
 s = sin << degrees
 
 thrustY : Angle -> Thrusters -> Float

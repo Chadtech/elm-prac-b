@@ -12,6 +12,7 @@ import Keyboard.Extra   as Keyboard
 import ThrusterState    exposing (setThrusters)
 import CollisionHandle  exposing (collisionsHandle)
 import Refresh          exposing (refresh)
+import Debug exposing (log)
 
 main =
   App.program
@@ -24,11 +25,10 @@ main =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ Sub.map HandleKeys Keyboard.subscriptions
-    , diffs Refresh
-    , diffs CheckForCollisions
-    , response Pause
-    ]
+  [ Sub.map HandleKeys Keyboard.subscriptions
+  , diffs Refresh
+  , response Pause
+  ]
 
 rate : Time -> Time
 rate dt = dt / 240
@@ -37,13 +37,16 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg m =
   case msg of 
 
-    CheckForCollisions dt ->
-      (collisionsHandle (rate dt) m, Cmd.none)
-
     Refresh dt ->
-      if m.paused then (m, Cmd.none)
+      if (m.paused || m.died) then 
+        (m, Cmd.none)
       else
-        (refresh (rate dt) m, Cmd.none)
+        let 
+          m' =
+            m
+            |>collisionsHandle (rate dt) 
+            |>refresh (rate dt) 
+        in (m', Cmd.none)
 
     HandleKeys keyMsg ->
       let
@@ -55,18 +58,25 @@ update msg m =
     Pause b ->
       ({ m | paused = True }, Cmd.none)
 
+
 handleKeys : Model -> Keyboard.Model -> Model
 handleKeys m keys =
   let s = m.ship in
+  if isPressed Keyboard.Enter keys then
+    initModel
+  else
   { m
   | keys = keys
   , ship = 
-    { s | thrusters = setThrusters keys }
+    { s | thrusters = 
+      if not m.died then
+        setThrusters keys 
+      else s.thrusters
+    }
   , paused = 
       if isPressed Keyboard.CharP keys then
         not m.paused
-      else
-        m.paused
+      else m.paused
    }
 
 

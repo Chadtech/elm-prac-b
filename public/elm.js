@@ -12039,9 +12039,9 @@ var _user$project$Collision$collision = F3(
 		return intersects;
 	});
 
-var _user$project$Types$Model = F4(
-	function (a, b, c, d) {
-		return {ship: a, keys: b, things: c, paused: d};
+var _user$project$Types$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {ship: a, keys: b, things: c, paused: d, died: e, deathMsg: f};
 	});
 var _user$project$Types$World = function (a) {
 	return {things: a};
@@ -12085,9 +12085,6 @@ var _user$project$Types$Ship = function (a) {
 };
 var _user$project$Types$Pause = function (a) {
 	return {ctor: 'Pause', _0: a};
-};
-var _user$project$Types$CheckForCollisions = function (a) {
-	return {ctor: 'CheckForCollisions', _0: a};
 };
 var _user$project$Types$HandleKeys = function (a) {
 	return {ctor: 'HandleKeys', _0: a};
@@ -12355,7 +12352,7 @@ var _user$project$Consumption$consumeAir = F2(
 	function (dt, s) {
 		return (_elm_lang$core$Native_Utils.cmp(s.oxygen, 0) > 0) ? _elm_lang$core$Native_Utils.update(
 			s,
-			{oxygen: s.oxygen - (dt / 100)}) : _elm_lang$core$Native_Utils.update(
+			{oxygen: s.oxygen - (dt / 20)}) : _elm_lang$core$Native_Utils.update(
 			s,
 			{oxygen: 0});
 	});
@@ -12556,102 +12553,115 @@ var _user$project$GameView$image$ = F3(
 				h,
 				_user$project$Pather$root(src)));
 	});
+var _user$project$GameView$sky = function (_p0) {
+	var _p1 = _p0;
+	var transparency = function () {
+		var dist = _elm_lang$core$Basics$sqrt(
+			Math.pow(_p1._0 - 60000, 2) + Math.pow(_p1._1 - 60000, 2));
+		return (_elm_lang$core$Native_Utils.cmp(dist, 10000) > 0) ? 0 : ((10000 - dist) / 5000);
+	}();
+	return A2(
+		_evancz$elm_graphics$Collage$alpha,
+		transparency,
+		A3(_user$project$GameView$image$, 601, 601, 'celestia/sky'));
+};
 var _user$project$GameView$stars = function (pos) {
 	return A2(
 		_evancz$elm_graphics$Collage$move,
 		pos,
-		A3(_user$project$GameView$image$, 601, 601, 'stars/stars-1'));
+		A3(_user$project$GameView$image$, 601, 601, 'celestia/stars-1'));
+};
+var _user$project$GameView$smallStars = function (pos) {
+	return A2(
+		_evancz$elm_graphics$Collage$move,
+		pos,
+		A3(_user$project$GameView$image$, 601, 601, 'celestia/smaller-stars'));
 };
 var _user$project$GameView$nearEnough = F2(
-	function (_p0, t) {
-		var _p1 = _p0;
-		var _p2 = t.sector;
-		var tx = _p2._0;
-		var ty = _p2._1;
-		var dx = _p1._1._0 - tx;
-		var ex = function (i) {
-			return _elm_lang$core$Native_Utils.eq(dx, 0) || _elm_lang$core$Native_Utils.eq(dx, i);
-		};
-		var dy = _p1._1._1 - ty;
-		var ey = function (i) {
-			return _elm_lang$core$Native_Utils.eq(dy, 0) || _elm_lang$core$Native_Utils.eq(dy, i);
-		};
-		var _p3 = _p1._0;
-		switch (_p3.ctor) {
-			case 'A':
-				return ex(-1) && ey(1);
-			case 'B':
-				return ex(1) && ey(1);
-			case 'C':
-				return ex(-1) && ey(-1);
-			default:
-				return ex(1) && ey(-1);
-		}
+	function (_p2, t) {
+		var _p3 = _p2;
+		var _p4 = t.global;
+		var tgx = _p4._0;
+		var tgy = _p4._1;
+		return _elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$Basics$sqrt(
+				Math.pow(_p3._0 - tgx, 2) + Math.pow(_p3._1 - tgy, 2)),
+			300) < 0;
 	});
-var _user$project$GameView$adjustPosition = F2(
-	function (_p4, t) {
-		var _p5 = _p4;
-		var _p10 = _p5._0;
-		var _p6 = t.local;
-		var x = _p6._0;
-		var y = _p6._1;
-		var _p7 = t.sector;
-		var tx = _p7._0;
-		var ty = _p7._1;
-		var sameX = _elm_lang$core$Native_Utils.eq(tx - _p5._1._0, 0);
-		var x$ = function () {
-			var _p8 = _p10;
-			switch (_p8.ctor) {
-				case 'A':
-					return sameX ? (x - 600) : x;
-				case 'B':
-					return sameX ? x : (x - 600);
-				case 'C':
-					return sameX ? (x - 600) : x;
-				default:
-					return sameX ? x : (x - 600);
-			}
-		}();
-		var sameY = _elm_lang$core$Native_Utils.eq(ty - _p5._1._1, 0);
-		var y$ = function () {
-			var _p9 = _p10;
-			switch (_p9.ctor) {
-				case 'A':
-					return sameY ? y : (y - 600);
-				case 'B':
-					return sameY ? y : (y - 600);
-				case 'C':
-					return sameY ? (y - 600) : y;
-				default:
-					return sameY ? (y - 600) : y;
-			}
-		}();
+var _user$project$GameView$adjustPosition = F3(
+	function (_p6, _p5, t) {
+		var _p7 = _p6;
+		var _p8 = _p5;
+		var _p9 = t.global;
+		var tgx = _p9._0;
+		var tgy = _p9._1;
 		return {
 			ctor: '_Tuple2',
-			_0: {ctor: '_Tuple2', _0: x$, _1: y$},
+			_0: {ctor: '_Tuple2', _0: (tgx - _p7._0) + _p8._0, _1: (tgy - _p7._1) + _p8._1},
 			_1: t
 		};
 	});
-var _user$project$GameView$drawAt = function (_p11) {
-	var _p12 = _p11;
-	var _p14 = _p12._1;
-	var a = _elm_lang$core$Basics$fst(_p14.angle);
-	var sprite = _p14.sprite.src;
-	var _p13 = _p14.sprite.dimensions;
-	var w = _p13._0;
-	var h = _p13._1;
+var _user$project$GameView$drawAt = function (_p10) {
+	var _p11 = _p10;
+	var _p13 = _p11._1;
+	var a = _elm_lang$core$Basics$fst(_p13.angle);
+	var sprite = _p13.sprite.src;
+	var _p12 = _p13.sprite.dimensions;
+	var w = _p12._0;
+	var h = _p12._1;
 	return A2(
 		_evancz$elm_graphics$Collage$rotate,
 		_elm_lang$core$Basics$degrees(a),
 		A2(
 			_evancz$elm_graphics$Collage$move,
-			_p12._0,
+			_p11._0,
 			A3(_user$project$GameView$image$, w, h, sprite)));
 };
-var _user$project$GameView$layerer = function (_p15) {
+var _user$project$GameView$modulo = F2(
+	function (m, f) {
+		var f$ = _elm_lang$core$Basics$floor(f);
+		return _elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics_ops['%'], f$, m)) + (f - _elm_lang$core$Basics$toFloat(f$));
+	});
+var _user$project$GameView$layerer = function (_p14) {
 	return _evancz$elm_graphics$Collage$toForm(
-		A3(_evancz$elm_graphics$Collage$collage, 1200, 1200, _p15));
+		A3(_evancz$elm_graphics$Collage$collage, 1200, 1200, _p14));
 };
+var _user$project$GameView$farOffStars = F2(
+	function (s, area) {
+		var _p15 = A2(_elm_lang$core$Debug$log, 'GLOBAL', s.global);
+		var x = _p15._0;
+		var y = _p15._1;
+		var x$ = A2(_user$project$GameView$modulo, 600, x / 30);
+		var y$ = A2(_user$project$GameView$modulo, 600, y / 30);
+		var pos = A2(
+			_elm_lang$core$Debug$log,
+			'POS',
+			{ctor: '_Tuple2', _0: 300 - x$, _1: 300 - y$});
+		return _user$project$GameView$layerer(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_evancz$elm_graphics$Collage$alpha,
+					0.8,
+					A2(
+						_evancz$elm_graphics$Collage$move,
+						pos,
+						_user$project$GameView$layerer(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_user$project$GameView$smallStars(
+									{ctor: '_Tuple2', _0: -300, _1: 300}),
+									_user$project$GameView$smallStars(
+									{ctor: '_Tuple2', _0: 300, _1: 300}),
+									_user$project$GameView$smallStars(
+									{ctor: '_Tuple2', _0: 300, _1: -300}),
+									_user$project$GameView$smallStars(
+									{ctor: '_Tuple2', _0: -300, _1: -300})
+								])))),
+					area
+				]));
+	});
 var _user$project$GameView$backdrop = F2(
 	function (s, area) {
 		var _p16 = s.global;
@@ -12668,7 +12678,7 @@ var _user$project$GameView$backdrop = F2(
 					A2(
 						_evancz$elm_graphics$Collage$alpha,
 						0.2,
-						A3(_user$project$GameView$image$, 320, 250, 'stars/real-stars'))),
+						A3(_user$project$GameView$image$, 320, 250, 'celestia/real-stars'))),
 					area
 				]));
 	});
@@ -12700,21 +12710,19 @@ var _user$project$GameView$rotateArea = F2(
 	});
 var _user$project$GameView$populateArea = F2(
 	function (m, area) {
-		var ss = m.ship.sector;
-		var q = m.ship.quadrant;
 		var ts = _user$project$GameView$layerer(
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$GameView$drawAt,
 				A2(
 					_elm_lang$core$List$map,
-					_user$project$GameView$adjustPosition(
-						{ctor: '_Tuple2', _0: q, _1: ss}),
+					A2(_user$project$GameView$adjustPosition, m.ship.global, m.ship.local),
 					A2(
 						_elm_lang$core$List$filter,
-						_user$project$GameView$nearEnough(
-							{ctor: '_Tuple2', _0: q, _1: ss}),
+						_user$project$GameView$nearEnough(m.ship.global),
 						m.things))));
+		var ss = m.ship.sector;
+		var q = m.ship.quadrant;
 		return _user$project$GameView$layerer(
 			_elm_lang$core$Native_List.fromArray(
 				[area, ts]));
@@ -12748,15 +12756,19 @@ var _user$project$GameView$gameView = function (m) {
 							_user$project$GameView$rotateArea,
 							m.ship,
 							A2(
-								_user$project$GameView$backdrop,
+								_user$project$GameView$farOffStars,
 								m.ship,
 								A2(
-									_user$project$GameView$positionArea,
+									_user$project$GameView$backdrop,
 									m.ship,
 									A2(
-										_user$project$GameView$populateArea,
-										m,
-										_user$project$GameView$area(m))))),
+										_user$project$GameView$positionArea,
+										m.ship,
+										A2(
+											_user$project$GameView$populateArea,
+											m,
+											_user$project$GameView$area(m)))))),
+							_user$project$GameView$sky(m.ship.global),
 							A2(
 							_user$project$DrawShip$drawShip,
 							_elm_lang$core$Native_Utils.cmp(m.ship.fuel, 0) > 0,
@@ -12830,7 +12842,7 @@ var _user$project$Init$frege = function () {
 		quadrant: _user$project$Types$C,
 		dir: 0,
 		dimensions: {ctor: '_Tuple2', _0: 34, _1: 29},
-		fuel: 1005.1,
+		fuel: 505.1,
 		oxygen: 63,
 		weight: 852,
 		thrusters: {leftFront: 0, leftSide: 0, leftBack: 0, main: 0, rightFront: 0, rightSide: 0, rightBack: 0, boost: false}
@@ -12844,7 +12856,7 @@ var _user$project$Init$giveOxygen = function (s) {
 var _user$project$Init$giveFuel = function (s) {
 	return _elm_lang$core$Native_Utils.update(
 		s,
-		{fuel: s.fuel + 1000});
+		{fuel: s.fuel + 762.2});
 };
 var _user$project$Init$fuelTank = F3(
 	function (_p1, _p0, va) {
@@ -12853,18 +12865,18 @@ var _user$project$Init$fuelTank = F3(
 		var _p4 = _p2._0;
 		var _p3 = _p0;
 		var dimensions = {ctor: '_Tuple2', _0: 20, _1: 30};
-		var sy = (_elm_lang$core$Basics$round(_p5) / 600) | 0;
-		var y = (_elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics_ops['%'], sy, 600)) + _p5) - _elm_lang$core$Basics$toFloat(sy);
-		var sx = (_elm_lang$core$Basics$round(_p4) / 600) | 0;
-		var x = (_elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics_ops['%'], sx, 600)) + _p4) - _elm_lang$core$Basics$toFloat(sx);
+		var gy$ = _elm_lang$core$Basics$floor(_p5);
+		var ly = _elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics_ops['%'], gy$, 600));
+		var gx$ = _elm_lang$core$Basics$floor(_p4);
+		var lx = _elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics_ops['%'], gx$, 600));
 		return {
 			angle: {ctor: '_Tuple2', _0: 0, _1: va},
 			velocity: {ctor: '_Tuple2', _0: _p3._0, _1: _p3._1},
-			local: {ctor: '_Tuple2', _0: x, _1: y},
+			local: {ctor: '_Tuple2', _0: lx, _1: ly},
 			global: {ctor: '_Tuple2', _0: _p4, _1: _p5},
-			sector: {ctor: '_Tuple2', _0: sx, _1: sy},
+			sector: {ctor: '_Tuple2', _0: (gx$ / 600) | 0, _1: (gy$ / 600) | 0},
 			dimensions: dimensions,
 			onCollision: _user$project$Init$giveFuel,
 			sprite: {dimensions: dimensions, src: 'stuff/fuel-tank'}
@@ -12877,18 +12889,18 @@ var _user$project$Init$o2box = F3(
 		var _p10 = _p8._0;
 		var _p9 = _p6;
 		var dimensions = {ctor: '_Tuple2', _0: 20, _1: 20};
-		var sy = (_elm_lang$core$Basics$round(_p11) / 600) | 0;
-		var y = (_elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics_ops['%'], sy, 600)) + _p11) - _elm_lang$core$Basics$toFloat(sy);
-		var sx = (_elm_lang$core$Basics$round(_p10) / 600) | 0;
-		var x = (_elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics_ops['%'], sx, 600)) + _p10) - _elm_lang$core$Basics$toFloat(sx);
+		var gy$ = _elm_lang$core$Basics$floor(_p11);
+		var ly = _elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics_ops['%'], gy$, 600));
+		var gx$ = _elm_lang$core$Basics$floor(_p10);
+		var lx = _elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics_ops['%'], gx$, 600));
 		return {
 			angle: {ctor: '_Tuple2', _0: 0, _1: va},
 			velocity: {ctor: '_Tuple2', _0: _p9._0, _1: _p9._1},
-			local: {ctor: '_Tuple2', _0: x, _1: y},
+			local: {ctor: '_Tuple2', _0: lx, _1: ly},
 			global: {ctor: '_Tuple2', _0: _p10, _1: _p11},
-			sector: {ctor: '_Tuple2', _0: sx, _1: sy},
+			sector: {ctor: '_Tuple2', _0: (gx$ / 600) | 0, _1: (gy$ / 600) | 0},
 			dimensions: dimensions,
 			onCollision: _user$project$Init$giveOxygen,
 			sprite: {dimensions: dimensions, src: 'stuff/oxygen-tank'}
@@ -12901,16 +12913,88 @@ var _user$project$Init$initModel = {
 		[
 			A3(
 			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 10000, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: -150},
+			-35),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 10000, _1: 60000},
+			{ctor: '_Tuple2', _0: 1, _1: -148},
+			3),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 60000, _1: 10000},
+			{ctor: '_Tuple2', _0: 140, _1: -10},
+			30),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 0, _1: 290},
+			5),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 44900, _1: 59900},
+			{ctor: '_Tuple2', _0: 0, _1: -400},
+			60),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 44900, _1: 60100},
+			{ctor: '_Tuple2', _0: 0, _1: -400},
+			64),
+			A3(
+			_user$project$Init$fuelTank,
 			{ctor: '_Tuple2', _0: 44800, _1: 60000},
 			{ctor: '_Tuple2', _0: 0, _1: -400},
-			30),
+			-34),
 			A3(
 			_user$project$Init$o2box,
 			{ctor: '_Tuple2', _0: 45050, _1: 60000},
 			{ctor: '_Tuple2', _0: 0, _1: -400},
-			30)
+			-10),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 30000, _1: 55000},
+			{ctor: '_Tuple2', _0: 50, _1: -250},
+			-60),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 55000},
+			{ctor: '_Tuple2', _0: 57, _1: -250},
+			-30),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 57, _1: -250},
+			-30),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 61, _1: 250},
+			25),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: -44, _1: -248},
+			55),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 50, _1: 251},
+			-87),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 33, _1: 250},
+			-3),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 30000, _1: 60000},
+			{ctor: '_Tuple2', _0: 100, _1: 250},
+			11)
 		]),
-	paused: false
+	paused: false,
+	died: false,
+	deathMsg: ''
 };
 
 var _user$project$KeyDiagram$keyDiagram = _evancz$elm_graphics$Element$toHtml(
@@ -13140,7 +13224,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 									A2(
 										_evancz$elm_graphics$Collage$alpha,
 										0.2,
-										A3(_user$project$MiniMap$image$, 80, 63, 'stars/real-stars')))),
+										A3(_user$project$MiniMap$image$, 80, 63, 'celestia/real-stars')))),
 								A2(
 								_evancz$elm_graphics$Collage$move,
 								{
@@ -13156,7 +13240,7 @@ var _user$project$MiniMap$miniMap = function (m) {
 									_0: _user$project$MiniMap$p(60000),
 									_1: _user$project$MiniMap$p(60000)
 								},
-								A3(_user$project$MiniMap$image$, 15, 15, 'stars/planet'))
+								A3(_user$project$MiniMap$image$, 15, 15, 'celestia/planet'))
 							]),
 						A2(_elm_lang$core$List$map, _user$project$MiniMap$drawThing, m.things))))
 			]));
@@ -13360,6 +13444,25 @@ var _user$project$PauseView$pausedNotice = function (paused) {
 			[]));
 };
 
+var _user$project$View$diedNotice = F2(
+	function (died, diedMsg) {
+		return died ? A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('died-notice')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$Components$point(diedMsg),
+					_user$project$Components$point('Press Enter to restart')
+				])) : A2(
+			_elm_lang$html$Html$span,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
 var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -13396,7 +13499,8 @@ var _user$project$View$view = function (model) {
 								_user$project$GameView$gameView(model),
 								_user$project$NavMarkers$navMarkers(model),
 								_user$project$VelocityGauge$velocityGauge(model.ship),
-								_user$project$PauseView$pausedNotice(model.paused)
+								_user$project$PauseView$pausedNotice(model.paused),
+								A2(_user$project$View$diedNotice, model.died, model.deathMsg)
 							])),
 						_user$project$RightHud$rightHud(model)
 					]))
@@ -13529,7 +13633,7 @@ var _user$project$Thrust$thrustX = F2(
 				]));
 	});
 var _user$project$Thrust$setThrust = function (s) {
-	var weightFactor = s.weight / 526;
+	var weightFactor = s.weight / 1526;
 	var _p2 = s.velocity;
 	var vx = _p2._0;
 	var vy = _p2._1;
@@ -13715,8 +13819,22 @@ var _user$project$Refresh$refreshThing = function (dt) {
 			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
 	};
 };
+var _user$project$Refresh$checkIfDead = function (s) {
+	var noMoreAir = _elm_lang$core$Native_Utils.cmp(s.oxygen, 1) < 0;
+	var _p1 = s.global;
+	var x = _p1._0;
+	var y = _p1._1;
+	var x$ = x - 60000;
+	var y$ = y - 60000;
+	var tooCloseToPlanet = _elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$Basics$sqrt(
+			Math.pow(x$, 2) + Math.pow(y$, 2)),
+		5000) < 0;
+	var deathMsg = noMoreAir ? 'You ran out of air' : (tooCloseToPlanet ? 'You burnt up in the atmosphere' : '');
+	return {ctor: '_Tuple2', _0: noMoreAir || tooCloseToPlanet, _1: deathMsg};
+};
 var _user$project$Refresh$refreshShip = function (dt) {
-	return function (_p1) {
+	return function (_p2) {
 		return A2(
 			_user$project$ShipPosition$shipPosition,
 			dt,
@@ -13725,11 +13843,14 @@ var _user$project$Refresh$refreshShip = function (dt) {
 				dt,
 				_user$project$Thrust$setThrust(
 					_user$project$SetWeight$setWeight(
-						A2(_user$project$Consumption$consumption, dt, _p1)))));
+						A2(_user$project$Consumption$consumption, dt, _p2)))));
 	};
 };
 var _user$project$Refresh$refresh = F2(
 	function (dt, m) {
+		var _p3 = _user$project$Refresh$checkIfDead(m.ship);
+		var isDead = _p3._0;
+		var deathMsg = _p3._1;
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{
@@ -13737,21 +13858,23 @@ var _user$project$Refresh$refresh = F2(
 				things: A2(
 					_elm_lang$core$List$map,
 					_user$project$Refresh$refreshThing(dt),
-					m.things)
+					m.things),
+				died: isDead || m.died,
+				deathMsg: deathMsg
 			});
 	});
 
 var _user$project$Main$handleKeys = F2(
 	function (m, keys) {
 		var s = m.ship;
-		return _elm_lang$core$Native_Utils.update(
+		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$Enter, keys) ? _user$project$Init$initModel : _elm_lang$core$Native_Utils.update(
 			m,
 			{
 				keys: keys,
 				ship: _elm_lang$core$Native_Utils.update(
 					s,
 					{
-						thrusters: _user$project$ThrusterState$setThrusters(keys)
+						thrusters: _elm_lang$core$Basics$not(m.died) ? _user$project$ThrusterState$setThrusters(keys) : s.thrusters
 					}),
 				paused: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$CharP, keys) ? _elm_lang$core$Basics$not(m.paused) : m.paused
 			});
@@ -13763,28 +13886,24 @@ var _user$project$Main$update = F2(
 	function (msg, m) {
 		var _p0 = msg;
 		switch (_p0.ctor) {
-			case 'CheckForCollisions':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(
-						_user$project$CollisionHandle$collisionsHandle,
-						_user$project$Main$rate(_p0._0),
-						m),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
 			case 'Refresh':
-				return m.paused ? {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none} : {
-					ctor: '_Tuple2',
-					_0: A2(
+				var _p1 = _p0._0;
+				if (m.paused || m.died) {
+					return {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					var m$ = A2(
 						_user$project$Refresh$refresh,
-						_user$project$Main$rate(_p0._0),
-						m),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+						_user$project$Main$rate(_p1),
+						A2(
+							_user$project$CollisionHandle$collisionsHandle,
+							_user$project$Main$rate(_p1),
+							m));
+					return {ctor: '_Tuple2', _0: m$, _1: _elm_lang$core$Platform_Cmd$none};
+				}
 			case 'HandleKeys':
-				var _p1 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, m.keys);
-				var keys = _p1._0;
-				var kCmd = _p1._1;
+				var _p2 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, m.keys);
+				var keys = _p2._0;
+				var kCmd = _p2._1;
 				return {
 					ctor: '_Tuple2',
 					_0: A2(_user$project$Main$handleKeys, m, keys),
@@ -13806,7 +13925,6 @@ var _user$project$Main$subscriptions = function (model) {
 			[
 				A2(_elm_lang$core$Platform_Sub$map, _user$project$Types$HandleKeys, _ohanhi$keyboard_extra$Keyboard_Extra$subscriptions),
 				_elm_lang$animation_frame$AnimationFrame$diffs(_user$project$Types$Refresh),
-				_elm_lang$animation_frame$AnimationFrame$diffs(_user$project$Types$CheckForCollisions),
 				_user$project$Ports$response(_user$project$Types$Pause)
 			]));
 };

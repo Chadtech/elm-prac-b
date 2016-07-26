@@ -12,8 +12,7 @@ pausedNotice paused =
     div
     [ class "paused-notice" ]
     [ point "PAUSED" ]
-  else
-    span [] []
+  else span [] []
 
 pauseSign : Html Msg
 pauseSign = 

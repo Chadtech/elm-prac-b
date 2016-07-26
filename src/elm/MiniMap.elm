@@ -16,7 +16,7 @@ miniMap m =
   div
   [ class "mini-map-container" ]
   [ append
-    [ "stars/real-stars"
+    [ "celestia/real-stars"
       |>image' 80 63
       |>alpha 0.2
       |>rotate (degrees 0)
@@ -24,7 +24,7 @@ miniMap m =
     , "markers/ring"
       |>image' 5 5
       |>move (p x, p y)
-    , "stars/planet"
+    , "celestia/planet"
       |>image' 15 15
       |>move (p 60000, p 60000)
     ]

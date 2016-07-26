@@ -8,7 +8,6 @@ import Debug exposing (log)
 type Msg 
   = Refresh Time
   | HandleKeys Keyboard.Msg
-  | CheckForCollisions Time
   | Pause Bool
 
 type Quadrant 
@@ -37,6 +36,8 @@ type alias Model =
   , keys   : Keyboard.Model
   , things : Things
   , paused : Bool
+  , died   : Bool
+  , deathMsg : String
   }
 
 type alias World = 
