@@ -12,5 +12,5 @@ respond = (s) ->
 document.addEventListener "visibilitychange", 
   ->
     if document.hidden
-      app.ports.response.send false
+      app.ports.response.send true
   false

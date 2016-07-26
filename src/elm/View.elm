@@ -8,13 +8,13 @@ import GameView         exposing (gameView)
 import RightHud         exposing (rightHud)
 import NavMarkers       exposing (navMarkers)
 import VelocityGauge    exposing (velocityGauge)
-import KeyDiagram       exposing (keyDiagram)
-import PauseView        exposing (pausedNotice, pauseSign)
-import Components exposing (point)
+import KeyDiagram       exposing (keyDiagram, keyExample)
+import PauseView        exposing (paused, instructions)
+import DiedView         exposing (diedNotice)
 
 
 view : Model -> Html Msg
-view model = 
+view m = 
   div
   [ class "root" ]
   [ div 
@@ -22,26 +22,18 @@ view model =
     [ div
       [ class "left-hud" ]
       [ keyDiagram
-      , pauseSign
+      , instructions
       ]
+    , keyExample
     , div 
       [ class "game-view" ] 
-      [ gameView model
-      , navMarkers model
-      , velocityGauge model.ship
-      , pausedNotice model.paused
-      , diedNotice model.died model.deathMsg
+      [ gameView m
+      , navMarkers m
+      , velocityGauge m.ship
+      , paused  m.paused
+      , diedNotice    m.died m.deathMsg
       ]
-    , rightHud model
+    , rightHud m
     ]
   ]
 
-diedNotice : Bool -> String -> Html Msg
-diedNotice died diedMsg =
-  if died then
-    div 
-    [ class "died-notice" ]
-    [ point diedMsg 
-    , point "Press Enter to restart"
-    ]
-  else span [] []

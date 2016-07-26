@@ -10,7 +10,6 @@ import ShipPosition     exposing (shipPosition)
 import ThingPosition    exposing (thingPosition)
 
 
-
 refresh : Time -> Model -> Model
 refresh dt m =
   let

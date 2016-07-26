@@ -1,7 +1,6 @@
 module ThingPosition exposing (thingPosition)
 
 import Types exposing (..)
-import Debug exposing (log)
 
 modulo : Float -> Float
 modulo f =
@@ -38,9 +37,8 @@ thingPosition dt t =
     y'       = y + vy'
     x'       = x + vx'
     a'       = a + (dt * va)
-
-    ym = modulo y'
-    xm = modulo x'
+    ym       = modulo y'
+    xm       = modulo x'
   in
   { t
   | local  = (xm, ym)

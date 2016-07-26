@@ -10,7 +10,6 @@ import Types            exposing (..)
 import DrawShip         exposing (drawShip)
 import List             exposing (filter, map)
 import Pather           exposing (root)
-import Debug exposing (log)
 
 gameView : Model -> Html Msg
 gameView m =
@@ -40,10 +39,10 @@ modulo m f =
 farOffStars : Ship -> Form -> Form
 farOffStars s area =
   let
-    (x,y) = log "GLOBAL" s.global
-    x' = modulo 600 (x / 30)
-    y' = modulo 600 (y / 30)
-    pos = log "POS" (300 - x', 300 - y')
+    (x,y) = s.global
+    x'    = modulo 600 (x / 30)
+    y'    = modulo 600 (y / 30)
+    pos   = (300 - x', 300 - y')
   in
   layerer
   [ layerer
@@ -51,7 +50,7 @@ farOffStars s area =
     , smallStars (300, 300)   -- B
     , smallStars (300, -300)  -- C
     , smallStars (-300, -300) -- D
-    ]|>move pos |> alpha 0.8 
+    ]|> move pos |> alpha 0.8 
     , area
   ]
 
@@ -146,8 +145,9 @@ sky (x,y) =
   let 
     transparency = 
       let 
-        dist = 
-          sqrt ((x - 60000)^2 + (y - 60000)^2) 
+        x'   = x - 60000
+        y'   = y - 60000
+        dist = sqrt (x'^2 + y'^2) 
       in
       if dist > 10000 then 0
       else (10000 - dist) / 5000

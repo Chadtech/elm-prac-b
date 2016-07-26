@@ -29,6 +29,7 @@ content : Ship -> (List String, List String)
 content s =
   let 
     (x,y)    = s.global 
+    (sx, sy) = s.sector
     (a, va)  = s.angle
     (vx, vy) = s.velocity
   in
@@ -36,26 +37,27 @@ content s =
   [ "--------"  . "--------"
   , "STATUS"    . "NOMINAL"
   , "--------"  . "--------"
-  , "ang vel "  . ((nf 4 (-va * (10/9))) ++ " rpm")
-  , "velocity"  . nf 8 ((sqrt (vx^2 + vy^2))/10)
-  , "dir"       . (angleFormat (s.dir / pi * 200))
-  , "position"  . "--------"
-  , ": angle"   . (angleFormat (-a / 0.9))
-  , ": x"       . nf 8 x
-  , ": y"       . nf 8 y
-  , "--------"  . "--------"
   , "FUEL"      . ((nf 6 (oneDecimal s.fuel))   ++ "l")
-  , "OXYGEN"    . ((nf 6 (oneDecimal s.oxygen)) ++ "l")
-  , "WEIGHT"    . ((nf 6 (oneDecimal s.weight)) ++ " yH")
+  , "AIR"       . ((nf 6 (oneDecimal s.oxygen)) ++ "l")
+  , "POWER"     . "unavaila"
+  , "MASS"      . ((nf 6 (oneDecimal s.weight)) ++ " yH")
+  , "--------"  . "--------"
+  , "rpms "     . (nf 4 (-va * (10/9)))
+  --, "speed"     . nf 8 ((sqrt (vx^2 + vy^2))/10)
+  , "dir"       . (angleFormat (s.dir / pi * 200))
+  , "POSITION"  . "--------"
+  , ": angle"   . (angleFormat (-a / 0.9))
+  , ": x"       . toString (sx - 100)
+  , ": y"       . toString (sy - 100)
   ]
 
 (.) = (,)
 
 angleFormat : Float -> String
 angleFormat =
-  round
-  >>toFloat
-  >>nf 5
+  round 
+  >>toFloat 
+  >>nf 5 
   >>pad
   >>(\s -> s ++ "/200")
 

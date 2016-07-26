@@ -5,14 +5,11 @@ import Types            exposing (..)
 import Ports            exposing (..)
 import View             exposing (view)
 import Init             exposing (initModel)
-import Debug            exposing (log)
 import AnimationFrame   exposing (..)
-import Keyboard.Extra   exposing (isPressed)
 import Keyboard.Extra   as Keyboard
-import ThrusterState    exposing (setThrusters)
 import CollisionHandle  exposing (collisionsHandle)
 import Refresh          exposing (refresh)
-import Debug exposing (log)
+import HandleKeys       exposing (handleKeys)
 
 main =
   App.program
@@ -43,9 +40,10 @@ update msg m =
       else
         let 
           m' =
+            let dt' = rate dt in
             m
-            |>collisionsHandle (rate dt) 
-            |>refresh (rate dt) 
+            |>collisionsHandle dt' 
+            |>refresh dt'
         in (m', Cmd.none)
 
     HandleKeys keyMsg ->
@@ -56,32 +54,7 @@ update msg m =
         (handleKeys m keys, Cmd.map HandleKeys kCmd)
 
     Pause b ->
-      ({ m | paused = True }, Cmd.none)
-
-
-handleKeys : Model -> Keyboard.Model -> Model
-handleKeys m keys =
-  let s = m.ship in
-  if isPressed Keyboard.Enter keys then
-    initModel
-  else
-  { m
-  | keys = keys
-  , ship = 
-    { s | thrusters = 
-      if not m.died then
-        setThrusters keys 
-      else s.thrusters
-    }
-  , paused = 
-      if isPressed Keyboard.CharP keys then
-        not m.paused
-      else m.paused
-   }
-
-
-
-
+      ({ m | paused = b }, Cmd.none)
 
 
 

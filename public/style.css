@@ -17,6 +17,9 @@ body {
   font-size: 2em;
   margin: 0;
 }
+.point.tiny {
+  font-size: 1.5em;
+}
 .point.urgent {
   color: #b39f4b;
 }
@@ -44,11 +47,25 @@ body {
   display: inline-block;
   width: 156px;
   height: 131px;
+  left: 0;
   border-color: #b0a69a;
   border-width: 2px;
   padding: 11px;
   border-style: solid;
   margin-right: 11px;
+}
+.key-example {
+  background-color: #000;
+  display: inline-block;
+  width: 178px;
+  height: 178px;
+  border-color: #b0a69a;
+  border-width: 2px;
+  border-style: solid;
+  margin-right: 11px;
+  position: absolute;
+  left: 0px;
+  top: 253px;
 }
 .right-hud {
   margin-left: 11px;
@@ -93,8 +110,9 @@ body {
   padding: 11px;
   position: absolute;
   top: 23px;
-  width: 110px;
-  height: 17px;
+  left: 0px;
+  width: 156px;
+  height: 192px;
   float: right;
   background-color: #000;
   border-style: solid;

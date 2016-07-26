@@ -12314,6 +12314,18 @@ var _user$project$CollisionHandle$collisionsHandle = F2(
 			}) : model;
 	});
 
+var _user$project$Components$tinyPoint = function (s) {
+	return A2(
+		_elm_lang$html$Html$p,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('point tiny')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(s)
+			]));
+};
 var _user$project$Components$point = function (s) {
 	return A2(
 		_elm_lang$html$Html$p,
@@ -12329,24 +12341,28 @@ var _user$project$Components$point = function (s) {
 
 var _user$project$Consumption$consumeFuel = F2(
 	function (dt, s) {
-		var t = s.thrusters;
-		var rate = t.boost ? 7 : 1;
-		var consumption = _elm_lang$core$List$product(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					0.1,
-					rate,
-					dt,
-					_elm_lang$core$Basics$toFloat(
-					_elm_lang$core$List$sum(
-						_elm_lang$core$Native_List.fromArray(
-							[t.leftFront, t.leftSide, t.leftBack, t.rightFront, t.rightSide, t.rightBack, t.main * 5])))
-				]));
-		return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
-			s,
-			{fuel: s.fuel - consumption}) : _elm_lang$core$Native_Utils.update(
-			s,
-			{fuel: 0});
+		if (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) {
+			var t = s.thrusters;
+			var rate = t.boost ? 7 : 1;
+			var consumption = _elm_lang$core$List$product(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						0.1,
+						rate,
+						dt,
+						_elm_lang$core$Basics$toFloat(
+						_elm_lang$core$List$sum(
+							_elm_lang$core$Native_List.fromArray(
+								[t.leftFront, t.leftSide, t.leftBack, t.rightFront, t.rightSide, t.rightBack, t.main * 5])))
+					]));
+			return _elm_lang$core$Native_Utils.update(
+				s,
+				{fuel: s.fuel - consumption});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				s,
+				{fuel: 0});
+		}
 	});
 var _user$project$Consumption$consumeAir = F2(
 	function (dt, s) {
@@ -12364,6 +12380,26 @@ var _user$project$Consumption$consumption = function (dt) {
 			A2(_user$project$Consumption$consumeAir, dt, _p0));
 	};
 };
+
+var _user$project$DiedView$diedNotice = F2(
+	function (died, diedMsg) {
+		return died ? A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('died-notice')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$Components$point(diedMsg),
+					_user$project$Components$point('Press Enter to restart')
+				])) : A2(
+			_elm_lang$html$Html$span,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
 
 var _user$project$Pather$root$ = './';
 var _user$project$Pather$root = function (s) {
@@ -12556,8 +12592,10 @@ var _user$project$GameView$image$ = F3(
 var _user$project$GameView$sky = function (_p0) {
 	var _p1 = _p0;
 	var transparency = function () {
+		var y$ = _p1._1 - 60000;
+		var x$ = _p1._0 - 60000;
 		var dist = _elm_lang$core$Basics$sqrt(
-			Math.pow(_p1._0 - 60000, 2) + Math.pow(_p1._1 - 60000, 2));
+			Math.pow(x$, 2) + Math.pow(y$, 2));
 		return (_elm_lang$core$Native_Utils.cmp(dist, 10000) > 0) ? 0 : ((10000 - dist) / 5000);
 	}();
 	return A2(
@@ -12629,15 +12667,12 @@ var _user$project$GameView$layerer = function (_p14) {
 };
 var _user$project$GameView$farOffStars = F2(
 	function (s, area) {
-		var _p15 = A2(_elm_lang$core$Debug$log, 'GLOBAL', s.global);
+		var _p15 = s.global;
 		var x = _p15._0;
 		var y = _p15._1;
 		var x$ = A2(_user$project$GameView$modulo, 600, x / 30);
 		var y$ = A2(_user$project$GameView$modulo, 600, y / 30);
-		var pos = A2(
-			_elm_lang$core$Debug$log,
-			'POS',
-			{ctor: '_Tuple2', _0: 300 - x$, _1: 300 - y$});
+		var pos = {ctor: '_Tuple2', _0: 300 - x$, _1: 300 - y$};
 		return _user$project$GameView$layerer(
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -12919,8 +12954,48 @@ var _user$project$Init$initModel = {
 			A3(
 			_user$project$Init$o2box,
 			{ctor: '_Tuple2', _0: 10000, _1: 60000},
-			{ctor: '_Tuple2', _0: 1, _1: -148},
+			{ctor: '_Tuple2', _0: 1, _1: -218},
 			3),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 15000, _1: 60000},
+			{ctor: '_Tuple2', _0: 5, _1: -238},
+			11),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 10000, _1: 60000},
+			{ctor: '_Tuple2', _0: -2, _1: 218},
+			6),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 9900, _1: 58000},
+			{ctor: '_Tuple2', _0: 3, _1: -218},
+			3),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 14000, _1: 58000},
+			{ctor: '_Tuple2', _0: 4, _1: -238},
+			11),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 99000, _1: 58000},
+			{ctor: '_Tuple2', _0: -3, _1: 218},
+			6),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 10000, _1: 60000},
+			{ctor: '_Tuple2', _0: -2, _1: 148},
+			40),
+			A3(
+			_user$project$Init$o2box,
+			{ctor: '_Tuple2', _0: 50000, _1: 108000},
+			{ctor: '_Tuple2', _0: -200, _1: -5},
+			73),
+			A3(
+			_user$project$Init$fuelTank,
+			{ctor: '_Tuple2', _0: 50000, _1: 103000},
+			{ctor: '_Tuple2', _0: -230, _1: -10},
+			110),
 			A3(
 			_user$project$Init$fuelTank,
 			{ctor: '_Tuple2', _0: 60000, _1: 10000},
@@ -12997,6 +13072,55 @@ var _user$project$Init$initModel = {
 	deathMsg: ''
 };
 
+var _user$project$ThrusterState$set = F2(
+	function (m, k) {
+		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, k, m) ? 1 : 0;
+	});
+var _user$project$ThrusterState$setThrusters = function (keys) {
+	var set$ = _user$project$ThrusterState$set(keys);
+	return {
+		leftFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharC),
+		leftSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharS),
+		leftBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharE),
+		main: set$(_ohanhi$keyboard_extra$Keyboard_Extra$Space),
+		rightFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharN),
+		rightSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharK),
+		rightBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharU),
+		boost: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$Shift, keys)
+	};
+};
+
+var _user$project$HandleKeys$handleKeys = F2(
+	function (m, keys) {
+		var s = m.ship;
+		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$Enter, keys) ? _user$project$Init$initModel : _elm_lang$core$Native_Utils.update(
+			m,
+			{
+				keys: keys,
+				ship: _elm_lang$core$Native_Utils.update(
+					s,
+					{
+						thrusters: _elm_lang$core$Basics$not(m.died) ? _user$project$ThrusterState$setThrusters(keys) : s.thrusters
+					}),
+				paused: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$CharP, keys) ? _elm_lang$core$Basics$not(m.paused) : m.paused
+			});
+	});
+
+var _user$project$KeyDiagram$keyExample = A2(
+	_elm_lang$html$Html$div,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('key-example')
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_evancz$elm_graphics$Element$toHtml(
+			A3(
+				_evancz$elm_graphics$Element$image,
+				178,
+				178,
+				_user$project$Pather$root('key-example')))
+		]));
 var _user$project$KeyDiagram$keyDiagram = _evancz$elm_graphics$Element$toHtml(
 	A3(
 		_evancz$elm_graphics$Element$image,
@@ -13059,47 +13183,17 @@ var _user$project$ReadOut$content = function (s) {
 	var _p2 = s.angle;
 	var a = _p2._0;
 	var va = _p2._1;
-	var _p3 = s.global;
-	var x = _p3._0;
-	var y = _p3._1;
+	var _p3 = s.sector;
+	var sx = _p3._0;
+	var sy = _p3._1;
+	var _p4 = s.global;
+	var x = _p4._0;
+	var y = _p4._1;
 	return _elm_lang$core$List$unzip(
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
 				A2(_user$project$ReadOut_ops['.'], 'STATUS', 'NOMINAL'),
-				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
-				A2(
-				_user$project$ReadOut_ops['.'],
-				'ang vel ',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					A2(_user$project$ReadOut$nf, 4, (0 - va) * (10 / 9)),
-					' rpm')),
-				A2(
-				_user$project$ReadOut_ops['.'],
-				'velocity',
-				A2(
-					_user$project$ReadOut$nf,
-					8,
-					_elm_lang$core$Basics$sqrt(
-						Math.pow(vx, 2) + Math.pow(vy, 2)) / 10)),
-				A2(
-				_user$project$ReadOut_ops['.'],
-				'dir',
-				_user$project$ReadOut$angleFormat((s.dir / _elm_lang$core$Basics$pi) * 200)),
-				A2(_user$project$ReadOut_ops['.'], 'position', '--------'),
-				A2(
-				_user$project$ReadOut_ops['.'],
-				': angle',
-				_user$project$ReadOut$angleFormat((0 - a) / 0.9)),
-				A2(
-				_user$project$ReadOut_ops['.'],
-				': x',
-				A2(_user$project$ReadOut$nf, 8, x)),
-				A2(
-				_user$project$ReadOut_ops['.'],
-				': y',
-				A2(_user$project$ReadOut$nf, 8, y)),
 				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
 				A2(
 				_user$project$ReadOut_ops['.'],
@@ -13113,7 +13207,7 @@ var _user$project$ReadOut$content = function (s) {
 					'l')),
 				A2(
 				_user$project$ReadOut_ops['.'],
-				'OXYGEN',
+				'AIR',
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					A2(
@@ -13121,16 +13215,39 @@ var _user$project$ReadOut$content = function (s) {
 						6,
 						_user$project$ReadOut$oneDecimal(s.oxygen)),
 					'l')),
+				A2(_user$project$ReadOut_ops['.'], 'POWER', 'unavaila'),
 				A2(
 				_user$project$ReadOut_ops['.'],
-				'WEIGHT',
+				'MASS',
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					A2(
 						_user$project$ReadOut$nf,
 						6,
 						_user$project$ReadOut$oneDecimal(s.weight)),
-					' yH'))
+					' yH')),
+				A2(_user$project$ReadOut_ops['.'], '--------', '--------'),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				'rpms ',
+				A2(_user$project$ReadOut$nf, 4, (0 - va) * (10 / 9))),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				'dir',
+				_user$project$ReadOut$angleFormat((s.dir / _elm_lang$core$Basics$pi) * 200)),
+				A2(_user$project$ReadOut_ops['.'], 'POSITION', '--------'),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				': angle',
+				_user$project$ReadOut$angleFormat((0 - a) / 0.9)),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				': x',
+				_elm_lang$core$Basics$toString(sx - 100)),
+				A2(
+				_user$project$ReadOut_ops['.'],
+				': y',
+				_elm_lang$core$Basics$toString(sy - 100))
 			]));
 };
 var _user$project$ReadOut$column = function (list) {
@@ -13143,9 +13260,9 @@ var _user$project$ReadOut$column = function (list) {
 		list);
 };
 var _user$project$ReadOut$readOut = function (s) {
-	var _p4 = _user$project$ReadOut$content(s);
-	var keys = _p4._0;
-	var values = _p4._1;
+	var _p5 = _user$project$ReadOut$content(s);
+	var keys = _p5._0;
+	var values = _p5._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13416,7 +13533,7 @@ var _user$project$VelocityGauge$velocityGauge = function (s) {
 			]));
 };
 
-var _user$project$PauseView$pauseSign = A2(
+var _user$project$PauseView$instructions = A2(
 	_elm_lang$html$Html$div,
 	_elm_lang$core$Native_List.fromArray(
 		[
@@ -13424,9 +13541,9 @@ var _user$project$PauseView$pauseSign = A2(
 		]),
 	_elm_lang$core$Native_List.fromArray(
 		[
-			_user$project$Components$point('P to pause')
+			_user$project$Components$tinyPoint('\'P\' to pause. Collect resources. Dont run out of air. Dont fly into the planet. Nav markers show nearby resrouces and point in their relative direction. Gray arrow is north. Blue arrow is your direction.')
 		]));
-var _user$project$PauseView$pausedNotice = function (paused) {
+var _user$project$PauseView$paused = function (paused) {
 	return paused ? A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13444,26 +13561,7 @@ var _user$project$PauseView$pausedNotice = function (paused) {
 			[]));
 };
 
-var _user$project$View$diedNotice = F2(
-	function (died, diedMsg) {
-		return died ? A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$class('died-notice')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_user$project$Components$point(diedMsg),
-					_user$project$Components$point('Press Enter to restart')
-				])) : A2(
-			_elm_lang$html$Html$span,
-			_elm_lang$core$Native_List.fromArray(
-				[]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$View$view = function (model) {
+var _user$project$View$view = function (m) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13487,7 +13585,8 @@ var _user$project$View$view = function (model) {
 								_elm_lang$html$Html_Attributes$class('left-hud')
 							]),
 						_elm_lang$core$Native_List.fromArray(
-							[_user$project$KeyDiagram$keyDiagram, _user$project$PauseView$pauseSign])),
+							[_user$project$KeyDiagram$keyDiagram, _user$project$PauseView$instructions])),
+						_user$project$KeyDiagram$keyExample,
 						A2(
 						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(
@@ -13496,33 +13595,15 @@ var _user$project$View$view = function (model) {
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_user$project$GameView$gameView(model),
-								_user$project$NavMarkers$navMarkers(model),
-								_user$project$VelocityGauge$velocityGauge(model.ship),
-								_user$project$PauseView$pausedNotice(model.paused),
-								A2(_user$project$View$diedNotice, model.died, model.deathMsg)
+								_user$project$GameView$gameView(m),
+								_user$project$NavMarkers$navMarkers(m),
+								_user$project$VelocityGauge$velocityGauge(m.ship),
+								_user$project$PauseView$paused(m.paused),
+								A2(_user$project$DiedView$diedNotice, m.died, m.deathMsg)
 							])),
-						_user$project$RightHud$rightHud(model)
+						_user$project$RightHud$rightHud(m)
 					]))
 			]));
-};
-
-var _user$project$ThrusterState$set = F2(
-	function (m, k) {
-		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, k, m) ? 1 : 0;
-	});
-var _user$project$ThrusterState$setThrusters = function (keys) {
-	var set$ = _user$project$ThrusterState$set(keys);
-	return {
-		leftFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharC),
-		leftSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharS),
-		leftBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharE),
-		main: set$(_ohanhi$keyboard_extra$Keyboard_Extra$Space),
-		rightFront: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharN),
-		rightSide: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharK),
-		rightBack: set$(_ohanhi$keyboard_extra$Keyboard_Extra$CharU),
-		boost: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$Shift, keys)
-	};
 };
 
 var _user$project$SetWeight$setWeight = function (s) {
@@ -13864,21 +13945,6 @@ var _user$project$Refresh$refresh = F2(
 			});
 	});
 
-var _user$project$Main$handleKeys = F2(
-	function (m, keys) {
-		var s = m.ship;
-		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$Enter, keys) ? _user$project$Init$initModel : _elm_lang$core$Native_Utils.update(
-			m,
-			{
-				keys: keys,
-				ship: _elm_lang$core$Native_Utils.update(
-					s,
-					{
-						thrusters: _elm_lang$core$Basics$not(m.died) ? _user$project$ThrusterState$setThrusters(keys) : s.thrusters
-					}),
-				paused: A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, _ohanhi$keyboard_extra$Keyboard_Extra$CharP, keys) ? _elm_lang$core$Basics$not(m.paused) : m.paused
-			});
-	});
 var _user$project$Main$rate = function (dt) {
 	return dt / 240;
 };
@@ -13887,26 +13953,25 @@ var _user$project$Main$update = F2(
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Refresh':
-				var _p1 = _p0._0;
 				if (m.paused || m.died) {
 					return {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none};
 				} else {
-					var m$ = A2(
-						_user$project$Refresh$refresh,
-						_user$project$Main$rate(_p1),
-						A2(
-							_user$project$CollisionHandle$collisionsHandle,
-							_user$project$Main$rate(_p1),
-							m));
+					var m$ = function () {
+						var dt$ = _user$project$Main$rate(_p0._0);
+						return A2(
+							_user$project$Refresh$refresh,
+							dt$,
+							A2(_user$project$CollisionHandle$collisionsHandle, dt$, m));
+					}();
 					return {ctor: '_Tuple2', _0: m$, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 			case 'HandleKeys':
-				var _p2 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, m.keys);
-				var keys = _p2._0;
-				var kCmd = _p2._1;
+				var _p1 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p0._0, m.keys);
+				var keys = _p1._0;
+				var kCmd = _p1._1;
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$handleKeys, m, keys),
+					_0: A2(_user$project$HandleKeys$handleKeys, m, keys),
 					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Types$HandleKeys, kCmd)
 				};
 			default:
@@ -13914,7 +13979,7 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						m,
-						{paused: true}),
+						{paused: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
@@ -13947,12 +14012,16 @@ Elm['Components'] = Elm['Components'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Components'], 'Components', typeof _user$project$Components$main === 'undefined' ? null : _user$project$Components$main);
 Elm['Consumption'] = Elm['Consumption'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Consumption'], 'Consumption', typeof _user$project$Consumption$main === 'undefined' ? null : _user$project$Consumption$main);
+Elm['DiedView'] = Elm['DiedView'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['DiedView'], 'DiedView', typeof _user$project$DiedView$main === 'undefined' ? null : _user$project$DiedView$main);
 Elm['DrawShip'] = Elm['DrawShip'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['DrawShip'], 'DrawShip', typeof _user$project$DrawShip$main === 'undefined' ? null : _user$project$DrawShip$main);
 Elm['GameView'] = Elm['GameView'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['GameView'], 'GameView', typeof _user$project$GameView$main === 'undefined' ? null : _user$project$GameView$main);
 Elm['Gravity'] = Elm['Gravity'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Gravity'], 'Gravity', typeof _user$project$Gravity$main === 'undefined' ? null : _user$project$Gravity$main);
+Elm['HandleKeys'] = Elm['HandleKeys'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['HandleKeys'], 'HandleKeys', typeof _user$project$HandleKeys$main === 'undefined' ? null : _user$project$HandleKeys$main);
 Elm['Init'] = Elm['Init'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Init'], 'Init', typeof _user$project$Init$main === 'undefined' ? null : _user$project$Init$main);
 Elm['KeyDiagram'] = Elm['KeyDiagram'] || {};

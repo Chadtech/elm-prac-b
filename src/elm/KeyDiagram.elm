@@ -1,4 +1,4 @@
-module KeyDiagram exposing (keyDiagram)
+module KeyDiagram exposing (keyDiagram, keyExample)
 
 import Types            exposing (..)
 import Collage          exposing (..)
@@ -16,3 +16,13 @@ keyDiagram =
   |>root
   |>image 156 131
   |>toHtml
+
+keyExample : Html Msg
+keyExample =
+  div
+  [ class "key-example" ]
+  [ "key-example"
+    |>root
+    |>image 178 178
+    |>toHtml
+  ]
