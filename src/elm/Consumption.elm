@@ -10,7 +10,7 @@ consumption dt =
 consumeAir : Time -> Ship -> Ship
 consumeAir dt s =
   if s.oxygen > 0 then
-    { s | oxygen = s.oxygen - (dt / 20) }
+    { s | oxygen = s.oxygen - (dt / 6) }
   else 
     { s | oxygen = 0 }
 
@@ -20,11 +20,11 @@ consumeFuel dt s =
     let
       t = s.thrusters
       rate = 
-        if t.boost then 7
-        else 1
+        if t.boost then 3.5
+        else 0.5
       consumption =
         product 
-        [ 0.1
+        [ 0.6
         , rate
         , dt
         , toFloat

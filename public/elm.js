@@ -12343,11 +12343,11 @@ var _user$project$Consumption$consumeFuel = F2(
 	function (dt, s) {
 		if (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) {
 			var t = s.thrusters;
-			var rate = t.boost ? 7 : 1;
+			var rate = t.boost ? 3.5 : 0.5;
 			var consumption = _elm_lang$core$List$product(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						0.1,
+						0.6,
 						rate,
 						dt,
 						_elm_lang$core$Basics$toFloat(
@@ -12368,7 +12368,7 @@ var _user$project$Consumption$consumeAir = F2(
 	function (dt, s) {
 		return (_elm_lang$core$Native_Utils.cmp(s.oxygen, 0) > 0) ? _elm_lang$core$Native_Utils.update(
 			s,
-			{oxygen: s.oxygen - (dt / 20)}) : _elm_lang$core$Native_Utils.update(
+			{oxygen: s.oxygen - (dt / 6)}) : _elm_lang$core$Native_Utils.update(
 			s,
 			{oxygen: 0});
 	});
