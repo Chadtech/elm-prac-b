@@ -3,7 +3,6 @@ module SetWeight exposing (setWeight)
 import Types exposing (Ship)
 
 setWeight : Ship -> Ship
-setWeight s =
-  { s
-  | weight = (s.fuel / 1.7) + (s.oxygen * 3) + 263
-  }
+setWeight ship =
+  let {fuel, oxygen} = ship in
+  { ship | weight = (fuel / 1.7) + (oxygen * 3) + 263 }

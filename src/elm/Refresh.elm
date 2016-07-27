@@ -13,15 +13,16 @@ import ThingPosition    exposing (thingPosition)
 refresh : Time -> Model -> Model
 refresh dt m =
   let
+    {ship, things, died} = m
     (isDead, deathMsg) =
-      checkIfDead m.ship
+      checkIfDead ship
   in
   { m 
-  | ship = refreshShip dt m.ship
+  | ship = refreshShip dt ship
   , things = 
-      m.things
+      things
       |>map (refreshThing dt)
-  , died     = isDead || m.died
+  , died     = isDead || died
   , deathMsg = deathMsg
   }
 
@@ -34,16 +35,17 @@ refreshShip dt =
   >>shipPosition dt
 
 checkIfDead : Ship -> (Bool, String)
-checkIfDead s =
+checkIfDead {global, oxygen} =
   let
-    (x,y) = s.global
+    (x,y) = global
     x' = x - 60000
     y' = y - 60000
-    noMoreAir = s.oxygen < 1
+    noMoreAir = oxygen < 1
     tooCloseToPlanet = 
       (sqrt (x'^2 + y'^2)) < 5000 
 
     deathMsg =
+
       if noMoreAir then "You ran out of air"
       else
         if tooCloseToPlanet then 

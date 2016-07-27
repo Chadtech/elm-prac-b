@@ -14,7 +14,8 @@ import DiedView         exposing (diedNotice)
 
 
 view : Model -> Html Msg
-view m = 
+view model = 
+  let {ship, died, deathMsg} = model in
   div
   [ class "root" ]
   [ div 
@@ -27,13 +28,13 @@ view m =
     , keyExample
     , div 
       [ class "game-view" ] 
-      [ gameView m
-      , navMarkers m
-      , velocityGauge m.ship
-      , paused  m.paused
-      , diedNotice    m.died m.deathMsg
+      [ gameView model
+      , navMarkers model
+      , velocityGauge ship
+      , paused model.paused
+      , diedNotice died deathMsg
       ]
-    , rightHud m
+    , rightHud model
     ]
   ]
 

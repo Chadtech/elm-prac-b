@@ -2,8 +2,8 @@ module CollisionHandle exposing (collisionsHandle)
 
 import Collision exposing (..)
 import Types     exposing (..)
-import List      exposing (map, concat, filter, length, foldr, append)
-import Debug     exposing (log)
+import List      exposing (maximum, map, map2, concat, filter, isEmpty, foldr, append)
+import Maybe     exposing (withDefault)
 
 
 dot : Pt -> Pt -> Float
@@ -12,14 +12,12 @@ dot (x1,y1) (x2,y2) = (x1*x2) + (y1*y2)
 polySupport : List Pt -> Pt -> Pt
 polySupport list d =
   let
-    dotList = List.map (dot d) list
-    decorated = List.map2 (,) dotList list
-    (m, p) = 
-      Maybe.withDefault
-      (0,(0,0))
-      (List.maximum decorated)
-  in
-    p
+    dotList = map (dot d) list
+    decorated = map2 (,) dotList list
+    (m, point) = 
+      maximum decorated
+      |>withDefault (0,(0,0))
+  in point
 
 smear : Pt -> Pt -> List Pt
 smear (x', y') (x, y) = 
@@ -43,8 +41,8 @@ toPolygon angle center destination points =
   |>concat
   |>map (place center)
 
-thingsPolygon : Float -> Pt -> Pt -> Thing -> List Pt
-thingsPolygon dt (svx, svy) (sgx, sgy) t =
+getThingsPolygon : Float -> Pt -> Pt -> Thing -> List Pt
+getThingsPolygon dt (svx, svy) (sgx, sgy) t =
   let 
     (w', h') = t.dimensions 
     w = toFloat w'
@@ -65,13 +63,13 @@ thingsPolygon dt (svx, svy) (sgx, sgy) t =
   , (-w/2, h/2)
   ]
 
-shipsPolygon : Ship -> List Pt
-shipsPolygon s =
+getShipsPolygon : Ship -> List Pt
+getShipsPolygon {angle, dimensions} =
   let 
-    (w', h') = s.dimensions 
+    (w', h') = dimensions 
     w = toFloat w'
     h = toFloat h'
-    (a, va) = s.angle
+    (a, va) = angle
   in
   rotatePoints (a + va)
   [ (w/2, h/2)
@@ -87,25 +85,28 @@ rotatePoints : Angle -> List Pt -> List Coordinate
 rotatePoints a' =
   map (toPolar >> rotatePoint a' >> fromPolar)
 
-collisions : Float -> Ship -> Thing -> (Bool, Thing)
-collisions dt s t = 
+didCollide : Time -> Ship -> Thing -> (Bool, Thing)
+didCollide dt ship thing = 
   let
-    (svx, svy) = s.velocity
+    (svx, svy) = ship.velocity
 
-    thingsPolygon' = 
-      thingsPolygon
-      dt
-      (svx * dt, svy * dt)
-      s.global
-      t
-  in
-  (collision 10
-    (thingsPolygon', polySupport)
-    (shipsPolygon s, polySupport)
-  , t)
+    collided =
+      let
+        thingsPolygon = 
+          getThingsPolygon
+            dt
+            (svx * dt, svy * dt)
+            ship.global
+            thing
 
-collisionAction : Thing -> Ship -> Ship
-collisionAction t s = t.onCollision s
+        shipsPolygon =
+          getShipsPolygon ship
+      in 
+      collision 10 
+        (thingsPolygon, polySupport)
+        (shipsPolygon, polySupport)
+
+  in (collided, thing)
 
 appendIfNotCollided : (Bool, Thing) -> Things -> Things
 appendIfNotCollided (b, t) things =
@@ -118,30 +119,27 @@ justThings (b, t) = b
 collisionsHandle : Time -> Model -> Model
 collisionsHandle dt model =
   let
+    {ship, things} = model
     collisionCheck = 
-      map
-        (collisions dt model.ship)
-        model.things 
+      map (didCollide dt ship) things 
 
     collidedThings = 
-      filter 
-        justThings
-        collisionCheck
+      filter justThings collisionCheck
   in
-  if (length collidedThings) > 0 then 
-    { model
-    | ship = 
-        foldr
-          collisionAction
-          model.ship
-          (map (\t -> snd t) collidedThings)
-    , things =
-        foldr
-          appendIfNotCollided
-          []
-          collisionCheck
-    }
-  else model
+  if isEmpty collidedThings then model
+  else
+  { model
+  | ship = 
+      foldr
+        .onCollision
+        ship
+        (map snd collidedThings)
+  , things =
+      foldr
+        appendIfNotCollided
+        []
+        collisionCheck
+  }
 
 
 

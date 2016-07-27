@@ -1,24 +1,24 @@
 module ThrusterState exposing (setThrusters)
 
 import Keyboard.Extra exposing (isPressed)
-import Keyboard.Extra as K
+import Keyboard.Extra as Keyboard
 import Types exposing (Ship, Model, Thrusters)
 import Debug exposing (log)
 
-set : K.Model -> K.Key -> Int
-set m k = 
-  if isPressed k m then 1 
+set : Keyboard.Model -> Keyboard.Key -> Int
+set m keys = 
+  if isPressed keys m then 1 
   else 0
 
-setThrusters : K.Model -> Thrusters
+setThrusters : Keyboard.Model -> Thrusters
 setThrusters keys =
   let set' = set keys in
-  { leftFront  = set' K.CharC
-  , leftSide   = set' K.CharS
-  , leftBack   = set' K.CharE
-  , main       = set' K.Space
-  , rightFront = set' K.CharN
-  , rightSide  = set' K.CharK
-  , rightBack  = set' K.CharU
-  , boost = isPressed K.Shift keys
+  { leftFront  = set' Keyboard.CharC
+  , leftSide   = set' Keyboard.CharS
+  , leftBack   = set' Keyboard.CharE
+  , main       = set' Keyboard.Space
+  , rightFront = set' Keyboard.CharN
+  , rightSide  = set' Keyboard.CharK
+  , rightBack  = set' Keyboard.CharU
+  , boost = isPressed Keyboard.Shift keys
   }

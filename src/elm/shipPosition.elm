@@ -41,13 +41,13 @@ setQuadrant (x, y) =
     if y > 0 then A else C
 
 shipPosition : Time -> Ship -> Ship
-shipPosition dt s =
+shipPosition dt ship =
   let 
-    (gx, gy) = s.global
-    (lx, ly) = s.local
-    (vx, vy) = s.velocity
-    (sx, sy) = s.sector
-    (a, va)  = s.angle
+    (gx, gy) = ship.global
+    (lx, ly) = ship.local
+    (vx, vy) = ship.velocity
+    (sx, sy) = ship.sector
+    (a, va)  = ship.angle
 
     vy' = dt * vy
     vx' = dt * vx
@@ -70,7 +70,7 @@ shipPosition dt s =
     a' = 
       moduloAngle (a + (dt * va))
   in
-  { s
+  { ship
   | local    = (gxm, gym)
   , global   = (gx', gy')
   , angle    = (a', va)

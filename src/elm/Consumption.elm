@@ -8,19 +8,20 @@ consumption dt =
   consumeAir dt >> consumeFuel dt
 
 consumeAir : Time -> Ship -> Ship
-consumeAir dt s =
-  if s.oxygen > 0 then
-    { s | oxygen = s.oxygen - (dt / 6) }
+consumeAir dt ship =
+  let {oxygen} = ship in
+  if oxygen > 0 then
+    { ship | oxygen = oxygen - (dt / 6) }
   else 
-    { s | oxygen = 0 }
+    { ship | oxygen = 0 }
 
 consumeFuel : Time -> Ship -> Ship
-consumeFuel dt s =
-  if s.fuel > 0 then
+consumeFuel dt ship =
+  let {fuel, thrusters} = ship in
+  if fuel > 0 then
     let
-      t = s.thrusters
       rate = 
-        if t.boost then 3.5
+        if thrusters.boost then 3.5
         else 0.5
       consumption =
         product 
@@ -29,16 +30,16 @@ consumeFuel dt s =
         , dt
         , toFloat
           <|sum 
-            [ t.leftFront
-            , t.leftSide
-            , t.leftBack
-            , t.rightFront
-            , t.rightSide
-            , t.rightBack
-            , t.main * 5
+            [ thrusters.leftFront
+            , thrusters.leftSide
+            , thrusters.leftBack
+            , thrusters.rightFront
+            , thrusters.rightSide
+            , thrusters.rightBack
+            , thrusters.main * 5
             ]
         ]
     in
-    { s | fuel = s.fuel - consumption }
+    { ship | fuel = fuel - consumption }
    else
-    { s | fuel = 0 }
+    { ship | fuel = 0 }

@@ -27,11 +27,11 @@ getSector : Float -> Int
 getSector f = floor (f / 600)
 
 thingPosition : Time -> Thing -> Thing
-thingPosition dt t =
+thingPosition dt thing =
   let
-    (x,y)    = t.global
-    (vx, vy) = t.velocity
-    (a, va)  = t.angle
+    (x,y)    = thing.global
+    (vx, vy) = thing.velocity
+    (a, va)  = thing.angle
     vy'      = dt * vy
     vx'      = dt * vx
     y'       = y + vy'
@@ -40,7 +40,7 @@ thingPosition dt t =
     ym       = modulo y'
     xm       = modulo x'
   in
-  { t
+  { thing
   | local  = (xm, ym)
   , global = (x + vx', y + vy')
   , angle  = (moduloAngle a', va)
