@@ -5,24 +5,24 @@ import Types exposing (..)
 import Debug exposing (log)
 
 setThrust : Ship -> Ship
-setThrust s =
+setThrust ship =
   let 
-    t            = s.thrusters 
-    (a, va)      = s.angle
-    (vx, vy)     = s.velocity
-    weightFactor = s.weight / 1526
+    t            = ship.thrusters 
+    (a, va)      = ship.angle
+    (vx, vy)     = ship.velocity
+    weightFactor = ship.weight / 1526
 
     dvx = (thrustX a t) / weightFactor
     dvy = (thrustY a t) / weightFactor
     dva = (thrustA t) / weightFactor
 
   in
-  if s.fuel > 0 then
-  { s
+  if ship.fuel > 0 then
+  { ship
   | velocity = (vx + dvx, vy + dvy)
   , angle    = (a, va + dva)
   }
-  else s
+  else ship
 
 weakPower : Float
 weakPower = 0.128

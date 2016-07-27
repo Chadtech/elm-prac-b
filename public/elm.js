@@ -12129,13 +12129,14 @@ var _user$project$CollisionHandle$rotatePoints = function (a$) {
 					_elm_lang$core$Basics$toPolar(_p6)));
 		});
 };
-var _user$project$CollisionHandle$shipsPolygon = function (s) {
-	var _p7 = s.angle;
-	var a = _p7._0;
-	var va = _p7._1;
-	var _p8 = s.dimensions;
-	var w$ = _p8._0;
-	var h$ = _p8._1;
+var _user$project$CollisionHandle$shipsPolygon = function (_p7) {
+	var _p8 = _p7;
+	var _p9 = _p8.angle;
+	var a = _p9._0;
+	var va = _p9._1;
+	var _p10 = _p8.dimensions;
+	var w$ = _p10._0;
+	var h$ = _p10._1;
 	var w = _elm_lang$core$Basics$toFloat(w$);
 	var h = _elm_lang$core$Basics$toFloat(h$);
 	return A2(
@@ -12150,26 +12151,26 @@ var _user$project$CollisionHandle$shipsPolygon = function (s) {
 			]));
 };
 var _user$project$CollisionHandle$place = F2(
-	function (_p10, _p9) {
-		var _p11 = _p10;
-		var _p12 = _p9;
-		return {ctor: '_Tuple2', _0: _p12._0 + _p11._0, _1: _p12._1 + _p11._1};
+	function (_p12, _p11) {
+		var _p13 = _p12;
+		var _p14 = _p11;
+		return {ctor: '_Tuple2', _0: _p14._0 + _p13._0, _1: _p14._1 + _p13._1};
 	});
 var _user$project$CollisionHandle$smear = F2(
-	function (_p14, _p13) {
-		var _p15 = _p14;
-		var _p16 = _p13;
-		var _p18 = _p16._1;
-		var _p17 = _p16._0;
+	function (_p16, _p15) {
+		var _p17 = _p16;
+		var _p18 = _p15;
+		var _p20 = _p18._1;
+		var _p19 = _p18._0;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				{ctor: '_Tuple2', _0: _p17, _1: _p18},
-				{ctor: '_Tuple2', _0: _p17 + _p15._0, _1: _p18 + _p15._1}
+				{ctor: '_Tuple2', _0: _p19, _1: _p20},
+				{ctor: '_Tuple2', _0: _p19 + _p17._0, _1: _p20 + _p17._1}
 			]);
 	});
 var _user$project$CollisionHandle$travel = F2(
 	function (a, dest) {
-		return function (_p19) {
+		return function (_p21) {
 			return A2(
 				_user$project$CollisionHandle$smear,
 				dest,
@@ -12177,7 +12178,7 @@ var _user$project$CollisionHandle$travel = F2(
 					A2(
 						_user$project$CollisionHandle$rotatePoint,
 						a,
-						_elm_lang$core$Basics$toPolar(_p19))));
+						_elm_lang$core$Basics$toPolar(_p21))));
 		};
 	});
 var _user$project$CollisionHandle$toPolygon = F4(
@@ -12192,32 +12193,32 @@ var _user$project$CollisionHandle$toPolygon = F4(
 					points)));
 	});
 var _user$project$CollisionHandle$thingsPolygon = F4(
-	function (dt, _p21, _p20, t) {
-		var _p22 = _p21;
-		var _p29 = _p22._1;
-		var _p28 = _p22._0;
-		var _p23 = _p20;
-		var _p24 = t.velocity;
-		var vx = _p24._0;
-		var vy = _p24._1;
+	function (dt, _p23, _p22, t) {
+		var _p24 = _p23;
+		var _p31 = _p24._1;
+		var _p30 = _p24._0;
+		var _p25 = _p22;
+		var _p26 = t.velocity;
+		var vx = _p26._0;
+		var vy = _p26._1;
 		var vx$ = dt * vx;
 		var vy$ = dt * vy;
-		var _p25 = t.angle;
-		var a = _p25._0;
-		var va = _p25._1;
-		var _p26 = t.global;
-		var gx = _p26._0;
-		var gy = _p26._1;
-		var _p27 = t.dimensions;
-		var w$ = _p27._0;
-		var h$ = _p27._1;
+		var _p27 = t.angle;
+		var a = _p27._0;
+		var va = _p27._1;
+		var _p28 = t.global;
+		var gx = _p28._0;
+		var gy = _p28._1;
+		var _p29 = t.dimensions;
+		var w$ = _p29._0;
+		var h$ = _p29._1;
 		var w = _elm_lang$core$Basics$toFloat(w$);
 		var h = _elm_lang$core$Basics$toFloat(h$);
 		return A4(
 			_user$project$CollisionHandle$toPolygon,
 			a + va,
-			{ctor: '_Tuple2', _0: ((gx - _p23._0) + vx$) - _p28, _1: ((gy - _p23._1) + vy$) - _p29},
-			{ctor: '_Tuple2', _0: vx$ - _p28, _1: vy$ - _p29},
+			{ctor: '_Tuple2', _0: ((gx - _p25._0) + vx$) - _p30, _1: ((gy - _p25._1) + vy$) - _p31},
+			{ctor: '_Tuple2', _0: vx$ - _p30, _1: vy$ - _p31},
 			_elm_lang$core$Native_List.fromArray(
 				[
 					{ctor: '_Tuple2', _0: w / 2, _1: h / 2},
@@ -12227,10 +12228,10 @@ var _user$project$CollisionHandle$thingsPolygon = F4(
 				]));
 	});
 var _user$project$CollisionHandle$dot = F2(
-	function (_p31, _p30) {
-		var _p32 = _p31;
-		var _p33 = _p30;
-		return (_p32._0 * _p33._0) + (_p32._1 * _p33._1);
+	function (_p33, _p32) {
+		var _p34 = _p33;
+		var _p35 = _p32;
+		return (_p34._0 * _p35._0) + (_p34._1 * _p35._1);
 	});
 var _user$project$CollisionHandle$polySupport = F2(
 	function (list, d) {
@@ -12246,7 +12247,7 @@ var _user$project$CollisionHandle$polySupport = F2(
 				}),
 			dotList,
 			list);
-		var _p34 = A2(
+		var _p36 = A2(
 			_elm_lang$core$Maybe$withDefault,
 			{
 				ctor: '_Tuple2',
@@ -12254,15 +12255,15 @@ var _user$project$CollisionHandle$polySupport = F2(
 				_1: {ctor: '_Tuple2', _0: 0, _1: 0}
 			},
 			_elm_lang$core$List$maximum(decorated));
-		var m = _p34._0;
-		var p = _p34._1;
+		var m = _p36._0;
+		var p = _p36._1;
 		return p;
 	});
 var _user$project$CollisionHandle$collisions = F3(
 	function (dt, s, t) {
-		var _p35 = s.velocity;
-		var svx = _p35._0;
-		var svy = _p35._1;
+		var _p37 = s.velocity;
+		var svx = _p37._0;
+		var svy = _p37._1;
 		var thingsPolygon$ = A4(
 			_user$project$CollisionHandle$thingsPolygon,
 			dt,
@@ -12284,34 +12285,30 @@ var _user$project$CollisionHandle$collisions = F3(
 		};
 	});
 var _user$project$CollisionHandle$collisionsHandle = F2(
-	function (dt, model) {
+	function (dt, m) {
+		var _p38 = m;
+		var ship = _p38.ship;
+		var things = _p38.things;
 		var collisionCheck = A2(
 			_elm_lang$core$List$map,
-			A2(_user$project$CollisionHandle$collisions, dt, model.ship),
-			model.things);
+			A2(_user$project$CollisionHandle$collisions, dt, ship),
+			things);
 		var collidedThings = A2(_elm_lang$core$List$filter, _user$project$CollisionHandle$justThings, collisionCheck);
-		return (_elm_lang$core$Native_Utils.cmp(
-			_elm_lang$core$List$length(collidedThings),
-			0) > 0) ? _elm_lang$core$Native_Utils.update(
-			model,
+		return _elm_lang$core$List$isEmpty(collidedThings) ? _elm_lang$core$Native_Utils.update(
+			m,
 			{
 				ship: A3(
 					_elm_lang$core$List$foldr,
 					_user$project$CollisionHandle$collisionAction,
-					model.ship,
-					A2(
-						_elm_lang$core$List$map,
-						function (t) {
-							return _elm_lang$core$Basics$snd(t);
-						},
-						collidedThings)),
+					ship,
+					A2(_elm_lang$core$List$map, _elm_lang$core$Basics$snd, collidedThings)),
 				things: A3(
 					_elm_lang$core$List$foldr,
 					_user$project$CollisionHandle$appendIfNotCollided,
 					_elm_lang$core$Native_List.fromArray(
 						[]),
 					collisionCheck)
-			}) : model;
+			}) : m;
 	});
 
 var _user$project$Components$tinyPoint = function (s) {
@@ -12340,10 +12337,12 @@ var _user$project$Components$point = function (s) {
 };
 
 var _user$project$Consumption$consumeFuel = F2(
-	function (dt, s) {
-		if (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) {
-			var t = s.thrusters;
-			var rate = t.boost ? 3.5 : 0.5;
+	function (dt, ship) {
+		var _p0 = ship;
+		var fuel = _p0.fuel;
+		var thrusters = _p0.thrusters;
+		if (_elm_lang$core$Native_Utils.cmp(fuel, 0) > 0) {
+			var rate = thrusters.boost ? 3.5 : 0.5;
 			var consumption = _elm_lang$core$List$product(
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -12353,31 +12352,33 @@ var _user$project$Consumption$consumeFuel = F2(
 						_elm_lang$core$Basics$toFloat(
 						_elm_lang$core$List$sum(
 							_elm_lang$core$Native_List.fromArray(
-								[t.leftFront, t.leftSide, t.leftBack, t.rightFront, t.rightSide, t.rightBack, t.main * 5])))
+								[thrusters.leftFront, thrusters.leftSide, thrusters.leftBack, thrusters.rightFront, thrusters.rightSide, thrusters.rightBack, thrusters.main * 5])))
 					]));
 			return _elm_lang$core$Native_Utils.update(
-				s,
-				{fuel: s.fuel - consumption});
+				ship,
+				{fuel: fuel - consumption});
 		} else {
 			return _elm_lang$core$Native_Utils.update(
-				s,
+				ship,
 				{fuel: 0});
 		}
 	});
 var _user$project$Consumption$consumeAir = F2(
-	function (dt, s) {
-		return (_elm_lang$core$Native_Utils.cmp(s.oxygen, 0) > 0) ? _elm_lang$core$Native_Utils.update(
-			s,
-			{oxygen: s.oxygen - (dt / 6)}) : _elm_lang$core$Native_Utils.update(
-			s,
+	function (dt, ship) {
+		var _p1 = ship;
+		var oxygen = _p1.oxygen;
+		return (_elm_lang$core$Native_Utils.cmp(oxygen, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+			ship,
+			{oxygen: oxygen - (dt / 6)}) : _elm_lang$core$Native_Utils.update(
+			ship,
 			{oxygen: 0});
 	});
 var _user$project$Consumption$consumption = function (dt) {
-	return function (_p0) {
+	return function (_p2) {
 		return A2(
 			_user$project$Consumption$consumeFuel,
 			dt,
-			A2(_user$project$Consumption$consumeAir, dt, _p0));
+			A2(_user$project$Consumption$consumeAir, dt, _p2));
 	};
 };
 
@@ -12555,7 +12556,7 @@ var _user$project$DrawShip$drawShip = F2(
 				47,
 				_user$project$Pather$root('ship/ship'))
 			]);
-		var ship = enoughFuel ? _elm_lang$core$Native_List.fromArray(
+		var shipRendering = enoughFuel ? _elm_lang$core$Native_List.fromArray(
 			[
 				A2(_user$project$DrawShip$mainThruster, t.main, t.boost),
 				A2(_user$project$DrawShip$leftFront, t.leftFront, t.boost),
@@ -12577,7 +12578,7 @@ var _user$project$DrawShip$drawShip = F2(
 					_elm_lang$core$List$append,
 					_elm_lang$core$Native_List.fromArray(
 						[]),
-					ship)));
+					shipRendering)));
 	});
 
 var _user$project$GameView$image$ = F3(
@@ -12616,9 +12617,9 @@ var _user$project$GameView$smallStars = function (pos) {
 		A3(_user$project$GameView$image$, 601, 601, 'celestia/smaller-stars'));
 };
 var _user$project$GameView$nearEnough = F2(
-	function (_p2, t) {
+	function (_p2, thing) {
 		var _p3 = _p2;
-		var _p4 = t.global;
+		var _p4 = thing.global;
 		var tgx = _p4._0;
 		var tgy = _p4._1;
 		return _elm_lang$core$Native_Utils.cmp(
@@ -12627,24 +12628,23 @@ var _user$project$GameView$nearEnough = F2(
 			300) < 0;
 	});
 var _user$project$GameView$adjustPosition = F3(
-	function (_p6, _p5, t) {
+	function (_p6, _p5, thing) {
 		var _p7 = _p6;
 		var _p8 = _p5;
-		var _p9 = t.global;
+		var _p9 = thing.global;
 		var tgx = _p9._0;
 		var tgy = _p9._1;
 		return {
 			ctor: '_Tuple2',
 			_0: {ctor: '_Tuple2', _0: (tgx - _p7._0) + _p8._0, _1: (tgy - _p7._1) + _p8._1},
-			_1: t
+			_1: thing
 		};
 	});
 var _user$project$GameView$drawAt = function (_p10) {
 	var _p11 = _p10;
-	var _p13 = _p11._1;
-	var a = _elm_lang$core$Basics$fst(_p13.angle);
-	var sprite = _p13.sprite.src;
-	var _p12 = _p13.sprite.dimensions;
+	var _p13 = _p11._1.sprite;
+	var a = _elm_lang$core$Basics$fst(_p11._1.angle);
+	var _p12 = _p13.dimensions;
 	var w = _p12._0;
 	var h = _p12._1;
 	return A2(
@@ -12653,7 +12653,7 @@ var _user$project$GameView$drawAt = function (_p10) {
 		A2(
 			_evancz$elm_graphics$Collage$move,
 			_p11._0,
-			A3(_user$project$GameView$image$, w, h, sprite)));
+			A3(_user$project$GameView$image$, w, h, _p13.src)));
 };
 var _user$project$GameView$modulo = F2(
 	function (m, f) {
@@ -12666,10 +12666,11 @@ var _user$project$GameView$layerer = function (_p14) {
 		A3(_evancz$elm_graphics$Collage$collage, 1200, 1200, _p14));
 };
 var _user$project$GameView$farOffStars = F2(
-	function (s, area) {
-		var _p15 = s.global;
-		var x = _p15._0;
-		var y = _p15._1;
+	function (_p15, area) {
+		var _p16 = _p15;
+		var _p17 = _p16.global;
+		var x = _p17._0;
+		var y = _p17._1;
 		var x$ = A2(_user$project$GameView$modulo, 600, x / 30);
 		var y$ = A2(_user$project$GameView$modulo, 600, y / 30);
 		var pos = {ctor: '_Tuple2', _0: 300 - x$, _1: 300 - y$};
@@ -12698,10 +12699,11 @@ var _user$project$GameView$farOffStars = F2(
 				]));
 	});
 var _user$project$GameView$backdrop = F2(
-	function (s, area) {
-		var _p16 = s.global;
-		var x = _p16._0;
-		var y = _p16._1;
+	function (_p18, area) {
+		var _p19 = _p18;
+		var _p20 = _p19.global;
+		var x = _p20._0;
+		var y = _p20._1;
 		var x$ = ((0 - x) * 5.0e-3) + 100;
 		var y$ = ((0 - y) * 5.0e-3) + 275;
 		return _user$project$GameView$layerer(
@@ -12718,10 +12720,10 @@ var _user$project$GameView$backdrop = F2(
 				]));
 	});
 var _user$project$GameView$positionArea = F2(
-	function (s, area$) {
-		var _p17 = s.local;
-		var x = _p17._0;
-		var y = _p17._1;
+	function (ship, area$) {
+		var _p21 = ship.local;
+		var x = _p21._0;
+		var y = _p21._1;
 		return _user$project$GameView$layerer(
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -12732,8 +12734,9 @@ var _user$project$GameView$positionArea = F2(
 				]));
 	});
 var _user$project$GameView$rotateArea = F2(
-	function (s, area$) {
-		var a = _elm_lang$core$Basics$fst(s.angle);
+	function (_p22, area$) {
+		var _p23 = _p22;
+		var a = _elm_lang$core$Basics$fst(_p23.angle);
 		return _user$project$GameView$layerer(
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -12762,21 +12765,21 @@ var _user$project$GameView$populateArea = F2(
 			_elm_lang$core$Native_List.fromArray(
 				[area, ts]));
 	});
-var _user$project$GameView$area = function (m) {
-	return _user$project$GameView$layerer(
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_user$project$GameView$stars(
-				{ctor: '_Tuple2', _0: -300, _1: 300}),
-				_user$project$GameView$stars(
-				{ctor: '_Tuple2', _0: 300, _1: 300}),
-				_user$project$GameView$stars(
-				{ctor: '_Tuple2', _0: 300, _1: -300}),
-				_user$project$GameView$stars(
-				{ctor: '_Tuple2', _0: -300, _1: -300})
-			]));
-};
+var _user$project$GameView$area = _user$project$GameView$layerer(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_user$project$GameView$stars(
+			{ctor: '_Tuple2', _0: -300, _1: 300}),
+			_user$project$GameView$stars(
+			{ctor: '_Tuple2', _0: 300, _1: 300}),
+			_user$project$GameView$stars(
+			{ctor: '_Tuple2', _0: 300, _1: -300}),
+			_user$project$GameView$stars(
+			{ctor: '_Tuple2', _0: -300, _1: -300})
+		]));
 var _user$project$GameView$gameView = function (m) {
+	var _p24 = m;
+	var ship = _p24.ship;
 	return _evancz$elm_graphics$Element$toHtml(
 		A3(
 			_evancz$elm_graphics$Collage$collage,
@@ -12789,25 +12792,22 @@ var _user$project$GameView$gameView = function (m) {
 						[
 							A2(
 							_user$project$GameView$rotateArea,
-							m.ship,
+							ship,
 							A2(
 								_user$project$GameView$farOffStars,
-								m.ship,
+								ship,
 								A2(
 									_user$project$GameView$backdrop,
-									m.ship,
+									ship,
 									A2(
 										_user$project$GameView$positionArea,
-										m.ship,
-										A2(
-											_user$project$GameView$populateArea,
-											m,
-											_user$project$GameView$area(m)))))),
-							_user$project$GameView$sky(m.ship.global),
+										ship,
+										A2(_user$project$GameView$populateArea, m, _user$project$GameView$area))))),
+							_user$project$GameView$sky(ship.global),
 							A2(
 							_user$project$DrawShip$drawShip,
-							_elm_lang$core$Native_Utils.cmp(m.ship.fuel, 0) > 0,
-							m.ship.thrusters)
+							_elm_lang$core$Native_Utils.cmp(ship.fuel, 0) > 0,
+							ship.thrusters)
 						]))
 				])));
 };
@@ -12828,29 +12828,29 @@ var _user$project$Gravity$gravity = F2(
 		};
 	});
 var _user$project$Gravity$thingGravity = F2(
-	function (dt, t) {
-		var _p4 = t.velocity;
+	function (dt, thing) {
+		var _p4 = thing.velocity;
 		var vx = _p4._0;
 		var vy = _p4._1;
-		var _p5 = A2(_user$project$Gravity$gravity, dt, t.global);
+		var _p5 = A2(_user$project$Gravity$gravity, dt, thing.global);
 		var gvx = _p5._0;
 		var gvy = _p5._1;
 		return _elm_lang$core$Native_Utils.update(
-			t,
+			thing,
 			{
 				velocity: {ctor: '_Tuple2', _0: vx - gvx, _1: vy - gvy}
 			});
 	});
 var _user$project$Gravity$shipGravity = F2(
-	function (dt, s) {
-		var _p6 = A2(_user$project$Gravity$gravity, dt, s.global);
+	function (dt, ship) {
+		var _p6 = A2(_user$project$Gravity$gravity, dt, ship.global);
 		var gvx = _p6._0;
 		var gvy = _p6._1;
-		var _p7 = s.velocity;
+		var _p7 = ship.velocity;
 		var vx = _p7._0;
 		var vy = _p7._1;
 		return _elm_lang$core$Native_Utils.update(
-			s,
+			ship,
 			{
 				velocity: {ctor: '_Tuple2', _0: vx - gvx, _1: vy - gvy}
 			});
@@ -13073,8 +13073,8 @@ var _user$project$Init$initModel = {
 };
 
 var _user$project$ThrusterState$set = F2(
-	function (m, k) {
-		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, k, m) ? 1 : 0;
+	function (m, keys) {
+		return A2(_ohanhi$keyboard_extra$Keyboard_Extra$isPressed, keys, m) ? 1 : 0;
 	});
 var _user$project$ThrusterState$setThrusters = function (keys) {
 	var set$ = _user$project$ThrusterState$set(keys);
@@ -13146,16 +13146,16 @@ var _user$project$ReadOut$nf = F2(
 			_elm_lang$core$String$length(s),
 			i) > 0) ? A3(_elm_lang$core$String$slice, 0, i, s) : s;
 	});
-var _user$project$ReadOut$pad = function (s) {
+var _user$project$ReadOut$pad = function (string) {
 	pad:
 	while (true) {
 		if (_elm_lang$core$Native_Utils.cmp(
-			_elm_lang$core$String$length(s),
+			_elm_lang$core$String$length(string),
 			4) > -1) {
-			return s;
+			return string;
 		} else {
-			var _v0 = A2(_elm_lang$core$Basics_ops['++'], s, '_');
-			s = _v0;
+			var _v0 = A2(_elm_lang$core$Basics_ops['++'], string, '_');
+			string = _v0;
 			continue pad;
 		}
 	}
@@ -13498,13 +13498,14 @@ var _user$project$NavMarkers$navMarkers = function (m) {
 						A3(_evancz$elm_graphics$Collage$collage, 600, 600, markers))))));
 };
 
-var _user$project$VelocityGauge$velocityGauge = function (s) {
-	var _p0 = s.velocity;
-	var vx = _p0._0;
-	var vy = _p0._1;
-	var v = _elm_lang$core$Basics$sqrt(
+var _user$project$VelocityGauge$velocityGauge = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1.velocity;
+	var vx = _p2._0;
+	var vy = _p2._1;
+	var velocity$ = _elm_lang$core$Basics$sqrt(
 		Math.pow(vx, 2) + Math.pow(vy, 2)) / 10;
-	var urgency = (_elm_lang$core$Native_Utils.cmp(15, v) > 0) ? '' : ((_elm_lang$core$Native_Utils.cmp(30, v) > 0) ? 'urgent' : ((_elm_lang$core$Native_Utils.cmp(45, v) > 0) ? 'urgenter' : 'critical'));
+	var urgency = (_elm_lang$core$Native_Utils.cmp(15, velocity$) > 0) ? '' : ((_elm_lang$core$Native_Utils.cmp(30, velocity$) > 0) ? 'urgent' : ((_elm_lang$core$Native_Utils.cmp(45, velocity$) > 0) ? 'urgenter' : 'critical'));
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13528,7 +13529,7 @@ var _user$project$VelocityGauge$velocityGauge = function (s) {
 							_elm_lang$core$String$slice,
 							0,
 							5,
-							_elm_lang$core$Basics$toString(v)))
+							_elm_lang$core$Basics$toString(velocity$)))
 					]))
 			]));
 };
@@ -13561,7 +13562,11 @@ var _user$project$PauseView$paused = function (paused) {
 			[]));
 };
 
-var _user$project$View$view = function (m) {
+var _user$project$View$view = function (model) {
+	var _p0 = model;
+	var ship = _p0.ship;
+	var died = _p0.died;
+	var deathMsg = _p0.deathMsg;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -13595,21 +13600,24 @@ var _user$project$View$view = function (m) {
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_user$project$GameView$gameView(m),
-								_user$project$NavMarkers$navMarkers(m),
-								_user$project$VelocityGauge$velocityGauge(m.ship),
-								_user$project$PauseView$paused(m.paused),
-								A2(_user$project$DiedView$diedNotice, m.died, m.deathMsg)
+								_user$project$GameView$gameView(model),
+								_user$project$NavMarkers$navMarkers(model),
+								_user$project$VelocityGauge$velocityGauge(ship),
+								_user$project$PauseView$paused(model.paused),
+								A2(_user$project$DiedView$diedNotice, died, deathMsg)
 							])),
-						_user$project$RightHud$rightHud(m)
+						_user$project$RightHud$rightHud(model)
 					]))
 			]));
 };
 
-var _user$project$SetWeight$setWeight = function (s) {
+var _user$project$SetWeight$setWeight = function (ship) {
+	var _p0 = ship;
+	var fuel = _p0.fuel;
+	var oxygen = _p0.oxygen;
 	return _elm_lang$core$Native_Utils.update(
-		s,
-		{weight: ((s.fuel / 1.7) + (s.oxygen * 3)) + 263});
+		ship,
+		{weight: ((fuel / 1.7) + (oxygen * 3)) + 263});
 };
 
 var _user$project$Thrust$s = function (_p0) {
@@ -13713,24 +13721,24 @@ var _user$project$Thrust$thrustX = F2(
 					t.rightSide)
 				]));
 	});
-var _user$project$Thrust$setThrust = function (s) {
-	var weightFactor = s.weight / 1526;
-	var _p2 = s.velocity;
+var _user$project$Thrust$setThrust = function (ship) {
+	var weightFactor = ship.weight / 1526;
+	var _p2 = ship.velocity;
 	var vx = _p2._0;
 	var vy = _p2._1;
-	var _p3 = s.angle;
+	var _p3 = ship.angle;
 	var a = _p3._0;
 	var va = _p3._1;
-	var t = s.thrusters;
+	var t = ship.thrusters;
 	var dvx = A2(_user$project$Thrust$thrustX, a, t) / weightFactor;
 	var dvy = A2(_user$project$Thrust$thrustY, a, t) / weightFactor;
 	var dva = _user$project$Thrust$thrustA(t) / weightFactor;
-	return (_elm_lang$core$Native_Utils.cmp(s.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
-		s,
+	return (_elm_lang$core$Native_Utils.cmp(ship.fuel, 0) > 0) ? _elm_lang$core$Native_Utils.update(
+		ship,
 		{
 			velocity: {ctor: '_Tuple2', _0: vx + dvx, _1: vy + dvy},
 			angle: {ctor: '_Tuple2', _0: a, _1: va + dva}
-		}) : s;
+		}) : ship;
 };
 
 var _user$project$ShipPosition$setQuadrant = function (_p0) {
@@ -13780,27 +13788,27 @@ var _user$project$ShipPosition$modulo = function (f) {
 	return (_elm_lang$core$Native_Utils.cmp(m, 300) > 0) ? (m - 600) : m;
 };
 var _user$project$ShipPosition$shipPosition = F2(
-	function (dt, s) {
-		var _p7 = s.angle;
+	function (dt, ship) {
+		var _p7 = ship.angle;
 		var a = _p7._0;
 		var va = _p7._1;
 		var a$ = _user$project$ShipPosition$moduloAngle(a + (dt * va));
-		var _p8 = s.sector;
+		var _p8 = ship.sector;
 		var sx = _p8._0;
 		var sy = _p8._1;
-		var _p9 = s.velocity;
+		var _p9 = ship.velocity;
 		var vx = _p9._0;
 		var vy = _p9._1;
 		var vy$ = dt * vy;
 		var vx$ = dt * vx;
-		var _p10 = s.local;
+		var _p10 = ship.local;
 		var lx = _p10._0;
 		var ly = _p10._1;
 		var dsy = _user$project$ShipPosition$axisCrosses(
 			{ctor: '_Tuple2', _0: ly, _1: ly + vy$});
 		var dsx = _user$project$ShipPosition$axisCrosses(
 			{ctor: '_Tuple2', _0: lx, _1: lx + vx$});
-		var _p11 = s.global;
+		var _p11 = ship.global;
 		var gx = _p11._0;
 		var gy = _p11._1;
 		var gx$ = gx + vx$;
@@ -13808,7 +13816,7 @@ var _user$project$ShipPosition$shipPosition = F2(
 		var gy$ = gy + vy$;
 		var gym = _user$project$ShipPosition$modulo(gy$);
 		return _elm_lang$core$Native_Utils.update(
-			s,
+			ship,
 			{
 				local: {ctor: '_Tuple2', _0: gxm, _1: gym},
 				global: {ctor: '_Tuple2', _0: gx$, _1: gy$},
@@ -13857,17 +13865,17 @@ var _user$project$ThingPosition$modulo = function (f) {
 		A2(_elm_lang$core$Basics_ops['%'], f$, 600)) + (f - _elm_lang$core$Basics$toFloat(f$));
 };
 var _user$project$ThingPosition$thingPosition = F2(
-	function (dt, t) {
-		var _p1 = t.angle;
+	function (dt, thing) {
+		var _p1 = thing.angle;
 		var a = _p1._0;
 		var va = _p1._1;
 		var a$ = a + (dt * va);
-		var _p2 = t.velocity;
+		var _p2 = thing.velocity;
 		var vx = _p2._0;
 		var vy = _p2._1;
 		var vy$ = dt * vy;
 		var vx$ = dt * vx;
-		var _p3 = t.global;
+		var _p3 = thing.global;
 		var x = _p3._0;
 		var y = _p3._1;
 		var y$ = y + vy$;
@@ -13875,7 +13883,7 @@ var _user$project$ThingPosition$thingPosition = F2(
 		var x$ = x + vx$;
 		var xm = _user$project$ThingPosition$modulo(x$);
 		return _elm_lang$core$Native_Utils.update(
-			t,
+			thing,
 			{
 				local: {ctor: '_Tuple2', _0: xm, _1: ym},
 				global: {ctor: '_Tuple2', _0: x + vx$, _1: y + vy$},
@@ -13900,11 +13908,12 @@ var _user$project$Refresh$refreshThing = function (dt) {
 			A2(_user$project$ThingPosition$thingPosition, dt, _p0));
 	};
 };
-var _user$project$Refresh$checkIfDead = function (s) {
-	var noMoreAir = _elm_lang$core$Native_Utils.cmp(s.oxygen, 1) < 0;
-	var _p1 = s.global;
-	var x = _p1._0;
-	var y = _p1._1;
+var _user$project$Refresh$checkIfDead = function (_p1) {
+	var _p2 = _p1;
+	var noMoreAir = _elm_lang$core$Native_Utils.cmp(_p2.oxygen, 1) < 0;
+	var _p3 = _p2.global;
+	var x = _p3._0;
+	var y = _p3._1;
 	var x$ = x - 60000;
 	var y$ = y - 60000;
 	var tooCloseToPlanet = _elm_lang$core$Native_Utils.cmp(
@@ -13915,7 +13924,7 @@ var _user$project$Refresh$checkIfDead = function (s) {
 	return {ctor: '_Tuple2', _0: noMoreAir || tooCloseToPlanet, _1: deathMsg};
 };
 var _user$project$Refresh$refreshShip = function (dt) {
-	return function (_p2) {
+	return function (_p4) {
 		return A2(
 			_user$project$ShipPosition$shipPosition,
 			dt,
@@ -13924,23 +13933,27 @@ var _user$project$Refresh$refreshShip = function (dt) {
 				dt,
 				_user$project$Thrust$setThrust(
 					_user$project$SetWeight$setWeight(
-						A2(_user$project$Consumption$consumption, dt, _p2)))));
+						A2(_user$project$Consumption$consumption, dt, _p4)))));
 	};
 };
 var _user$project$Refresh$refresh = F2(
 	function (dt, m) {
-		var _p3 = _user$project$Refresh$checkIfDead(m.ship);
-		var isDead = _p3._0;
-		var deathMsg = _p3._1;
+		var _p5 = m;
+		var ship = _p5.ship;
+		var things = _p5.things;
+		var died = _p5.died;
+		var _p6 = _user$project$Refresh$checkIfDead(ship);
+		var isDead = _p6._0;
+		var deathMsg = _p6._1;
 		return _elm_lang$core$Native_Utils.update(
 			m,
 			{
-				ship: A2(_user$project$Refresh$refreshShip, dt, m.ship),
+				ship: A2(_user$project$Refresh$refreshShip, dt, ship),
 				things: A2(
 					_elm_lang$core$List$map,
 					_user$project$Refresh$refreshThing(dt),
-					m.things),
-				died: isDead || m.died,
+					things),
+				died: isDead || died,
 				deathMsg: deathMsg
 			});
 	});

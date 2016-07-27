@@ -12,7 +12,7 @@ drawShip enoughFuel t =
   let
     shipSprite =
       [ image' 47 47 (root "ship/ship") ]     
-    ship =
+    shipRendering =
       if enoughFuel then
       [ mainThruster t.main       t.boost
       , leftFront    t.leftFront  t.boost
@@ -26,7 +26,7 @@ drawShip enoughFuel t =
       else
       [ shipSprite ]
   in
-  ship
+  shipRendering
   |>foldr append []
   |>collage 138 138
   |>toForm

@@ -2,7 +2,7 @@ module CollisionHandle exposing (collisionsHandle)
 
 import Collision exposing (..)
 import Types     exposing (..)
-import List      exposing (map, concat, filter, length, foldr, append)
+import List      exposing (map, concat, filter, isEmpty, foldr, append)
 import Debug     exposing (log)
 
 
@@ -66,12 +66,12 @@ thingsPolygon dt (svx, svy) (sgx, sgy) t =
   ]
 
 shipsPolygon : Ship -> List Pt
-shipsPolygon s =
+shipsPolygon {angle, dimensions} =
   let 
-    (w', h') = s.dimensions 
+    (w', h') = dimensions 
     w = toFloat w'
     h = toFloat h'
-    (a, va) = s.angle
+    (a, va) = angle
   in
   rotatePoints (a + va)
   [ (w/2, h/2)
@@ -116,32 +116,29 @@ justThings : (Bool, Thing) -> Bool
 justThings (b, t) = b
 
 collisionsHandle : Time -> Model -> Model
-collisionsHandle dt model =
+collisionsHandle dt m =
   let
+    {ship, things} = m
     collisionCheck = 
-      map
-        (collisions dt model.ship)
-        model.things 
+      map (collisions dt ship) things 
 
     collidedThings = 
-      filter 
-        justThings
-        collisionCheck
+      filter justThings collisionCheck
   in
-  if (length collidedThings) > 0 then 
-    { model
+  if isEmpty collidedThings then 
+    { m
     | ship = 
         foldr
           collisionAction
-          model.ship
-          (map (\t -> snd t) collidedThings)
+          ship
+          (map snd collidedThings)
     , things =
         foldr
           appendIfNotCollided
           []
           collisionCheck
     }
-  else model
+  else m
 
 
 

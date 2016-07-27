@@ -13,18 +13,19 @@ import Pather           exposing (root)
 
 gameView : Model -> Html Msg
 gameView m =
+  let {ship} = m in
   collage 600 600 
   [ layerer
-    [ area m
+    [ area
       |>populateArea m
-      |>positionArea m.ship
-      |>backdrop     m.ship
-      |>farOffStars  m.ship
-      |>rotateArea   m.ship
-    , sky m.ship.global
+      |>positionArea ship
+      |>backdrop     ship
+      |>farOffStars  ship
+      |>rotateArea   ship
+    , sky ship.global
     , drawShip       
-        (m.ship.fuel > 0)
-        m.ship.thrusters
+        (ship.fuel > 0)
+        ship.thrusters
     ]
   ]|>toHtml
 
@@ -37,9 +38,9 @@ modulo m f =
   (toFloat (f' % m)) + (f - (toFloat f'))
 
 farOffStars : Ship -> Form -> Form
-farOffStars s area =
+farOffStars {global} area =
   let
-    (x,y) = s.global
+    (x,y) = global
     x'    = modulo 600 (x / 30)
     y'    = modulo 600 (y / 30)
     pos   = (300 - x', 300 - y')
@@ -55,9 +56,9 @@ farOffStars s area =
   ]
 
 backdrop : Ship -> Form -> Form
-backdrop s area =
+backdrop {global} area =
   let
-    (x,y) = s.global
+    (x,y) = global
     x' = (-x * 0.005) + 100
     y' = (-y * 0.005) + 275
   in
@@ -70,13 +71,13 @@ backdrop s area =
   ]
 
 positionArea : Ship -> Form -> Form
-positionArea s area' = 
-  let (x,y) = s.local in
+positionArea ship area' = 
+  let (x,y) = ship.local in
   layerer [ move (-x, -y) area' ]
 
 rotateArea : Ship -> Form -> Form
-rotateArea s area' =
-  let a = fst s.angle in
+rotateArea {angle} area' =
+  let a = fst angle in
   layerer [ rotate (degrees -a) area' ]
 
 populateArea : Model-> Form -> Form
@@ -95,28 +96,27 @@ populateArea m area =
   in layerer [ area, ts ]
 
 drawAt : (Coordinate, Thing) -> Form
-drawAt (p, t) =
+drawAt (p, {angle, sprite}) =
   let
-    (w,h)  = t.sprite.dimensions
-    sprite = t.sprite.src
-    a      = fst t.angle
+    (w,h) = sprite.dimensions
+    a     = fst angle
   in
-  image' w h sprite
+  image' w h sprite.src
   |>move p
   |>rotate (degrees a)
 
 adjustPosition : Coordinate -> Coordinate -> Thing -> (Coordinate, Thing)
-adjustPosition (sgx, sgy) (slx, sly) t =
-  let (tgx, tgy) = t.global in
-  ((tgx  - sgx  + slx, tgy - sgy + sly), t)
+adjustPosition (sgx, sgy) (slx, sly) thing =
+  let (tgx, tgy) = thing.global in
+  ((tgx  - sgx  + slx, tgy - sgy + sly), thing)
 
 nearEnough : Coordinate -> Thing -> Bool
-nearEnough (sgx, sgy) t =
-  let (tgx, tgy) = t.global in
+nearEnough (sgx, sgy) thing =
+  let (tgx, tgy) = thing.global in
   (sqrt ((sgx - tgx)^2 + (sgy - tgy)^2)) < 300
 
-area : Model -> Form
-area m = 
+area : Form
+area = 
   layerer
   [ stars (-300, 300)  -- A
   , stars (300, 300)   -- B

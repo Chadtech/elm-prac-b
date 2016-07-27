@@ -13,16 +13,19 @@ import Debug exposing (log)
 
 
 velocityGauge : Ship -> Html Msg
-velocityGauge s =
+velocityGauge {velocity} =
   let
-    (vx, vy) = s.velocity
-    v = (sqrt (vx^2 + vy^2))/10
+    (vx, vy)  = velocity
+    velocity' = (sqrt (vx^2 + vy^2))/10
     urgency = 
-      if 15 > v then ""
+      if 15 > velocity' then 
+        ""
       else
-        if 30 > v then "urgent"
+        if 30 > velocity' then 
+          "urgent"
         else 
-          if 45 > v then "urgenter"
+          if 45 > velocity' then 
+            "urgenter"
           else "critical"
   in
   div
@@ -32,6 +35,6 @@ velocityGauge s =
     [class ("point " ++ urgency) ]
     [ text
       <|slice 0 5
-      <|toString v
+      <|toString velocity'
     ]
   ]

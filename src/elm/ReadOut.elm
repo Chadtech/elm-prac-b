@@ -62,9 +62,9 @@ angleFormat =
   >>(\s -> s ++ "/200")
 
 pad : String -> String
-pad s =
-  if length s >= 4 then s
-  else pad (s ++ "_")
+pad string =
+  if length string >= 4 then string
+  else pad (string ++ "_")
 
 -- Number Format
 nf : Int -> Float -> String
