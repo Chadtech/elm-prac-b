@@ -1,4 +1,4 @@
-module PauseView exposing (paused, instructions)
+module PauseView exposing (pausedNotice, instructions)
 
 import Html             exposing (..)
 import Html.Attributes  exposing (..)
@@ -6,8 +6,8 @@ import Html.Events      exposing (..)
 import Types        exposing (..)
 import Components   exposing (point, tinyPoint)
 
-paused : Bool -> Html Msg
-paused paused =
+pausedNotice : Bool -> Html Msg
+pausedNotice paused =
   if paused then
     div
     [ class "paused-notice" ]

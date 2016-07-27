@@ -9,13 +9,13 @@ import RightHud         exposing (rightHud)
 import NavMarkers       exposing (navMarkers)
 import VelocityGauge    exposing (velocityGauge)
 import KeyDiagram       exposing (keyDiagram, keyExample)
-import PauseView        exposing (paused, instructions)
+import PauseView        exposing (pausedNotice, instructions)
 import DiedView         exposing (diedNotice)
 
 
 view : Model -> Html Msg
 view model = 
-  let {ship, died, deathMsg} = model in
+  let {ship, died, deathMsg, paused} = model in
   div
   [ class "root" ]
   [ div 
@@ -31,7 +31,7 @@ view model =
       [ gameView model
       , navMarkers model
       , velocityGauge ship
-      , paused model.paused
+      , pausedNotice paused
       , diedNotice died deathMsg
       ]
     , rightHud model
