@@ -12110,10 +12110,6 @@ var _user$project$CollisionHandle$appendIfNotCollided = F2(
 			_elm_lang$core$Native_List.fromArray(
 				[_p3._1]));
 	});
-var _user$project$CollisionHandle$collisionAction = F2(
-	function (t, s) {
-		return t.onCollision(s);
-	});
 var _user$project$CollisionHandle$rotatePoint = F2(
 	function (a$, _p4) {
 		var _p5 = _p4;
@@ -12129,7 +12125,7 @@ var _user$project$CollisionHandle$rotatePoints = function (a$) {
 					_elm_lang$core$Basics$toPolar(_p6)));
 		});
 };
-var _user$project$CollisionHandle$shipsPolygon = function (_p7) {
+var _user$project$CollisionHandle$getShipsPolygon = function (_p7) {
 	var _p8 = _p7;
 	var _p9 = _p8.angle;
 	var a = _p9._0;
@@ -12192,7 +12188,7 @@ var _user$project$CollisionHandle$toPolygon = F4(
 					A2(_user$project$CollisionHandle$travel, angle, destination),
 					points)));
 	});
-var _user$project$CollisionHandle$thingsPolygon = F4(
+var _user$project$CollisionHandle$getThingsPolygon = F4(
 	function (dt, _p23, _p22, t) {
 		var _p24 = _p23;
 		var _p31 = _p24._1;
@@ -12256,50 +12252,48 @@ var _user$project$CollisionHandle$polySupport = F2(
 			},
 			_elm_lang$core$List$maximum(decorated));
 		var m = _p36._0;
-		var p = _p36._1;
-		return p;
+		var point = _p36._1;
+		return point;
 	});
-var _user$project$CollisionHandle$collisions = F3(
-	function (dt, s, t) {
-		var _p37 = s.velocity;
+var _user$project$CollisionHandle$didCollide = F3(
+	function (dt, ship, thing) {
+		var _p37 = ship.velocity;
 		var svx = _p37._0;
 		var svy = _p37._1;
-		var thingsPolygon$ = A4(
-			_user$project$CollisionHandle$thingsPolygon,
-			dt,
-			{ctor: '_Tuple2', _0: svx * dt, _1: svy * dt},
-			s.global,
-			t);
-		return {
-			ctor: '_Tuple2',
-			_0: A3(
+		var collided = function () {
+			var shipsPolygon = _user$project$CollisionHandle$getShipsPolygon(ship);
+			var thingsPolygon = A4(
+				_user$project$CollisionHandle$getThingsPolygon,
+				dt,
+				{ctor: '_Tuple2', _0: svx * dt, _1: svy * dt},
+				ship.global,
+				thing);
+			return A3(
 				_user$project$Collision$collision,
 				10,
-				{ctor: '_Tuple2', _0: thingsPolygon$, _1: _user$project$CollisionHandle$polySupport},
-				{
-					ctor: '_Tuple2',
-					_0: _user$project$CollisionHandle$shipsPolygon(s),
-					_1: _user$project$CollisionHandle$polySupport
-				}),
-			_1: t
-		};
+				{ctor: '_Tuple2', _0: thingsPolygon, _1: _user$project$CollisionHandle$polySupport},
+				{ctor: '_Tuple2', _0: shipsPolygon, _1: _user$project$CollisionHandle$polySupport});
+		}();
+		return {ctor: '_Tuple2', _0: collided, _1: thing};
 	});
 var _user$project$CollisionHandle$collisionsHandle = F2(
-	function (dt, m) {
-		var _p38 = m;
+	function (dt, model) {
+		var _p38 = model;
 		var ship = _p38.ship;
 		var things = _p38.things;
 		var collisionCheck = A2(
 			_elm_lang$core$List$map,
-			A2(_user$project$CollisionHandle$collisions, dt, ship),
+			A2(_user$project$CollisionHandle$didCollide, dt, ship),
 			things);
 		var collidedThings = A2(_elm_lang$core$List$filter, _user$project$CollisionHandle$justThings, collisionCheck);
-		return _elm_lang$core$List$isEmpty(collidedThings) ? _elm_lang$core$Native_Utils.update(
-			m,
+		return _elm_lang$core$List$isEmpty(collidedThings) ? model : _elm_lang$core$Native_Utils.update(
+			model,
 			{
 				ship: A3(
 					_elm_lang$core$List$foldr,
-					_user$project$CollisionHandle$collisionAction,
+					function (_) {
+						return _.onCollision;
+					},
 					ship,
 					A2(_elm_lang$core$List$map, _elm_lang$core$Basics$snd, collidedThings)),
 				things: A3(
@@ -12308,7 +12302,7 @@ var _user$project$CollisionHandle$collisionsHandle = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[]),
 					collisionCheck)
-			}) : m;
+			});
 	});
 
 var _user$project$Components$tinyPoint = function (s) {
