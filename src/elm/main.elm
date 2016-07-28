@@ -2,7 +2,7 @@ import Html             exposing (p, text)
 import Html.Attributes  exposing (class)
 import Html.App         as App
 import Types            exposing (..)
-import Ports            exposing (..)
+import PageVisibility   exposing (..)
 import View             exposing (view)
 import Init             exposing (initModel)
 import AnimationFrame   exposing (..)
@@ -24,37 +24,41 @@ subscriptions model =
   Sub.batch
   [ Sub.map HandleKeys Keyboard.subscriptions
   , diffs Refresh
-  , response Pause
+  , visibilityChanges Pause
   ]
 
 rate : Time -> Time
 rate dt = dt / 240
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg m =
+update msg model =
   case msg of 
 
     Refresh dt ->
-      if (m.paused || m.died) then 
-        (m, Cmd.none)
+      let {paused, died} = model in
+      if (paused || died) then 
+        (model, Cmd.none)
       else
         let 
-          m' =
+          model' =
             let dt' = rate dt in
-            m
+            model
             |>collisionsHandle dt' 
             |>refresh dt'
-        in (m', Cmd.none)
+        in (model', Cmd.none)
 
     HandleKeys keyMsg ->
       let
         (keys, kCmd) = 
-          Keyboard.update keyMsg m.keys
+          Keyboard.update keyMsg model.keys
       in
-        (handleKeys m keys, Cmd.map HandleKeys kCmd)
+        (handleKeys model keys, Cmd.map HandleKeys kCmd)
 
-    Pause b ->
-      ({ m | paused = b }, Cmd.none)
+    Pause v ->
+      if v == Hidden then
+        ({ model | paused = True }, Cmd.none)
+      else
+        (model, Cmd.none)
 
 
 

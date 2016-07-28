@@ -44,7 +44,8 @@ gulp.task 'elm', ->
       console.log 'ELM ERROR :^('
       console.log err
     else
-      console.log 'Elm : ' + stdout.slice 0, stdout.length - 1
+      console.log 'Elm says .. '
+      console.log (stdout.slice 0, stdout.length - 1)
 
 gulp.task 'watch', ->
   autowatch gulp,

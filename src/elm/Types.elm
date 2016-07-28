@@ -3,12 +3,12 @@ module Types exposing (..)
 import Time             exposing (..)
 import Random           exposing (..)
 import Keyboard.Extra   as Keyboard
-import Debug exposing (log)
+import PageVisibility   exposing (..)
 
 type Msg 
   = Refresh Time
   | HandleKeys Keyboard.Msg
-  | Pause Bool
+  | Pause Visibility
 
 type Quadrant 
   = A
