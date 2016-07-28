@@ -54,8 +54,8 @@ update msg model =
       in
         (handleKeys model keys, Cmd.map HandleKeys kCmd)
 
-    Pause v ->
-      if v == Hidden then
+    Pause visibility ->
+      if visibility == Hidden then
         ({ model | paused = True }, Cmd.none)
       else
         (model, Cmd.none)

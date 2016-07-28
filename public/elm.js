@@ -14681,13 +14681,6 @@ var _user$project$Main$main = {
 		})
 };
 
-var _user$project$Ports$request = _elm_lang$core$Native_Platform.outgoingPort(
-	'request',
-	function (v) {
-		return v;
-	});
-var _user$project$Ports$response = _elm_lang$core$Native_Platform.incomingPort('response', _elm_lang$core$Json_Decode$bool);
-
 var Elm = {};
 Elm['Collision'] = Elm['Collision'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Collision'], 'Collision', typeof _user$project$Collision$main === 'undefined' ? null : _user$project$Collision$main);
@@ -14721,8 +14714,6 @@ Elm['Pather'] = Elm['Pather'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Pather'], 'Pather', typeof _user$project$Pather$main === 'undefined' ? null : _user$project$Pather$main);
 Elm['PauseView'] = Elm['PauseView'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['PauseView'], 'PauseView', typeof _user$project$PauseView$main === 'undefined' ? null : _user$project$PauseView$main);
-Elm['Ports'] = Elm['Ports'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['ReadOut'] = Elm['ReadOut'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['ReadOut'], 'ReadOut', typeof _user$project$ReadOut$main === 'undefined' ? null : _user$project$ReadOut$main);
 Elm['Refresh'] = Elm['Refresh'] || {};
