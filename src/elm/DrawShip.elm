@@ -28,7 +28,7 @@ drawShip enoughFuel t =
   in
   shipRendering
   |>foldr append []
-  |>collage 138 138
+  |>collage 47 47
   |>toForm
 
 image' : Int -> Int -> String -> Form

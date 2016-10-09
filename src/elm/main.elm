@@ -10,6 +10,7 @@ import Keyboard.Extra   as Keyboard
 import CollisionHandle  exposing (collisionsHandle)
 import Refresh          exposing (refresh)
 import HandleKeys       exposing (handleKeys)
+import Debug exposing (log)
 
 main =
   App.program

@@ -1,0 +1,55 @@
+Im making a video game about a space ship flying in space. In most video games, developers have to work on whats called 'collision detection'. The things in your game are just floating surfaces, and to make them appear solid you need code that detects when these floating surfaces touch or overlap. This way, the game can have true objects that dont simply pass through each other.
+
+Another thing about video game development, is that time isnt really continous. Games progress along a frame rate, or a quick succession of states, just like a video being a sequence of still pictures.
+
+There is a difficulty associated with detecting collisions among objects that exist in discrete (non-continuous) time. I cant simply ask if two objects touch at any given time, but I also have to ask, would they have touched in between the discrete moments in time. To illustrate this, consider a video game about a person shooting a gun at another person. If you just asked 'is the bullet touching the target?', the answer would likely be no at all points in time, even if the bullet was traveling directly at its target. This is because the bullet is traveling so fast, that it will likely be in front of its target at time 0, but behind it at time 1. Somewhere in between time 0 and 1 it was inside the target, but, we wouldnt know that if we only checked for collisions on each discrete time step.
+
+Thus, collision detection cant simply ask 'Are these things touching?' but 'Would these things have touched along their respective paths?' One answer is to make a new shape, that occupies the whole space the object occupied in its travels, and then check to see if these shapes overlap. 
+
+
+    time 0                        time 1
+  +----------+                  +----------+ 
+  |          |                  |          |
+  |          |    its path      |          |
+  |  Object  |  ------------->  |  Object  |
+  |          |                  |          |
+  |          |                  |          |
+  +----------+                  +----------+
+
+  would become the shape ..
+
+  +----------------------------------------+
+  |                                        |
+  |                                        |
+  |  Shape representing all space occupied |  
+  |  by the object between time and time 1 |
+  |                                        |
+  +----------------------------------------+
+
+ and
+
+    time 0                        time 1
+  +----------+                  +----------+ 
+  |          |                  |          |
+  +---+      |        path      +---+      |
+      |      |  ------------->      |      |
+      |      |                      |      |
+      +--+   |                      +--+   |
+         +---+                          +--+
+
+  would become the shape ..
+
+  +----------------------------------------+
+  |                                        |
+  +---+                                    |
+      |                                    |  
+      |                                    |
+      +--+                                 |
+         +---------------------------------+
+
+This solution falls apart pretty quickly. One of these new shapes of a speedy bullet, would intersect with an object its shot at, true, but it works only in the circumstance where the target is stationary. But in many possible relative motions of the bullet and its target, these new shapes representing their paths wont overlap.
+For example, imagine a bullet trailing another bullet. Both are moving fast, and have very long shapes that represent their path, but because they are traveling in the same direction at the same speed, the trailing bullet is always behind it. Their paths overlap quite a lot, but the objects themselves never do.
+
+----
+
+So thats where I am at right now in my space ship game. And I believe I have the solution (which came to me in the course of writing this out). I should consider overlaping shapes representing paths, but I must do so only in relative distances. Two bullets going along the same path never overlap when you compare their relative movements, because relative to each other, they never move.

@@ -13239,8 +13239,8 @@ var _user$project$DrawShip$drawShip = F2(
 		return _evancz$elm_graphics$Collage$toForm(
 			A3(
 				_evancz$elm_graphics$Collage$collage,
-				138,
-				138,
+				47,
+				47,
 				A3(
 					_elm_lang$core$List$foldr,
 					_elm_lang$core$List$append,
